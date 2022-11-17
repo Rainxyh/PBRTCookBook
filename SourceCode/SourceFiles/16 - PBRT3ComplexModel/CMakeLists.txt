@@ -26,15 +26,18 @@ if(OpenMP_FOUND)
 	message(STATUS "found openmp") 
 	set(CMAKE_C_FLAGS ${CMAKE_C_FLAGS}, ${OPENMP_C_FLAGS})
    	# set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS}, ${OPENMP_CXX_FLAGS})
-	set(CMAKE_CXX_FLAGS "-fopenmp -lassimp")
+	# set(CMAKE_CXX_FLAGS "-fopenmp -lassimp")
+	set(CMAKE_CXX_FLAGS "-fopenmp")
 else()
    	message(FATAL_ERROR "openmp not found!")
 endif()
 
 find_package(assimp REQUIRED)
 if (assimp_FOUND)
-	message(STATUS "found assimp") 
-	set(CMAKE_CXX_FLAGS "-fopenmp -lassimp")
+    message(STATUS "found assimp") 
+    set(ASSIMP_LIBRARY "assimp")
+    add_library(${ASSIMP_LIBRARY} SHARED IMPORTED)
+    set_target_properties(${ASSIMP_LIBRARY} PROPERTIES IMPORTED_LOCATION "${ASSIMP_LIBRARY_DIRS}/libassimp.so")
 else()
    	message(FATAL_ERROR "assimp not found!")
 endif()
@@ -267,28 +270,15 @@ add_executable(Feimos
 	${Media}
 )
 
+
 FILE(GLOB Icons ${CMAKE_CURRENT_SOURCE_DIR}/Icons/*.png)
 SET(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR})
 file(COPY ${Icons} DESTINATION ${EXECUTABLE_OUTPUT_PATH}/Icons/)
-# 用于包含ASSIMP
-#set(AssimpLib ${CMAKE_CURRENT_SOURCE_DIR}/3rdLib/Assimp-lib/)
-#add_library(Feimos STATIC IMPORTED)
-#set_target_properties(Feimos PROPERTIES
-#IMPORTED_LOCATION_RELEASE ${AssimpLib}/assimp.lib
-#IMPORTED_LOCATION_DEBUG ${AssimpLib}/assimp.lib
-#IMPORTED_LINK_INTERFACE_LIBRARIES Feimos)
-#add_library(assimpFeimos SHARED IMPORTED)
-#set_property(TARGET assimpFeimos PROPERTY IMPORTED_LOCATION ${AssimpLib}assimp-vc140-mt.dll)
-#set_property(TARGET assimpFeimos PROPERTY IMPORTED_IMPLIB ${AssimpLib}assimp.lib)
-#set(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
-#set_target_properties(Feimos PROPERTIES INSTALL_RPATH ${AssimpLib})
-#FILE(GLOB ASSIMPDLL ${AssimpLib}/assimp-vc140-mt.dll)
-#file(COPY ${ASSIMPDLL} DESTINATION ${EXECUTABLE_OUTPUT_PATH})
 
 target_link_libraries(Feimos 
 	Qt5::Widgets
 	Qt5::Gui
-	#${AssimpLib}assimp.lib
+	${ASSIMP_LIBRARY}
 )
 set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT Feimos)
 
