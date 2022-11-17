@@ -42,83 +42,25 @@ namespace Feimos
 		}
 #endif // !NDEBUG
 
-		Vector2<T> operator+(const Vector2<T> &v) const
-		{
-			DCHECK(!v.HasNaNs());
-			return Vector2(x + v.x, y + v.y);
-		}
-
-		Vector2<T> &operator+=(const Vector2<T> &v)
-		{
-			DCHECK(!v.HasNaNs());
-			x += v.x;
-			y += v.y;
-			return *this;
-		}
-		Vector2<T> operator-(const Vector2<T> &v) const
-		{
-			DCHECK(!v.HasNaNs());
-			return Vector2(x - v.x, y - v.y);
-		}
-
-		Vector2<T> &operator-=(const Vector2<T> &v)
-		{
-			DCHECK(!v.HasNaNs());
-			x -= v.x;
-			y -= v.y;
-			return *this;
-		}
-		bool operator==(const Vector2<T> &v) const { return x == v.x && y == v.y; }
-		bool operator!=(const Vector2<T> &v) const { return x != v.x || y != v.y; }
+		Vector2<T> operator+(const Vector2<T> &v) const;
+		Vector2<T> &operator+=(const Vector2<T> &v);
+		Vector2<T> operator-(const Vector2<T> &v) const;
+		Vector2<T> &operator-=(const Vector2<T> &v);
+		bool operator==(const Vector2<T> &v) const;
+		bool operator!=(const Vector2<T> &v) const;
 		template <typename U>
-		Vector2<T> operator*(U f) const
-		{
-			return Vector2<T>(f * x, f * y);
-		}
-
+		Vector2<T> operator*(U f) const;
 		template <typename U>
-		Vector2<T> &operator*=(U f)
-		{
-			DCHECK(!isNaN(f));
-			x *= f;
-			y *= f;
-			return *this;
-		}
+		Vector2<T> &operator*=(U f);
 		template <typename U>
-		Vector2<T> operator/(U f) const
-		{
-			CHECK_NE(f, 0);
-			float inv = (float)1 / f;
-			return Vector2<T>(x * inv, y * inv);
-		}
-
+		Vector2<T> operator/(U f) const;
 		template <typename U>
-		Vector2<T> &operator/=(U f)
-		{
-			CHECK_NE(f, 0);
-			float inv = (float)1 / f;
-			x *= inv;
-			y *= inv;
-			return *this;
-		}
-		Vector2<T> operator-() const { return Vector2<T>(-x, -y); }
-		T operator[](int i) const
-		{
-			DCHECK(i >= 0 && i <= 1);
-			if (i == 0)
-				return x;
-			return y;
-		}
-
-		T &operator[](int i)
-		{
-			DCHECK(i >= 0 && i <= 1);
-			if (i == 0)
-				return x;
-			return y;
-		}
-		float LengthSquared() const { return x * x + y * y; }
-		float Length() const { return std::sqrt(LengthSquared()); }
+		Vector2<T> &operator/=(U f);
+		Vector2<T> operator-() const;
+		T operator[](int i) const;
+		T &operator[](int i);
+		float LengthSquared() const;
+		float Length() const;
 
 		// Vector2 Public Data
 		T x, y;
@@ -689,20 +631,21 @@ namespace Feimos
 		return Vector3<T>(std::abs(v.x), std::abs(v.y), std::abs(v.z));
 	}
 
+	// 用 于 点 乘 操 作
 	template <typename T>
 	inline T Dot(const Vector3<T> &v1, const Vector3<T> &v2)
 	{
 		DCHECK(!v1.HasNaNs() && !v2.HasNaNs());
 		return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
 	}
-
+	// 返 回 点 乘 的 绝 对 值
 	template <typename T>
 	inline T AbsDot(const Vector3<T> &v1, const Vector3<T> &v2)
 	{
 		DCHECK(!v1.HasNaNs() && !v2.HasNaNs());
 		return std::abs(Dot(v1, v2));
 	}
-
+	// 求 叉 积
 	template <typename T>
 	inline Vector3<T> Cross(const Vector3<T> &v1, const Vector3<T> &v2)
 	{
@@ -712,7 +655,6 @@ namespace Feimos
 		return Vector3<T>((v1y * v2z) - (v1z * v2y), (v1z * v2x) - (v1x * v2z),
 						  (v1x * v2y) - (v1y * v2x));
 	}
-
 	template <typename T>
 	inline Vector3<T> Cross(const Vector3<T> &v1, const Normal3<T> &v2)
 	{
@@ -722,7 +664,6 @@ namespace Feimos
 		return Vector3<T>((v1y * v2z) - (v1z * v2y), (v1z * v2x) - (v1x * v2z),
 						  (v1x * v2y) - (v1y * v2x));
 	}
-
 	template <typename T>
 	inline Vector3<T> Cross(const Normal3<T> &v1, const Vector3<T> &v2)
 	{
@@ -732,44 +673,45 @@ namespace Feimos
 		return Vector3<T>((v1y * v2z) - (v1z * v2y), (v1z * v2x) - (v1x * v2z),
 						  (v1x * v2y) - (v1y * v2x));
 	}
-
+	// 求 单 位 化 的 向 量
 	template <typename T>
 	inline Vector3<T> Normalize(const Vector3<T> &v)
 	{
 		return v / v.Length();
 	}
+	// 返 回 向 量 （或 点） 中 最 小 的x , y , z 值
 	template <typename T>
 	T MinComponent(const Vector3<T> &v)
 	{
 		return std::min(v.x, std::min(v.y, v.z));
 	}
-
+	// 返 回 向 量 （或 点） 中 最 大 的x , y , z 值
 	template <typename T>
 	T MaxComponent(const Vector3<T> &v)
 	{
 		return std::max(v.x, std::max(v.y, v.z));
 	}
-
+	// 返 回 向 量 （或 点） 中 最 大 的x , y , z 值 的 索 引
 	template <typename T>
 	int MaxDimension(const Vector3<T> &v)
 	{
 		return (v.x > v.y) ? ((v.x > v.z) ? 0 : 2) : ((v.y > v.z) ? 1 : 2);
 	}
-
+	// 返 回 两 个 向 量 （或 点） 中 最 小 的x , y , z 值
 	template <typename T>
 	Vector3<T> Min(const Vector3<T> &p1, const Vector3<T> &p2)
 	{
 		return Vector3<T>(std::min(p1.x, p2.x), std::min(p1.y, p2.y),
 						  std::min(p1.z, p2.z));
 	}
-
+	// 返 回 两 个 向 量 （或 点） 中 最 大 的x , y , z 值
 	template <typename T>
 	Vector3<T> Max(const Vector3<T> &p1, const Vector3<T> &p2)
 	{
 		return Vector3<T>(std::max(p1.x, p2.x), std::max(p1.y, p2.y),
 						  std::max(p1.z, p2.z));
 	}
-
+	// 返 回 输 入 向 量x , y , z 交 换 次 序 的 值
 	template <typename T>
 	Vector3<T> Permute(const Vector3<T> &v, int x, int y, int z)
 	{
@@ -795,37 +737,39 @@ namespace Feimos
 	{
 		return v * f;
 	}
+	// 用 于 点 乘 操 作
 	template <typename T>
 	inline float Dot(const Vector2<T> &v1, const Vector2<T> &v2)
 	{
 		DCHECK(!v1.HasNaNs() && !v2.HasNaNs());
 		return v1.x * v2.x + v1.y * v2.y;
 	}
-
+	// 返 回 点 乘 的 绝 对 值
 	template <typename T>
 	inline float AbsDot(const Vector2<T> &v1, const Vector2<T> &v2)
 	{
 		DCHECK(!v1.HasNaNs() && !v2.HasNaNs());
 		return std::abs(Dot(v1, v2));
 	}
-
+	// 求 单 位 化 的 向 量
 	template <typename T>
 	inline Vector2<T> Normalize(const Vector2<T> &v)
 	{
 		return v / v.Length();
 	}
+
 	template <typename T>
 	Vector2<T> Abs(const Vector2<T> &v)
 	{
 		return Vector2<T>(std::abs(v.x), std::abs(v.y));
 	}
-
+	// 求 两 点 之 间 的 距 离
 	template <typename T>
 	inline float Distance(const Point3<T> &p1, const Point3<T> &p2)
 	{
 		return (p1 - p2).Length();
 	}
-
+	// 求 两 点 之 间 距 离 的 平 方
 	template <typename T>
 	inline float DistanceSquared(const Point3<T> &p1, const Point3<T> &p2)
 	{
@@ -838,33 +782,33 @@ namespace Feimos
 		DCHECK(!p.HasNaNs());
 		return p * f;
 	}
-
+	// 两 点 求 线 性 和
 	template <typename T>
 	Point3<T> Lerp(float t, const Point3<T> &p0, const Point3<T> &p1)
 	{
 		return (1 - t) * p0 + t * p1;
 	}
-
+	// 两 点 各 分 量 取 最 小 值
 	template <typename T>
 	Point3<T> Min(const Point3<T> &p1, const Point3<T> &p2)
 	{
 		return Point3<T>(std::min(p1.x, p2.x), std::min(p1.y, p2.y),
 						 std::min(p1.z, p2.z));
 	}
-
+	// 两 点 各 分 量 取 最 大 值
 	template <typename T>
 	Point3<T> Max(const Point3<T> &p1, const Point3<T> &p2)
 	{
 		return Point3<T>(std::max(p1.x, p2.x), std::max(p1.y, p2.y),
 						 std::max(p1.z, p2.z));
 	}
-
+	// 各 分 量 向 下 取 整
 	template <typename T>
 	Point3<T> Floor(const Point3<T> &p)
 	{
 		return Point3<T>(std::floor(p.x), std::floor(p.y), std::floor(p.z));
 	}
-
+	// 各 分 量 向 上 取 整
 	template <typename T>
 	Point3<T> Ceil(const Point3<T> &p)
 	{

@@ -51,6 +51,9 @@ void RenderThread::run()
 	Feimos::Vector3f vertical(0.0, 4.0, 0.0);
 	Feimos::Point3f origin(0.0, 0.0, -4.0);
 
+	// Feimos::Transform sphereT_Object2World, sphereT_World2Object;
+	// Feimos::Shape? s = new Sphere(&sphereT_Object2World, &sphereT_World2Object, false, 1.0);
+
 	// 生成Mesh加速结构
 	std::shared_ptr<Feimos::TriangleMesh> mesh;
 	std::vector<std::shared_ptr<Feimos::Shape>> tris;

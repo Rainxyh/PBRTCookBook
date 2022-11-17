@@ -58,9 +58,9 @@ namespace Feimos
 			int primitivesOffset;  // leaf
 			int secondChildOffset; // interior
 		};
-		uint16_t nPrimitives; // 0 -> interior node
+		uint16_t nPrimitives; // 0 -> interior node 如 果 为 0 说 明 是 内 部 节 点， 大 于 0 则 是 叶 节 点
 		uint8_t axis;		  // interior node: xyz
-		uint8_t pad[1];		  // ensure 32 byte total size
+		uint8_t pad[1];		  // ensure 32 byte total size 填 充 结 构 体， 使 字 节 变 为 32 的 倍 数， 访 问 会 更 快 且 稳 定
 	};
 	// BVHAccel Method Definitions
 	BVHAccel::BVHAccel(std::vector<std::shared_ptr<Primitive>> p,
@@ -327,11 +327,12 @@ namespace Feimos
 			return false;
 		bool hit = false;
 
+		// PBRT 采 用 预 先 计 算 的 Ray 的 倒 数 和 方 向 分 量 是 否 为 负 来 做 包 围 盒 快 速 求 交 计 算
 		Vector3f invDir(1 / ray.d.x, 1 / ray.d.y, 1 / ray.d.z);
 		int dirIsNeg[3] = {invDir.x < 0, invDir.y < 0, invDir.z < 0};
 		// Follow ray through BVH nodes to find primitive intersections
-		int toVisitOffset = 0, currentNodeIndex = 0;
-		int nodesToVisit[64];
+		int toVisitOffset = 0, currentNodeIndex = 0; // 数组中下一个需要被访问的节点位置, 当前访问的节点位置
+		int nodesToVisit[64]; // 需要去被访问的节点
 		while (true)
 		{
 

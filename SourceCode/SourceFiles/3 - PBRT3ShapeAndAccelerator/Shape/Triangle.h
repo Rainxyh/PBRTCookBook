@@ -27,6 +27,7 @@ namespace Feimos
 		std::unique_ptr<Point2f[]> uv;
 		std::vector<int> faceIndices;
 	};
+	
 	static long long triMeshBytes = 0;
 	class Triangle : public Shape
 	{
