@@ -6,16 +6,19 @@
 #include "Material/Reflection.h"
 #include "Texture/Texture.h"
 
-namespace Feimos {
+namespace Feimos
+{
 
-// MirrorMaterial Declarations
-class MirrorMaterial : public Material {
+  // MirrorMaterial Declarations
+  class MirrorMaterial : public Material
+  {
   public:
     // MirrorMaterial Public Methods
     MirrorMaterial(const std::shared_ptr<Texture<Spectrum>> &r,
-                   const std::shared_ptr<Texture<float>> &bump) {
-        Kr = r;
-        bumpMap = bump;
+                   const std::shared_ptr<Texture<float>> &bump)
+    {
+      Kr = r;
+      bumpMap = bump;
     }
     void ComputeScatteringFunctions(SurfaceInteraction *si, TransportMode mode,
                                     bool allowMultipleLobes) const;
@@ -24,22 +27,8 @@ class MirrorMaterial : public Material {
     // MirrorMaterial Private Data
     std::shared_ptr<Texture<Spectrum>> Kr;
     std::shared_ptr<Texture<float>> bumpMap;
-};
-
-
-
-
-
+  };
 
 }
 
-
-
-
-
-
-
 #endif
-
-
-

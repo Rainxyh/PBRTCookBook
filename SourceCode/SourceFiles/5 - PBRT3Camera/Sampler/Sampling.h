@@ -6,23 +6,11 @@
 #include "Core/Geometry.hpp"
 #include "Core/Transform.h"
 
-namespace Feimos {
+namespace Feimos
+{
 
-
-
-Point2f ConcentricSampleDisk(const Point2f &u);
-
-
-
-
-
-
+    Point2f ConcentricSampleDisk(const Point2f &u);
 
 }
 
-
-
 #endif
-
-
-

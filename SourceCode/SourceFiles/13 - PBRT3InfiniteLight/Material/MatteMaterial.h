@@ -4,10 +4,12 @@
 #include "Material/Material.h"
 #include "Texture/Texture.h"
 
-namespace Feimos {
+namespace Feimos
+{
 
-// MatteMaterial Declarations
-class MatteMaterial : public Material {
+  // MatteMaterial Declarations
+  class MatteMaterial : public Material
+  {
   public:
     // MatteMaterial Public Methods
     MatteMaterial(const std::shared_ptr<Texture<Spectrum>> &Kd,
@@ -22,21 +24,8 @@ class MatteMaterial : public Material {
     // MatteMaterial Private Data
     std::shared_ptr<Texture<Spectrum>> Kd;
     std::shared_ptr<Texture<float>> sigma, bumpMap;
-};
+  };
 
 }
 
-
-
-
-
-
-
-
 #endif
-
-
-
-
-
-

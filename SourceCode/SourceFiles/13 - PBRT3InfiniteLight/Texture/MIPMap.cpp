@@ -1,24 +1,6 @@
 
 
-namespace Feimos {
-
-
-
-
-
-
-
+namespace Feimos
+{
 
 }
-
-
-
-
-
-
-
-
-
-
-
-

@@ -4,23 +4,13 @@
 #include <stdlib.h>
 #include <time.h>
 
-
-
-inline void ClockRandomInit() {
+inline void ClockRandomInit()
+{
 	srand((unsigned)time(NULL));
 }
-inline double getClockRandom() {
+inline double getClockRandom()
+{
 	return rand() / (RAND_MAX + 1.0);
 }
 
-
-
-
-
-
-
 #endif
-
-
-
-

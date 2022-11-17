@@ -1,35 +1,34 @@
 #include "InteractionDockWidget.h"
 
-InteractionDockWidget::InteractionDockWidget(QWidget * parent) {
+InteractionDockWidget::InteractionDockWidget(QWidget *parent)
+{
 	setWindowTitle("Interaction");
-	
+
 	setFeatures(QDockWidget::DockWidgetMovable);
 	setFeatures(QDockWidget::AllDockWidgetFeatures);
-	
+
 	dockCentralWidget = new QFrame;
 
 	setWidget(dockCentralWidget);
 	centerLayout = new QVBoxLayout;
 	dockCentralWidget->setWindowFlags(Qt::FramelessWindowHint);
 	dockCentralWidget->setLayout(centerLayout);
-	
 
 	setupDock();
-
-
 
 	setMinimumWidth(200);
 }
 
-InteractionDockWidget::~InteractionDockWidget() {
-
+InteractionDockWidget::~InteractionDockWidget()
+{
 }
 
-void InteractionDockWidget::closeEvent(QCloseEvent * event) {
-
+void InteractionDockWidget::closeEvent(QCloseEvent *event)
+{
 }
 
-void InteractionDockWidget::setupDock() {
+void InteractionDockWidget::setupDock()
+{
 
 	m_DataTreeWidget = new DataTreeWidget;
 	centerLayout->addWidget(m_DataTreeWidget);
@@ -39,13 +38,3 @@ void InteractionDockWidget::setupDock() {
 
 	centerLayout->addWidget(renderButton);
 }
-
-
-
-
-
-
-
-
-
-

@@ -3,40 +3,43 @@
 #include <QHeaderView>
 #include "RenderStatus.h"
 
-DataTreeWidget::DataTreeWidget(QWidget* pParent) :
-	QTreeWidget(pParent) {
+DataTreeWidget::DataTreeWidget(QWidget *pParent) : QTreeWidget(pParent)
+{
 	// Set the size policy, making sure the widget fits nicely in the layout
 	setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
 	// Status and tooltip
 	setToolTip("Data");
-	//setStatusTip("Statistics");
+	// setStatusTip("Statistics");
 
 	// Configure tree
 	setColumnCount(3);
 
 	QStringList ColumnNames;
 
-	ColumnNames << "Property" << "Value" << "Unit";
+	ColumnNames << "Property"
+				<< "Value"
+				<< "Unit";
 	setHeaderLabels(ColumnNames);
 	// Configure headers
 	header()->resizeSection(0, 150);
 	header()->resizeSection(1, 150);
 	header()->resizeSection(2, 100);
-	
-	connect(&m_RenderStatus, SIGNAL(setDataChanged(const QString&, const QString&, const QString&, const QString&, const QString&)), 
-		this, SLOT(dataChanged(const QString&, const QString&, const QString&, const QString&, const QString&)));
+
+	connect(&m_RenderStatus, SIGNAL(setDataChanged(const QString &, const QString &, const QString &, const QString &, const QString &)),
+			this, SLOT(dataChanged(const QString &, const QString &, const QString &, const QString &, const QString &)));
 
 	generateTree();
 }
-void DataTreeWidget::generateTree() {
-	
+void DataTreeWidget::generateTree()
+{
+
 	addTreeItem(NULL, "Performance", "", "", "DataTree-application");
 	addTreeItem(NULL, "Memory Use", "", "", "DataTree-memory");
 }
-QTreeWidgetItem* DataTreeWidget::addTreeItem(QTreeWidgetItem* pParent, const QString& Property, const QString& Value, const QString& Unit, const QString& Icon)
+QTreeWidgetItem *DataTreeWidget::addTreeItem(QTreeWidgetItem *pParent, const QString &Property, const QString &Value, const QString &Unit, const QString &Icon)
 {
 	// Create new item
-	QTreeWidgetItem* pItem = new QTreeWidgetItem(pParent);
+	QTreeWidgetItem *pItem = new QTreeWidgetItem(pParent);
 
 	// Set item properties
 	pItem->setText(0, Property);
@@ -48,16 +51,18 @@ QTreeWidgetItem* DataTreeWidget::addTreeItem(QTreeWidgetItem* pParent, const QSt
 		addTopLevelItem(pItem);
 	return pItem;
 }
-void DataTreeWidget::UpdateData(const QString& Group, const QString& Name, const QString& Value, const QString& Unit, const QString& Icon)
+void DataTreeWidget::UpdateData(const QString &Group, const QString &Name, const QString &Value, const QString &Unit, const QString &Icon)
 {
-	QTreeWidgetItem* pGroup = FindItem(Group);
+	QTreeWidgetItem *pGroup = FindItem(Group);
 
-	if (!pGroup) {
+	if (!pGroup)
+	{
 		pGroup = addTreeItem(NULL, Group);
 
 		addTreeItem(pGroup, Name, Value, Unit, Icon);
 	}
-	else {
+	else
+	{
 		bool Found = false;
 
 		for (int i = 0; i < pGroup->childCount(); i++)
@@ -75,15 +80,15 @@ void DataTreeWidget::UpdateData(const QString& Group, const QString& Name, const
 			addTreeItem(pGroup, Name, Value, Unit, Icon);
 	}
 }
-QTreeWidgetItem* DataTreeWidget::FindItem(const QString& Name)
+QTreeWidgetItem *DataTreeWidget::FindItem(const QString &Name)
 {
-	QList<QTreeWidgetItem*> Items = findItems(Name, Qt::MatchRecursive, 0);
+	QList<QTreeWidgetItem *> Items = findItems(Name, Qt::MatchRecursive, 0);
 	if (Items.size() <= 0)
 		return NULL;
 	else
 		return Items[0];
 }
-void DataTreeWidget::dataChanged(const QString& Group, const QString& Name, const QString& Value, const QString& Unit, const QString& Icon)
+void DataTreeWidget::dataChanged(const QString &Group, const QString &Name, const QString &Value, const QString &Unit, const QString &Icon)
 {
 	UpdateData(Group, Name, Value, Unit, Icon);
 }

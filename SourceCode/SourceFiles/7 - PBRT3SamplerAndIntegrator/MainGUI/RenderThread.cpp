@@ -23,21 +23,18 @@
 
 #include "RenderStatus.h"
 
-
-
-
-
-
-RenderThread::RenderThread() {
+RenderThread::RenderThread()
+{
 	paintFlag = false;
 	renderFlag = false;
 }
 
-RenderThread::~RenderThread() {
-	
+RenderThread::~RenderThread()
+{
 }
 
-void RenderThread::run() {
+void RenderThread::run()
+{
 	emit PrintString("Prepared to Render");
 
 	ClockRandomInit();
@@ -47,7 +44,6 @@ void RenderThread::run() {
 
 	emit PrintString("Init FrameBuffer");
 	p_framebuffer->bufferResize(WIDTH, HEIGHT);
-
 
 	emit PrintString("Init Camera");
 	std::shared_ptr<Feimos::Camera> camera;
@@ -60,7 +56,6 @@ void RenderThread::run() {
 	Feimos::Transform Camera2World = Inverse(lookat);
 	camera = std::shared_ptr<Feimos::Camera>(Feimos::CreatePerspectiveCamera(WIDTH, HEIGHT, Camera2World));
 
-	
 	// 生成Mesh加速结构
 	std::shared_ptr<Feimos::TriangleMesh> mesh;
 	std::vector<std::shared_ptr<Feimos::Shape>> tris;
@@ -69,7 +64,7 @@ void RenderThread::run() {
 	std::shared_ptr<Feimos::Aggregate> aggregate;
 	Feimos::Transform tri_Object2World, tri_World2Object;
 
-	tri_Object2World = Feimos::Translate(Feimos::Vector3f(0.0, -2.5, 0.0))*tri_Object2World;
+	tri_Object2World = Feimos::Translate(Feimos::Vector3f(0.0, -2.5, 0.0)) * tri_Object2World;
 	tri_World2Object = Inverse(tri_Object2World);
 	emit PrintString("Read Mesh");
 	plyi = new Feimos::plyInfo("../../Resources/dragon.3d");
@@ -96,33 +91,22 @@ void RenderThread::run() {
 	emit PrintString("Start Rendering");
 	// 开始执行渲染
 	int renderCount = 0;
-	while (renderFlag) {
+	while (renderFlag)
+	{
 		QElapsedTimer t;
 		t.start();
-		
+
 		double frameTime;
 		integrator->Render(*worldScene, frameTime);
-
 
 		m_RenderStatus.setDataChanged("Performance", "One Frame Time", QString::number(frameTime), "");
 		m_RenderStatus.setDataChanged("Performance", "Frame pre second", QString::number(1.0f / (float)frameTime), "");
 
 		emit PaintBuffer(p_framebuffer->getUCbuffer(), WIDTH, HEIGHT, 4);
-			
-		while (t.elapsed() < 1);
+
+		while (t.elapsed() < 1)
+			;
 	}
 
 	emit PrintString("End Rendering");
-	
 }
-
-
-
-
-
-
-
-
-
-
-

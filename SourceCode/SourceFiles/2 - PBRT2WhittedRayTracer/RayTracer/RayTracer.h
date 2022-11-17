@@ -8,13 +8,13 @@
 #include "bvh_node.h"
 #include "hitable.h"
 
-
 //定义光源的形状和光强度
 material *lightM = new diffuse_light(new constant_texture(vec3(12.0f, 12.0f, 12.0f)));
 hitable *light_shape = new xz_rect(2.23f, 3.33f, 2.23f, 3.33f, 5.54f, lightM);
 //定义康奈尔盒场景
-hitable *cornell_box() {
-	hitable **list = new hitable*[1000];
+hitable *cornell_box()
+{
+	hitable **list = new hitable *[1000];
 	int index = 0;
 	material *LeftWall = new lambertian(new constant_texture(vec3(0.63f, 0.065f, 0.05f)));
 	material *RightWall = new lambertian(new constant_texture(vec3(0.12f, 0.45f, 0.15f)));
@@ -36,38 +36,46 @@ hitable *cornell_box() {
 	list[index++] = shortBox;
 	list[index++] = tallBox;
 	//建立BVH树
-	//return new hitable_list(list, index);
+	// return new hitable_list(list, index);
 	return new bvh_node(list, index, 0.0f, 1.0f);
 }
 
-vec3 getLight(const ray&r, hitable *world) {
+vec3 getLight(const ray &r, hitable *world)
+{
 	hit_record hrec;
 	scatter_record srec;
-	if (world->hit(r, 0.001f, 100000.0f, hrec)) {
+	if (world->hit(r, 0.001f, 100000.0f, hrec))
+	{
 		//计算发出的光。如果是非光源物体，emitted就是vec3(0.f)
 		vec3 emitted = hrec.mat_ptr->emitted(r, hrec, hrec.u, hrec.v, hrec.p);
 		return emitted;
 	}
-	else {
+	else
+	{
 		return vec3(0, 0, 0);
 	}
 }
 
-vec3 calSpecularLi(const ray&r, hitable *world, int depth);
-vec3 WhittedRT(const ray&r, hitable *world, int depth) {
+vec3 calSpecularLi(const ray &r, hitable *world, int depth);
+vec3 WhittedRT(const ray &r, hitable *world, int depth)
+{
 	vec3 finalColor(0.0, 0.0, 0.0);
 	ray tempR = r;
 	hit_record hrec;
 	scatter_record srec;
 	depth++;
-	if (world->hit(tempR, 0.001f, 100000.0f, hrec)) {
+	if (world->hit(tempR, 0.001f, 100000.0f, hrec))
+	{
 		vec3 emitted = hrec.mat_ptr->emitted(tempR, hrec, hrec.u, hrec.v, hrec.p);
 		//击中了物体
-		if (hrec.mat_ptr->scatter(tempR, hrec, srec)) {
-			if (srec.is_specular) {
+		if (hrec.mat_ptr->scatter(tempR, hrec, srec))
+		{
+			if (srec.is_specular)
+			{
 				finalColor = calSpecularLi(srec.specular_ray, world, depth + 1);
 			}
-			else {
+			else
+			{
 				//计算对光采样的pdf
 				hitable_pdf p(light_shape, hrec.p);
 				ray scattered = ray(hrec.p, p.generate(), r.time());
@@ -81,50 +89,48 @@ vec3 WhittedRT(const ray&r, hitable *world, int depth) {
 			}
 		}
 		//击中了光源
-		else {
+		else
+		{
 			finalColor = emitted;
 		}
 	}
 	return finalColor;
 }
 
-
 const int maxDepth = 5;
-vec3 calSpecularLi(const ray&r, hitable *world, int depth) {
+vec3 calSpecularLi(const ray &r, hitable *world, int depth)
+{
 	if (depth > maxDepth)
 		return vec3(0.0, 0.0, 0.0);
 	return WhittedRT(r, world, depth);
 }
 
-inline vec3 de_nan(const vec3&c) {
+inline vec3 de_nan(const vec3 &c)
+{
 	vec3 temp = c;
-	if (!(temp[0] == temp[0]))temp[0] = 0;
-	if (!(temp[1] == temp[1]))temp[1] = 0;
-	if (!(temp[2] == temp[2]))temp[2] = 0;
+	if (!(temp[0] == temp[0]))
+		temp[0] = 0;
+	if (!(temp[1] == temp[1]))
+		temp[1] = 0;
+	if (!(temp[2] == temp[2]))
+		temp[2] = 0;
 	return temp;
 }
 
-vec3 HDRtoLDR(const vec3& col, float exposure) {
+vec3 HDRtoLDR(const vec3 &col, float exposure)
+{
 	exposure = 1.0f - exposure;
 	float invExposure = 1.0f / exposure;
 	float gamma = 2.2f;
-	//HDR修正
+	// HDR修正
 	vec3 temp_c;
 	temp_c[0] = 1.0f - std::exp(-col[0] * invExposure);
-	//temp_cx = powf(temp_cx, 1.0 / gamma);
+	// temp_cx = powf(temp_cx, 1.0 / gamma);
 	temp_c[1] = 1.0f - std::exp(-col[1] * invExposure);
-	//temp_cy = powf(temp_cy, 1.0 / gamma);
+	// temp_cy = powf(temp_cy, 1.0 / gamma);
 	temp_c[2] = 1.0f - std::exp(-col[2] * invExposure);
-	//temp_cz = powf(temp_cz, 1.0 / gamma);
+	// temp_cz = powf(temp_cz, 1.0 / gamma);
 	return temp_c;
 }
 
-
 #endif
-
-
-
-
-
-
-

@@ -1,8 +1,8 @@
 #include "IMAGraphicsView.h"
 #include "DebugText.hpp"
 
-
-IMAGraphicsView::IMAGraphicsView(QGraphicsView * parent) {
+IMAGraphicsView::IMAGraphicsView(QGraphicsView *parent)
+{
 	setFrameShadow(Sunken);
 	setFrameShape(NoFrame);
 	//设置View的最小显示区
@@ -12,48 +12,47 @@ IMAGraphicsView::IMAGraphicsView(QGraphicsView * parent) {
 	setRenderHint(QPainter::Antialiasing);
 
 	getMap("Icons/background.png");
-	
-	
+
 	setScene(&scene);
-	//scene.setBackgroundBrush(QColor(0, 255, 255, 255));
+	// scene.setBackgroundBrush(QColor(0, 255, 255, 255));
 
 	setCacheMode(CacheBackground);
 	scale(_scale, _scale);
 }
 
-IMAGraphicsView::~IMAGraphicsView() {
-	
-
-
+IMAGraphicsView::~IMAGraphicsView()
+{
 }
 
-
-void IMAGraphicsView::mouseMoveEvent(QMouseEvent *event) {
-
+void IMAGraphicsView::mouseMoveEvent(QMouseEvent *event)
+{
 }
 
-void IMAGraphicsView::mousePressEvent(QMouseEvent *event) {
-	//QGraphicsView 坐标
+void IMAGraphicsView::mousePressEvent(QMouseEvent *event)
+{
+	// QGraphicsView 坐标
 	QPoint viewPoint = event->pos();
-	//QGraphicsScene 坐标
-	QPointF scenePoint = mapToScene(viewPoint);
-	DebugText::getDebugText()->addContents(QString::number(scenePoint.x())+" "+ QString::number(scenePoint.y()));
-}
-
-void IMAGraphicsView::mouseReleaseEvent(QMouseEvent *event) {
-	//QGraphicsView 坐标
-	QPoint viewPoint = event->pos();
-	//QGraphicsScene 坐标
+	// QGraphicsScene 坐标
 	QPointF scenePoint = mapToScene(viewPoint);
 	DebugText::getDebugText()->addContents(QString::number(scenePoint.x()) + " " + QString::number(scenePoint.y()));
 }
 
-void IMAGraphicsView::drawBackground(QPainter *painter, const QRectF &rect) {
-	painter->drawPixmap(int(sceneRect().left()), int(sceneRect().top()), map);
-	
+void IMAGraphicsView::mouseReleaseEvent(QMouseEvent *event)
+{
+	// QGraphicsView 坐标
+	QPoint viewPoint = event->pos();
+	// QGraphicsScene 坐标
+	QPointF scenePoint = mapToScene(viewPoint);
+	DebugText::getDebugText()->addContents(QString::number(scenePoint.x()) + " " + QString::number(scenePoint.y()));
 }
 
-void IMAGraphicsView::getMap(QString mapname) {
+void IMAGraphicsView::drawBackground(QPainter *painter, const QRectF &rect)
+{
+	painter->drawPixmap(int(sceneRect().left()), int(sceneRect().top()), map);
+}
+
+void IMAGraphicsView::getMap(QString mapname)
+{
 	map.load(mapname);
 
 	width = map.width();
@@ -66,19 +65,24 @@ void IMAGraphicsView::getMap(QString mapname) {
 
 void IMAGraphicsView::wheelEvent(QWheelEvent *event)
 {
-	if (event->delta() > 0) {
+	if (event->delta() > 0)
+	{
 		_scale = 1.1f;
 	}
-	else {
-		_scale = 0.9f; 
+	else
+	{
+		_scale = 0.9f;
 	}
-	scale(_scale, _scale); 
+	scale(_scale, _scale);
 }
 
-void IMAGraphicsView::PaintBuffer(unsigned char* buffer, int width, int height, int channals) {
+void IMAGraphicsView::PaintBuffer(unsigned char *buffer, int width, int height, int channals)
+{
 	QImage::Format format;
-	if (channals == 4) format = QImage::Format_ARGB32;
-	else if (channals == 3) format = QImage::Format_RGB888;
+	if (channals == 4)
+		format = QImage::Format_ARGB32;
+	else if (channals == 3)
+		format = QImage::Format_RGB888;
 	QImage image(buffer, width, height, static_cast<int>(width * channals * sizeof(unsigned char)), format);
 	image.constBits();
 	map = QPixmap::fromImage(image.rgbSwapped());
@@ -93,4 +97,3 @@ void IMAGraphicsView::PaintBuffer(unsigned char* buffer, int width, int height, 
 	scale(0.5, 0.5);
 	scale(2.0, 2.0);
 }
-

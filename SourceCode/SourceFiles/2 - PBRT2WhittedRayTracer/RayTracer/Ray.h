@@ -3,42 +3,30 @@
 
 #include "vec3.h"
 
-class ray  {
+class ray
+{
 public:
-    
-    ray() {}
-    ray(const vec3& a, const vec3& b,float ti = 0.0) 
-    { 
-		A = a;B = b;_time = ti;
-    }
-    
-    ray(const ray& r) {*this = r;}
-    vec3 origin() const {return A;}
-    vec3 direction() const {return B;}
-	float time()const { return _time; }
-    vec3 pointAtParameter(float t) const { return A + t*B; }
-	vec3 A;
-	vec3 B;
-	float _time;
+  ray() {}
+  ray(const vec3 &a, const vec3 &b, float ti = 0.0)
+  {
+    A = a;
+    B = b;
+    _time = ti;
+  }
+
+  ray(const ray &r) { *this = r; }
+  vec3 origin() const { return A; }
+  vec3 direction() const { return B; }
+  float time() const { return _time; }
+  vec3 pointAtParameter(float t) const { return A + t * B; }
+  vec3 A;
+  vec3 B;
+  float _time;
 };
 
-//inline ostream &operator<<(ostream &os, const ray &r) {
+// inline ostream &operator<<(ostream &os, const ray &r) {
 //	os << "(" << r.origin() << ") + t(" << r.direction() << ")";
 //	return os;
-//}
+// }
 
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-

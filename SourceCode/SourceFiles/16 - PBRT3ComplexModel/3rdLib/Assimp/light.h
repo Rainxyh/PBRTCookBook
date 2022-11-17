@@ -49,67 +49,68 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "types.h"
 
 #ifdef __cplusplus
-extern "C" {
+extern "C"
+{
 #endif
 
-// ---------------------------------------------------------------------------
-/** Enumerates all supported types of light sources.
- */
-enum aiLightSourceType
-{
-    aiLightSource_UNDEFINED     = 0x0,
+  // ---------------------------------------------------------------------------
+  /** Enumerates all supported types of light sources.
+   */
+  enum aiLightSourceType
+  {
+    aiLightSource_UNDEFINED = 0x0,
 
     //! A directional light source has a well-defined direction
     //! but is infinitely far away. That's quite a good
     //! approximation for sun light.
-    aiLightSource_DIRECTIONAL   = 0x1,
+    aiLightSource_DIRECTIONAL = 0x1,
 
     //! A point light source has a well-defined position
     //! in space but no direction - it emits light in all
     //! directions. A normal bulb is a point light.
-    aiLightSource_POINT         = 0x2,
+    aiLightSource_POINT = 0x2,
 
     //! A spot light source emits light in a specific
     //! angle. It has a position and a direction it is pointing to.
     //! A good example for a spot light is a light spot in
     //! sport arenas.
-    aiLightSource_SPOT          = 0x3,
+    aiLightSource_SPOT = 0x3,
 
     //! The generic light level of the world, including the bounces
     //! of all other light sources.
     //! Typically, there's at most one ambient light in a scene.
     //! This light type doesn't have a valid position, direction, or
     //! other properties, just a color.
-    aiLightSource_AMBIENT       = 0x4,
+    aiLightSource_AMBIENT = 0x4,
 
     //! An area light is a rectangle with predefined size that uniformly
     //! emits light from one of its sides. The position is center of the
     //! rectangle and direction is its normal vector.
-    aiLightSource_AREA          = 0x5,
+    aiLightSource_AREA = 0x5,
 
-    /** This value is not used. It is just there to force the
-     *  compiler to map this enum to a 32 Bit integer.
-     */
+  /** This value is not used. It is just there to force the
+   *  compiler to map this enum to a 32 Bit integer.
+   */
 #ifndef SWIG
     _aiLightSource_Force32Bit = INT_MAX
 #endif
-};
+  };
 
-// ---------------------------------------------------------------------------
-/** Helper structure to describe a light source.
- *
- *  Assimp supports multiple sorts of light sources, including
- *  directional, point and spot lights. All of them are defined with just
- *  a single structure and distinguished by their parameters.
- *  Note - some file formats (such as 3DS, ASE) export a "target point" -
- *  the point a spot light is looking at (it can even be animated). Assimp
- *  writes the target point as a subnode of a spotlights's main node,
- *  called "<spotName>.Target". However, this is just additional information
- *  then, the transformation tracks of the main node make the
- *  spot light already point in the right direction.
-*/
-struct aiLight
-{
+  // ---------------------------------------------------------------------------
+  /** Helper structure to describe a light source.
+   *
+   *  Assimp supports multiple sorts of light sources, including
+   *  directional, point and spot lights. All of them are defined with just
+   *  a single structure and distinguished by their parameters.
+   *  Note - some file formats (such as 3DS, ASE) export a "target point" -
+   *  the point a spot light is looking at (it can even be animated). Assimp
+   *  writes the target point as a subnode of a spotlights's main node,
+   *  called "<spotName>.Target". However, this is just additional information
+   *  then, the transformation tracks of the main node make the
+   *  spot light already point in the right direction.
+   */
+  struct aiLight
+  {
     /** The name of the light source.
      *
      *  There must be a node in the scenegraph with the same name.
@@ -235,22 +236,15 @@ struct aiLight
 #ifdef __cplusplus
 
     aiLight()
-        :   mType                 (aiLightSource_UNDEFINED)
-        ,   mAttenuationConstant  (0.f)
-        ,   mAttenuationLinear    (1.f)
-        ,   mAttenuationQuadratic (0.f)
-        ,   mAngleInnerCone       ((float)AI_MATH_TWO_PI)
-        ,   mAngleOuterCone       ((float)AI_MATH_TWO_PI)
-        ,   mSize                 (0.f, 0.f)
+        : mType(aiLightSource_UNDEFINED), mAttenuationConstant(0.f), mAttenuationLinear(1.f), mAttenuationQuadratic(0.f), mAngleInnerCone((float)AI_MATH_TWO_PI), mAngleOuterCone((float)AI_MATH_TWO_PI), mSize(0.f, 0.f)
     {
     }
 
 #endif
-};
+  };
 
 #ifdef __cplusplus
 }
 #endif
-
 
 #endif // !! __AI_LIGHT_H_INC__

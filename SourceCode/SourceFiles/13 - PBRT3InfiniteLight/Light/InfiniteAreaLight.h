@@ -7,29 +7,33 @@
 #include "Core/Scene.h"
 #include "Sampler/Sampling.h"
 
-namespace Feimos {
+namespace Feimos
+{
 
 	// InfiniteAreaLight Declarations
-	class InfiniteAreaLight : public Light {
+	class InfiniteAreaLight : public Light
+	{
 	public:
 		// InfiniteAreaLight Public Methods
 		InfiniteAreaLight(const Transform &LightToWorld, const Spectrum &power,
-			int nSamples, const std::string &texmap);
-		void Preprocess(const Scene &scene) {
+						  int nSamples, const std::string &texmap);
+		void Preprocess(const Scene &scene)
+		{
 			scene.WorldBound().BoundingSphere(&worldCenter, &worldRadius);
 		}
 		Spectrum Power() const;
 		Spectrum Le(const Ray &ray) const;
 		Spectrum Sample_Li(const Interaction &ref, const Point2f &u, Vector3f *wi,
-			float *pdf, VisibilityTester *vis) const;
+						   float *pdf, VisibilityTester *vis) const;
 		float Pdf_Li(const Interaction &, const Vector3f &) const;
 		Spectrum Sample_Le(const Point2f &u1, const Point2f &u2, float time,
-			Ray *ray, Normal3f *nLight, float *pdfPos,
-			float *pdfDir) const {
+						   Ray *ray, Normal3f *nLight, float *pdfPos,
+						   float *pdfDir) const
+		{
 			return Spectrum(0.f);
 		}
 		void Pdf_Le(const Ray &, const Normal3f &, float *pdfPos,
-			float *pdfDir) const {}
+					float *pdfDir) const {}
 
 	private:
 		// InfiniteAreaLight Private Data
@@ -39,31 +43,6 @@ namespace Feimos {
 		std::unique_ptr<Distribution2D> distribution;
 	};
 
-
-
-
-
-
-
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
 #endif
-
-
-
-
-
-
-

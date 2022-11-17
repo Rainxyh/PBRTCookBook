@@ -44,25 +44,29 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifndef INCLUDED_AI_PROGRESSHANDLER_H
 #define INCLUDED_AI_PROGRESSHANDLER_H
 #include "types.h"
-namespace Assimp    {
-
-// ------------------------------------------------------------------------------------
-/** @brief CPP-API: Abstract interface for custom progress report receivers.
- *
- *  Each #Importer instance maintains its own #ProgressHandler. The default
- *  implementation provided by Assimp doesn't do anything at all. */
-class ASSIMP_API ProgressHandler
-#ifndef SWIG
-    : public Intern::AllocateFromAssimpHeap
-#endif
+namespace Assimp
 {
-protected:
+
+  // ------------------------------------------------------------------------------------
+  /** @brief CPP-API: Abstract interface for custom progress report receivers.
+   *
+   *  Each #Importer instance maintains its own #ProgressHandler. The default
+   *  implementation provided by Assimp doesn't do anything at all. */
+  class ASSIMP_API ProgressHandler
+#ifndef SWIG
+      : public Intern::AllocateFromAssimpHeap
+#endif
+  {
+  protected:
     /** @brief  Default constructor */
-    ProgressHandler () {
+    ProgressHandler()
+    {
     }
-public:
+
+  public:
     /** @brief  Virtual destructor  */
-    virtual ~ProgressHandler () {
+    virtual ~ProgressHandler()
+    {
     }
 
     // -------------------------------------------------------------------
@@ -96,9 +100,10 @@ public:
      *  @note This is currently only used at the start and the end
      *   of the file parsing.
      *   */
-    virtual void UpdateFileRead(int currentStep /*= 0*/, int numberOfSteps /*= 0*/) {
-        float f = numberOfSteps ? currentStep / (float)numberOfSteps : 1.0f;
-        Update( f * 0.5f );
+    virtual void UpdateFileRead(int currentStep /*= 0*/, int numberOfSteps /*= 0*/)
+    {
+      float f = numberOfSteps ? currentStep / (float)numberOfSteps : 1.0f;
+      Update(f * 0.5f);
     }
 
     // -------------------------------------------------------------------
@@ -110,13 +115,14 @@ public:
      *   them has finished. This number is always strictly monotone
      *   increasing, although not necessarily linearly.
      *   */
-    virtual void UpdatePostProcess(int currentStep /*= 0*/, int numberOfSteps /*= 0*/) {
-        float f = numberOfSteps ? currentStep / (float)numberOfSteps : 1.0f;
-        Update( f * 0.5f + 0.5f );
+    virtual void UpdatePostProcess(int currentStep /*= 0*/, int numberOfSteps /*= 0*/)
+    {
+      float f = numberOfSteps ? currentStep / (float)numberOfSteps : 1.0f;
+      Update(f * 0.5f + 0.5f);
     }
 
-}; // !class ProgressHandler
-// ------------------------------------------------------------------------------------
+  }; // !class ProgressHandler
+  // ------------------------------------------------------------------------------------
 } // Namespace Assimp
 
 #endif

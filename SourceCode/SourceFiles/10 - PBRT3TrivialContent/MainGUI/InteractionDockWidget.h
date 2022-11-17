@@ -8,13 +8,13 @@
 
 #include "DataTreeWidget.h"
 
-class InteractionDockWidget : public QDockWidget {
+class InteractionDockWidget : public QDockWidget
+{
 	Q_OBJECT
 
 public:
-	InteractionDockWidget(QWidget * parent = Q_NULLPTR);
+	InteractionDockWidget(QWidget *parent = Q_NULLPTR);
 	~InteractionDockWidget();
-
 
 private:
 	void setupDock();
@@ -25,32 +25,12 @@ private:
 
 public:
 	QPushButton *renderButton;
-	DataTreeWidget * m_DataTreeWidget;
+	DataTreeWidget *m_DataTreeWidget;
 
 protected:
 	void closeEvent(QCloseEvent *event);
-	
-private slots :
-	
-	
+
+private slots:
 };
 
-
-
-
-	
-
-
-
-
-
-
-	
 #endif
-
-
-
-
-
-
-

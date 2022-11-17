@@ -1,17 +1,1 @@
 #include "Core/Spectrum.h"
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

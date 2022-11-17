@@ -3,69 +3,61 @@
 #include "Material/Material.h"
 #include "Media/Medium.h"
 
-namespace Feimos {
+namespace Feimos
+{
 
-class Primitive {
-public:
-	// Primitive Interface
-	virtual ~Primitive();
-	virtual Bounds3f WorldBound() const = 0;
-	virtual bool Intersect(const Ray &r, SurfaceInteraction *) const = 0;
-	virtual bool IntersectP(const Ray &r) const = 0;
-	virtual const AreaLight *GetAreaLight() const = 0;
-	virtual const Material *GetMaterial() const = 0;
-	virtual void ComputeScatteringFunctions(SurfaceInteraction *isect,
-		TransportMode mode,
-		bool allowMultipleLobes) const = 0;
-};
+	class Primitive
+	{
+	public:
+		// Primitive Interface
+		virtual ~Primitive();
+		virtual Bounds3f WorldBound() const = 0;
+		virtual bool Intersect(const Ray &r, SurfaceInteraction *) const = 0;
+		virtual bool IntersectP(const Ray &r) const = 0;
+		virtual const AreaLight *GetAreaLight() const = 0;
+		virtual const Material *GetMaterial() const = 0;
+		virtual void ComputeScatteringFunctions(SurfaceInteraction *isect,
+												TransportMode mode,
+												bool allowMultipleLobes) const = 0;
+	};
 
-class GeometricPrimitive : public Primitive {
-public:
-	// GeometricPrimitive Public Methods
-	virtual Bounds3f WorldBound() const;
-	virtual bool Intersect(const Ray &r, SurfaceInteraction *isect) const;
-	virtual bool IntersectP(const Ray &r) const;
-	GeometricPrimitive(const std::shared_ptr<Shape> &shape,
-		const std::shared_ptr<Material> &material,
-		const std::shared_ptr<AreaLight> &areaLight,
-		const MediumInterface &mediumInterface);
+	class GeometricPrimitive : public Primitive
+	{
+	public:
+		// GeometricPrimitive Public Methods
+		virtual Bounds3f WorldBound() const;
+		virtual bool Intersect(const Ray &r, SurfaceInteraction *isect) const;
+		virtual bool IntersectP(const Ray &r) const;
+		GeometricPrimitive(const std::shared_ptr<Shape> &shape,
+						   const std::shared_ptr<Material> &material,
+						   const std::shared_ptr<AreaLight> &areaLight,
+						   const MediumInterface &mediumInterface);
 
-	const AreaLight *GetAreaLight() const;
-	const Material *GetMaterial() const;
+		const AreaLight *GetAreaLight() const;
+		const Material *GetMaterial() const;
 
-	virtual void ComputeScatteringFunctions(SurfaceInteraction *isect,
-		TransportMode mode,
-		bool allowMultipleLobes) const;
-private:
-	// GeometricPrimitive Private Data
-	std::shared_ptr<Material> material;
-	std::shared_ptr<AreaLight> areaLight;
-	std::shared_ptr<Shape> shape;
-	MediumInterface mediumInterface;
-};
+		virtual void ComputeScatteringFunctions(SurfaceInteraction *isect,
+												TransportMode mode,
+												bool allowMultipleLobes) const;
 
+	private:
+		// GeometricPrimitive Private Data
+		std::shared_ptr<Material> material;
+		std::shared_ptr<AreaLight> areaLight;
+		std::shared_ptr<Shape> shape;
+		MediumInterface mediumInterface;
+	};
 
+	class Aggregate : public Primitive
+	{
+	public:
+		// Aggregate Public Methods
+		virtual void ComputeScatteringFunctions(SurfaceInteraction *isect,
+												TransportMode mode,
+												bool allowMultipleLobes) const {}
 
-class Aggregate : public Primitive {
-public:
-	// Aggregate Public Methods
-	virtual void ComputeScatteringFunctions(SurfaceInteraction *isect,
-		TransportMode mode,
-		bool allowMultipleLobes) const {}
-
-	const AreaLight *GetAreaLight() const { return nullptr; }
-	const Material *GetMaterial() const { return nullptr; }
-};
+		const AreaLight *GetAreaLight() const { return nullptr; }
+		const Material *GetMaterial() const { return nullptr; }
+	};
 
 }
-
-
-
-
-
-
-
-
-
-
-

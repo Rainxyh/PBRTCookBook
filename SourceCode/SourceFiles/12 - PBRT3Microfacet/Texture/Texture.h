@@ -4,32 +4,18 @@
 #include "Core/Geometry.hpp"
 #include "Core/FeimosRender.h"
 
-namespace Feimos{
+namespace Feimos
+{
 
-
-template <typename T>
-class Texture {
+  template <typename T>
+  class Texture
+  {
   public:
     // Texture Interface
     virtual T Evaluate(const SurfaceInteraction &) const = 0;
     virtual ~Texture() {}
-};
-
-
-
+  };
 
 }
 
-
-
-
-
-
 #endif
-
-
-
-
-
-
-

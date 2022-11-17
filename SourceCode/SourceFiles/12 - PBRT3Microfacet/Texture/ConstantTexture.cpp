@@ -1,12 +1,6 @@
 #include "Texture/ConstantTexture.h"
 
-namespace Feimos {
-
+namespace Feimos
+{
 
 }
-
-
-
-
-
-

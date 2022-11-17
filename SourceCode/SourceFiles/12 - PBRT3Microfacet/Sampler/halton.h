@@ -7,10 +7,12 @@
 #include "Sampler/Sampler.h"
 #include "Sampler/LowDiscrepancy.h"
 
-namespace Feimos {
+namespace Feimos
+{
 
-// HaltonSampler Declarations
-class HaltonSampler : public GlobalSampler {
+  // HaltonSampler Declarations
+  class HaltonSampler : public GlobalSampler
+  {
   public:
     // HaltonSampler Public Methods
     HaltonSampler(int nsamp, const Bounds2i &sampleBounds,
@@ -33,21 +35,14 @@ class HaltonSampler : public GlobalSampler {
     bool sampleAtPixelCenter;
 
     // HaltonSampler Private Methods
-    const uint16_t *PermutationForDimension(int dim) const {
-        return &radicalInversePermutations[PrimeSums[dim]];
+    const uint16_t *PermutationForDimension(int dim) const
+    {
+      return &radicalInversePermutations[PrimeSums[dim]];
     }
-};
+  };
 
-HaltonSampler *CreateHaltonSampler(const Bounds2i &sampleBounds);
-
+  HaltonSampler *CreateHaltonSampler(const Bounds2i &sampleBounds);
 
 }
 
-
-
-
-
 #endif
-
-
-

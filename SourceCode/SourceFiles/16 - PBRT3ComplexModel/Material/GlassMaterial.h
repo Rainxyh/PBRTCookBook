@@ -6,10 +6,12 @@
 #include "Core/FeimosRender.h"
 #include "Texture/Texture.h"
 
-namespace Feimos {
+namespace Feimos
+{
 
-// GlassMaterial Declarations
-class GlassMaterial : public Material {
+  // GlassMaterial Declarations
+  class GlassMaterial : public Material
+  {
   public:
     // GlassMaterial Public Methods
     GlassMaterial(const std::shared_ptr<Texture<Spectrum>> &Kr,
@@ -26,7 +28,7 @@ class GlassMaterial : public Material {
           index(index),
           bumpMap(bumpMap),
           remapRoughness(remapRoughness) {}
-    void ComputeScatteringFunctions(SurfaceInteraction *si, 
+    void ComputeScatteringFunctions(SurfaceInteraction *si,
                                     TransportMode mode,
                                     bool allowMultipleLobes) const;
 
@@ -37,19 +39,8 @@ class GlassMaterial : public Material {
     std::shared_ptr<Texture<float>> index;
     std::shared_ptr<Texture<float>> bumpMap;
     bool remapRoughness;
-};
+  };
 
 }
 
-
-
-
-
-
-
 #endif
-
-
-
-
-

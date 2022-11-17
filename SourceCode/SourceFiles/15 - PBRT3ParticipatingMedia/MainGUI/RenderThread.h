@@ -7,7 +7,8 @@
 #include "Core/FrameBuffer.h"
 #include "IMAGraphicsView.h"
 
-class RenderThread :public QThread {
+class RenderThread : public QThread
+{
 
 	Q_OBJECT
 public:
@@ -17,33 +18,16 @@ public:
 public:
 	bool renderFlag;
 	bool paintFlag;
-	FrameBuffer* p_framebuffer;
+	FrameBuffer *p_framebuffer;
 
 signals:
-	void PrintString(const char* s);
-	void PrintDataD(const char* s, const double data);
-	void PaintBuffer(unsigned char* buffer, int width, int height, int channals);
+	void PrintString(const char *s);
+	void PrintDataD(const char *s, const double data);
+	void PaintBuffer(unsigned char *buffer, int width, int height, int channals);
 private slots:
-	
-
 
 public:
 	void run();
-
-
 };
 
-
-
-
-
-
-
-
 #endif
-
-
-
-
-
-

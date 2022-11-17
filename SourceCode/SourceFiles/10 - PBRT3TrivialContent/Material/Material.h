@@ -4,32 +4,26 @@
 
 #include "Core/FeimosRender.h"
 
-namespace Feimos {
-// TransportMode Declarations
-enum class TransportMode { Radiance, Importance };
+namespace Feimos
+{
+  // TransportMode Declarations
+  enum class TransportMode
+  {
+    Radiance,
+    Importance
+  };
 
-// Material Declarations
-class Material {
+  // Material Declarations
+  class Material
+  {
   public:
     // Material Interface
     virtual void ComputeScatteringFunctions(SurfaceInteraction *si,
                                             TransportMode mode,
                                             bool allowMultipleLobes) const = 0;
     virtual ~Material() {}
-};
+  };
 
 }
 
-
-
-
-
 #endif
-
-
-
-
-
-
-
-

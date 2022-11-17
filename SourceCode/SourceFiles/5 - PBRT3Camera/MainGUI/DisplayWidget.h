@@ -11,12 +11,12 @@
 #include "Core/FrameBuffer.h"
 #include "RenderThread.h"
 
-class DisplayWidget : public QGroupBox {
+class DisplayWidget : public QGroupBox
+{
 	Q_OBJECT
 
-
 public:
-	DisplayWidget(QGroupBox * parent = Q_NULLPTR);
+	DisplayWidget(QGroupBox *parent = Q_NULLPTR);
 	~DisplayWidget();
 
 	void startRenderThread();
@@ -24,7 +24,7 @@ public:
 
 public:
 	bool renderFlag;
-	RenderThread * rThread;
+	RenderThread *rThread;
 	FrameBuffer framebuffer;
 
 private:
@@ -35,22 +35,8 @@ private:
 	void closeEvent(QCloseEvent *event);
 
 private slots:
-	void PrintString(const char* s);
-	void PrintDataD(const char* s, const double data);
+	void PrintString(const char *s);
+	void PrintDataD(const char *s, const double data);
 };
 
-
-
-
-
-
-
 #endif
-
-
-
-
-
-
-
-

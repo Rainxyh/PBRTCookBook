@@ -1,11 +1,6 @@
 #include "Texture/Texture.h"
 
-
-
-namespace Feimos {
-
+namespace Feimos
+{
 
 }
-
-
-

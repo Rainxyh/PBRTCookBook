@@ -30,21 +30,18 @@
 
 #include "RenderStatus.h"
 
-
-
-
-
-
-RenderThread::RenderThread() {
+RenderThread::RenderThread()
+{
 	paintFlag = false;
 	renderFlag = false;
 }
 
-RenderThread::~RenderThread() {
-	
+RenderThread::~RenderThread()
+{
 }
 
-void RenderThread::run() {
+void RenderThread::run()
+{
 	emit PrintString("Prepared to Render");
 
 	ClockRandomInit();
@@ -54,7 +51,6 @@ void RenderThread::run() {
 
 	emit PrintString("Init FrameBuffer");
 	p_framebuffer->bufferResize(WIDTH, HEIGHT);
-
 
 	emit PrintString("Init Camera");
 	std::shared_ptr<Feimos::Camera> camera;
@@ -69,8 +65,14 @@ void RenderThread::run() {
 
 	// 生成材质与纹理
 	emit PrintString("Init Material");
-	Feimos::Spectrum floorColor; floorColor[0] = 0.2; floorColor[1] = 0.3; floorColor[2] = 0.9;
-	Feimos::Spectrum dragonColor; dragonColor[0] = 1.0; dragonColor[1] = 1.0; dragonColor[2] = 0.0;
+	Feimos::Spectrum floorColor;
+	floorColor[0] = 0.2;
+	floorColor[1] = 0.3;
+	floorColor[2] = 0.9;
+	Feimos::Spectrum dragonColor;
+	dragonColor[0] = 1.0;
+	dragonColor[1] = 1.0;
+	dragonColor[2] = 0.0;
 	std::shared_ptr<Feimos::Texture<Feimos::Spectrum>> KdDragon = std::make_shared<Feimos::ConstantTexture<Feimos::Spectrum>>(dragonColor);
 	std::shared_ptr<Feimos::Texture<Feimos::Spectrum>> KdFloor = std::make_shared<Feimos::ConstantTexture<Feimos::Spectrum>>(floorColor);
 	std::shared_ptr<Feimos::Texture<float>> sigma = std::make_shared<Feimos::ConstantTexture<float>>(0.0f);
@@ -79,21 +81,18 @@ void RenderThread::run() {
 	std::shared_ptr<Feimos::Material> dragonMaterial = std::make_shared<Feimos::MatteMaterial>(KdDragon, sigma, bumpMap);
 	std::shared_ptr<Feimos::Material> floorMaterial = std::make_shared<Feimos::MatteMaterial>(KdFloor, sigma, bumpMap);
 
-
 	//地板
 	emit PrintString("Init Floor");
 	int nTrianglesFloor = 2;
-	int vertexIndicesFloor[6] = { 0,1,2,3,4,5 };
+	int vertexIndicesFloor[6] = {0, 1, 2, 3, 4, 5};
 	int nVerticesFloor = 6;
 	const float yPos_Floor = -2.0;
 	Feimos::Point3f P_Floor[6] = {
-		Feimos::Point3f(-6.0,yPos_Floor,6.0),Feimos::Point3f(6.0,yPos_Floor,6.0),Feimos::Point3f(-6.0,yPos_Floor,-6.0),
-		Feimos::Point3f(6.0,yPos_Floor,6.0),Feimos::Point3f(6.0,yPos_Floor,-6.0),Feimos::Point3f(-6.0,yPos_Floor,-6.0)
-	};
-	Feimos::Transform floor_Object2World; 
+		Feimos::Point3f(-6.0, yPos_Floor, 6.0), Feimos::Point3f(6.0, yPos_Floor, 6.0), Feimos::Point3f(-6.0, yPos_Floor, -6.0),
+		Feimos::Point3f(6.0, yPos_Floor, 6.0), Feimos::Point3f(6.0, yPos_Floor, -6.0), Feimos::Point3f(-6.0, yPos_Floor, -6.0)};
+	Feimos::Transform floor_Object2World;
 	Feimos::Transform floor_World2Object = Feimos::Inverse(floor_Object2World);
-	std::shared_ptr<Feimos::TriangleMesh> meshFloor = std::make_shared<Feimos::TriangleMesh>
-		(floor_Object2World, nTrianglesFloor, vertexIndicesFloor, nVerticesFloor, P_Floor, nullptr, nullptr, nullptr, nullptr);
+	std::shared_ptr<Feimos::TriangleMesh> meshFloor = std::make_shared<Feimos::TriangleMesh>(floor_Object2World, nTrianglesFloor, vertexIndicesFloor, nVerticesFloor, P_Floor, nullptr, nullptr, nullptr, nullptr);
 	std::vector<std::shared_ptr<Feimos::Shape>> trisFloor;
 	for (int i = 0; i < nTrianglesFloor; ++i)
 		trisFloor.push_back(std::make_shared<Feimos::Triangle>(&floor_Object2World, &floor_World2Object, false, meshFloor, i));
@@ -105,7 +104,7 @@ void RenderThread::run() {
 	std::shared_ptr<Feimos::Aggregate> aggregate;
 	Feimos::Transform tri_Object2World, tri_World2Object;
 
-	tri_Object2World = Feimos::Translate(Feimos::Vector3f(0.0, -2.5, 0.0))*tri_Object2World;
+	tri_Object2World = Feimos::Translate(Feimos::Vector3f(0.0, -2.5, 0.0)) * tri_Object2World;
 	tri_World2Object = Feimos::Inverse(tri_Object2World);
 
 	emit PrintString("Read Mesh");
@@ -138,34 +137,23 @@ void RenderThread::run() {
 	emit PrintString("Start Rendering");
 	// 开始执行渲染
 	int renderCount = 0;
-	while (renderFlag) {
+	while (renderFlag)
+	{
 		emit PrintString("test");
 		QElapsedTimer t;
 		t.start();
-		
+
 		double frameTime;
 		integrator->Render(*worldScene, frameTime);
-
 
 		m_RenderStatus.setDataChanged("Performance", "One Frame Time", QString::number(frameTime), "");
 		m_RenderStatus.setDataChanged("Performance", "Frame pre second", QString::number(1.0f / (float)frameTime), "");
 
 		emit PaintBuffer(p_framebuffer->getUCbuffer(), WIDTH, HEIGHT, 4);
-			
-		while (t.elapsed() < 1);
+
+		while (t.elapsed() < 1)
+			;
 	}
 
 	emit PrintString("End Rendering");
-	
 }
-
-
-
-
-
-
-
-
-
-
-

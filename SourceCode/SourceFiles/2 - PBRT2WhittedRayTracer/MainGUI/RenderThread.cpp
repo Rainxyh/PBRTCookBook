@@ -5,16 +5,18 @@
 #include "RayTracer/RayTracer.h"
 #include "RayTracer/camera.h"
 
-RenderThread::RenderThread() {
+RenderThread::RenderThread()
+{
 	paintFlag = false;
 	renderFlag = false;
 }
 
-RenderThread::~RenderThread() {
-	
+RenderThread::~RenderThread()
+{
 }
 
-void RenderThread::run() {
+void RenderThread::run()
+{
 	emit PrintString("Prepared to Render");
 
 	ClockRandomInit();
@@ -26,24 +28,27 @@ void RenderThread::run() {
 
 	hitable *world = cornell_box();
 
-	vec3 lookfrom(2.78, 2.78, -8.00);//
+	vec3 lookfrom(2.78, 2.78, -8.00); //
 	vec3 lookat(2.78, 2.78, 0);
-	float disk_to_focus = 10.0;//(lookfrom - lookat).length();
+	float disk_to_focus = 10.0; //(lookfrom - lookat).length();
 	float aperture = 0.00;
 	float vfov = 40.0;
 	camera cam(lookfrom, lookat, vec3(0, 1, 0), vfov, float(WIDTH) / float(HEIGHT), aperture, disk_to_focus, 0.0, 1.0);
 
 	// ¿ªÊ¼Ö´ÐÐäÖÈ¾
 	int renderCount = 0;
-	while (renderFlag) {
+	while (renderFlag)
+	{
 		QElapsedTimer t;
 		t.start();
-		
-		//emit PrintString("Rendering");
+
+		// emit PrintString("Rendering");
 		renderCount++;
 
-		for (int i = 0; i < WIDTH; i++) {
-			for(int j = 0; j < HEIGHT; j++) {
+		for (int i = 0; i < WIDTH; i++)
+		{
+			for (int j = 0; j < HEIGHT; j++)
+			{
 
 				float u = float(i + getClockRandom()) / float(WIDTH);
 				float v = float(j + getClockRandom()) / float(HEIGHT);
@@ -60,21 +65,9 @@ void RenderThread::run() {
 			}
 		}
 
-		
 		emit PaintBuffer(p_framebuffer->getUCbuffer(), WIDTH, HEIGHT, 4);
-			
-		while (t.elapsed() < 20);
+
+		while (t.elapsed() < 20)
+			;
 	}
-	
 }
-
-
-
-
-
-
-
-
-
-
-

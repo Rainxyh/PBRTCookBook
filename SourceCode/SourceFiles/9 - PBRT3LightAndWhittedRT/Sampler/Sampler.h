@@ -7,10 +7,12 @@
 #include "Camera/Camera.h"
 #include "Sampler/RNG.h"
 
-namespace Feimos {
+namespace Feimos
+{
 
-// Sampler Declarations
-class Sampler {
+  // Sampler Declarations
+  class Sampler
+  {
   public:
     // Sampler Interface
     virtual ~Sampler();
@@ -43,57 +45,47 @@ class Sampler {
   private:
     // Sampler Private Data
     size_t array1DOffset, array2DOffset;
-};
+  };
 
+  class PixelSampler : public Sampler
+  {
+  public:
+    // PixelSampler Public Methods
+    PixelSampler(int64_t samplesPerPixel, int nSampledDimensions);
+    bool StartNextSample();
+    bool SetSampleNumber(int64_t);
+    float Get1D();
+    Point2f Get2D();
 
-class PixelSampler : public Sampler {
-public:
-	// PixelSampler Public Methods
-	PixelSampler(int64_t samplesPerPixel, int nSampledDimensions);
-	bool StartNextSample();
-	bool SetSampleNumber(int64_t);
-	float Get1D();
-	Point2f Get2D();
+  protected:
+    // PixelSampler Protected Data
+    std::vector<std::vector<float>> samples1D;
+    std::vector<std::vector<Point2f>> samples2D;
+    int current1DDimension = 0, current2DDimension = 0;
+    RNG rng;
+  };
 
-protected:
-	// PixelSampler Protected Data
-	std::vector<std::vector<float>> samples1D;
-	std::vector<std::vector<Point2f>> samples2D;
-	int current1DDimension = 0, current2DDimension = 0;
-	RNG rng;
-};
+  class GlobalSampler : public Sampler
+  {
+  public:
+    // GlobalSampler Public Methods
+    bool StartNextSample();
+    void StartPixel(const Point2i &);
+    bool SetSampleNumber(int64_t sampleNum);
+    float Get1D();
+    Point2f Get2D();
+    GlobalSampler(int64_t samplesPerPixel) : Sampler(samplesPerPixel) {}
+    virtual int64_t GetIndexForSample(int64_t sampleNum) const = 0;
+    virtual float SampleDimension(int64_t index, int dimension) const = 0;
 
-class GlobalSampler : public Sampler {
-public:
-	// GlobalSampler Public Methods
-	bool StartNextSample();
-	void StartPixel(const Point2i &);
-	bool SetSampleNumber(int64_t sampleNum);
-	float Get1D();
-	Point2f Get2D();
-	GlobalSampler(int64_t samplesPerPixel) : Sampler(samplesPerPixel) {}
-	virtual int64_t GetIndexForSample(int64_t sampleNum) const = 0;
-	virtual float SampleDimension(int64_t index, int dimension) const = 0;
-
-private:
-	// GlobalSampler Private Data
-	int dimension;
-	int64_t intervalSampleIndex;
-	static const int arrayStartDim = 5;
-	int arrayEndDim;
-};
-
-
-
-
-
+  private:
+    // GlobalSampler Private Data
+    int dimension;
+    int64_t intervalSampleIndex;
+    static const int arrayStartDim = 5;
+    int arrayEndDim;
+  };
 
 }
 
-
-
-
 #endif
-
-
-

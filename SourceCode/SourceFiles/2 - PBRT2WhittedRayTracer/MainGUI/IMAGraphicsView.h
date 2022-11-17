@@ -7,28 +7,29 @@
 #include <QPixmap>
 #include <QMouseEvent>
 
-
-class IMAGraphicsView : public QGraphicsView {
+class IMAGraphicsView : public QGraphicsView
+{
 	Q_OBJECT
 
 public:
-	IMAGraphicsView(QGraphicsView * parent = Q_NULLPTR);
+	IMAGraphicsView(QGraphicsView *parent = Q_NULLPTR);
 	~IMAGraphicsView();
+
 public:
 	void getMap(QString mapname);
 
 private:
 	int bottom, left, top, right, width, height;
 	float _scale = 1.0f;
+
 private:
 	QGraphicsScene scene;
 	QPixmap map;
 
 signals:
-	
 
 private slots:
-	void PaintBuffer(unsigned char* buffer, int width, int height, int channals);
+	void PaintBuffer(unsigned char *buffer, int width, int height, int channals);
 
 protected:
 	void mouseMoveEvent(QMouseEvent *event);
@@ -38,14 +39,4 @@ protected:
 	void mouseReleaseEvent(QMouseEvent *event);
 };
 
-
-
-
-
 #endif
-
-
-
-
-
-

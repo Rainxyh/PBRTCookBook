@@ -5,20 +5,26 @@
 #include "Core/FeimosRender.h"
 #include "Integrator/Integrator.h"
 
-namespace Feimos {
+namespace Feimos
+{
 
-// LightStrategy Declarations
-enum class LightStrategy { UniformSampleAll, UniformSampleOne };
+  // LightStrategy Declarations
+  enum class LightStrategy
+  {
+    UniformSampleAll,
+    UniformSampleOne
+  };
 
-// DirectLightingIntegrator Declarations
-class DirectLightingIntegrator : public SamplerIntegrator {
+  // DirectLightingIntegrator Declarations
+  class DirectLightingIntegrator : public SamplerIntegrator
+  {
   public:
     // DirectLightingIntegrator Public Methods
     DirectLightingIntegrator(LightStrategy strategy, int maxDepth,
                              std::shared_ptr<const Camera> camera,
                              std::shared_ptr<Sampler> sampler,
                              const Bounds2i &pixelBounds,
-							FrameBuffer* framebuffer)
+                             FrameBuffer *framebuffer)
         : SamplerIntegrator(camera, sampler, pixelBounds, framebuffer),
           strategy(strategy),
           maxDepth(maxDepth) {}
@@ -31,25 +37,8 @@ class DirectLightingIntegrator : public SamplerIntegrator {
     const LightStrategy strategy;
     const int maxDepth;
     std::vector<int> nLightSamples;
-};
-
-
-
+  };
 
 }
 
-
-
-
-
-
-
-
-
-
-
-
 #endif
-
-
-

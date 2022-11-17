@@ -1,16 +1,6 @@
 #include "Camera/Camera.h"
 
-namespace Feimos{
-
-
-
-
-
-
+namespace Feimos
+{
 
 }
-
-
-
-
-

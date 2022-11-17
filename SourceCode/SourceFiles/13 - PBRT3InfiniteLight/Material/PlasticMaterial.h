@@ -6,10 +6,12 @@
 #include "Core/FeimosRender.h"
 #include "Texture/Texture.h"
 
-namespace Feimos {
+namespace Feimos
+{
 
-// PlasticMaterial Declarations
-class PlasticMaterial : public Material {
+  // PlasticMaterial Declarations
+  class PlasticMaterial : public Material
+  {
   public:
     // PlasticMaterial Public Methods
     PlasticMaterial(const std::shared_ptr<Texture<Spectrum>> &Kd,
@@ -30,23 +32,8 @@ class PlasticMaterial : public Material {
     std::shared_ptr<Texture<Spectrum>> Kd, Ks;
     std::shared_ptr<Texture<float>> roughness, bumpMap;
     const bool remapRoughness;
-};
-
-
-
-
+  };
 
 }
 
-
-
-
-
-
-
 #endif
-
-
-
-
-

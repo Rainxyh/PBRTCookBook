@@ -5,11 +5,12 @@
 #include "ONB.h"
 #include "hitable.h"
 
-inline vec3 random_cosine_direction() {
+inline vec3 random_cosine_direction()
+{
 	float r1 = getClockRandom();
 	float r2 = getClockRandom();
 	float z = sqrt(1 - r2);
-	float phi = 2 * M_PI*r1;
+	float phi = 2 * M_PI * r1;
 	float x = cos(phi) * 2 * sqrt(r2);
 	float y = sin(phi) * 2 * sqrt(r2);
 	return vec3(x, y, z);
@@ -17,7 +18,7 @@ inline vec3 random_cosine_direction() {
 class pdf
 {
 public:
-	virtual float value(const vec3& direction) const = 0;
+	virtual float value(const vec3 &direction) const = 0;
 	virtual vec3 generate() const = 0;
 };
 
@@ -25,12 +26,12 @@ inline vec3 random_cosine_direction();
 class cosine_pdf : public pdf
 {
 public:
-	cosine_pdf(const vec3& w) { uvw.build_from_w(w); }
-	virtual float value(const vec3& direction) const
+	cosine_pdf(const vec3 &w) { uvw.build_from_w(w); }
+	virtual float value(const vec3 &direction) const
 	{
 		float cosine = dot(unitVector(direction), uvw.w());
 		if (cosine > 0)
-			return cosine /M_PI;
+			return cosine / M_PI;
 		else
 			return 0;
 	}
@@ -44,8 +45,8 @@ public:
 class hitable_pdf : public pdf
 {
 public:
-	hitable_pdf(hitable *p, const vec3& origin) :ptr(p), o(origin) {}
-	virtual float value(const vec3& direction) const
+	hitable_pdf(hitable *p, const vec3 &origin) : ptr(p), o(origin) {}
+	virtual float value(const vec3 &direction) const
 	{
 		return ptr->pdf_value(o, direction);
 	}
@@ -62,10 +63,14 @@ public:
 class mixture_pdf : public pdf
 {
 public:
-	mixture_pdf(pdf *p0, pdf *p1){p[0] = p0; p[1] = p1;}
-	virtual float value(const vec3& direction) const
+	mixture_pdf(pdf *p0, pdf *p1)
 	{
-		return 0.5f * p[0]->value(direction) + 0.5f*p[1]->value(direction);
+		p[0] = p0;
+		p[1] = p1;
+	}
+	virtual float value(const vec3 &direction) const
+	{
+		return 0.5f * p[0]->value(direction) + 0.5f * p[1]->value(direction);
 	}
 
 	virtual vec3 generate() const
@@ -78,9 +83,4 @@ public:
 	pdf *p[2];
 };
 
-
-
-
 #endif
-
-

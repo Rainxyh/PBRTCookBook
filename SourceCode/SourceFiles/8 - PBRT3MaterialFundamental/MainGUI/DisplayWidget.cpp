@@ -1,6 +1,7 @@
 #include "DisplayWidget.h"
 
-DisplayWidget::DisplayWidget(QGroupBox * parent) {
+DisplayWidget::DisplayWidget(QGroupBox *parent)
+{
 
 	renderFlag = false;
 	rThread = nullptr;
@@ -11,25 +12,29 @@ DisplayWidget::DisplayWidget(QGroupBox * parent) {
 	framebuffer.InitBuffer(800, 600, 4);
 }
 
-DisplayWidget::~DisplayWidget() { 
+DisplayWidget::~DisplayWidget()
+{
 	killRenderThread();
 	framebuffer.FreeBuffer();
 }
 
-void DisplayWidget::closeEvent(QCloseEvent *event) {
+void DisplayWidget::closeEvent(QCloseEvent *event)
+{
 	killRenderThread();
 }
 
-void DisplayWidget::startRenderThread() {
-	if (!rThread) {
+void DisplayWidget::startRenderThread()
+{
+	if (!rThread)
+	{
 		rThread = new RenderThread;
 		renderFlag = true;
 		rThread->renderFlag = true;
 		rThread->p_framebuffer = &framebuffer;
 
-		connect(rThread, SIGNAL(PrintString(const char*)), this, SLOT(PrintString(const char*)));	
-		connect(rThread, SIGNAL(PrintDataD(const char*, const double)), this, SLOT(PrintDataD(const char*, const double)));
-		connect(rThread, SIGNAL(PaintBuffer(unsigned char*, int, int, int)), &m_IMAGraphicsView, SLOT(PaintBuffer(unsigned char*, int, int, int)));
+		connect(rThread, SIGNAL(PrintString(const char *)), this, SLOT(PrintString(const char *)));
+		connect(rThread, SIGNAL(PrintDataD(const char *, const double)), this, SLOT(PrintDataD(const char *, const double)));
+		connect(rThread, SIGNAL(PaintBuffer(unsigned char *, int, int, int)), &m_IMAGraphicsView, SLOT(PaintBuffer(unsigned char *, int, int, int)));
 
 		rThread->start();
 	}
@@ -37,7 +42,8 @@ void DisplayWidget::startRenderThread() {
 	renderFlag = true;
 }
 
-void DisplayWidget::killRenderThread() {
+void DisplayWidget::killRenderThread()
+{
 	if (!rThread)
 		return;
 	renderFlag = false;
@@ -52,20 +58,12 @@ void DisplayWidget::killRenderThread() {
 	rThread = nullptr;
 }
 
-void DisplayWidget::PrintString(const char* s) {
+void DisplayWidget::PrintString(const char *s)
+{
 
 	TextDinodonS(s);
 }
-void DisplayWidget::PrintDataD(const char* s, const double data) {
+void DisplayWidget::PrintDataD(const char *s, const double data)
+{
 	TextDinodonN(s, data);
 }
-
-
-
-
-
-
-
-
-
-

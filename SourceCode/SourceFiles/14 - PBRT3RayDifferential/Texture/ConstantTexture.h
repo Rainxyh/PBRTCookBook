@@ -4,10 +4,12 @@
 
 #include "Texture/Texture.h"
 
-namespace Feimos {
+namespace Feimos
+{
 
-template <typename T>
-class ConstantTexture : public Texture<T> {
+  template <typename T>
+  class ConstantTexture : public Texture<T>
+  {
   public:
     // ConstantTexture Public Methods
     ConstantTexture(const T &value) : value(value) {}
@@ -15,21 +17,8 @@ class ConstantTexture : public Texture<T> {
 
   private:
     T value;
-};
+  };
 
 }
 
-
-
-
-
-
-
 #endif
-
-
-
-
-
-
-

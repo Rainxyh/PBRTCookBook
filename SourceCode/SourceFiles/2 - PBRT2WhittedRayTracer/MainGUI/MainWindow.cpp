@@ -1,10 +1,10 @@
 #include "MainWindow.h"
 #include "DebugText.hpp"
 
-
 MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent) {
-    
+	: QMainWindow(parent)
+{
+
 	setMinimumSize(800, 800);
 
 	setCentralWidget(&centralWidget);
@@ -20,48 +20,38 @@ MainWindow::MainWindow(QWidget *parent)
 	setDock();
 
 	connect(m_InteractionDockWidget.renderButton, SIGNAL(clicked()), this, SLOT(setRendering()));
-
 }
 
-void MainWindow::closeEvent(QCloseEvent *event) {
+void MainWindow::closeEvent(QCloseEvent *event)
+{
 	// 关闭渲染线程
 	m_DisplayWidget.killRenderThread();
-
 }
 
-void MainWindow::setMenu(void) {
-
-
+void MainWindow::setMenu(void)
+{
 }
 
-void MainWindow::setWidget(void) {
-	
+void MainWindow::setWidget(void)
+{
+
 	MainWindowLayout.addWidget(&m_DisplayWidget);
-
 }
 
-void MainWindow::setDock(void) {
+void MainWindow::setDock(void)
+{
 
 	addDockWidget(Qt::LeftDockWidgetArea, &m_InteractionDockWidget);
-
 }
 
-void MainWindow::setRendering() {
+void MainWindow::setRendering()
+{
 
-	if (!m_DisplayWidget.renderFlag) {
+	if (!m_DisplayWidget.renderFlag)
+	{
 		// 启动渲染
 		m_InteractionDockWidget.renderButton->setText("Rendering");
 
-
-
 		m_DisplayWidget.startRenderThread();
 	}
-
 }
-
-
-
-
-
-
-

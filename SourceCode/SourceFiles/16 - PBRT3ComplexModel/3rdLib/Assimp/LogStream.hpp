@@ -44,27 +44,31 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifndef INCLUDED_AI_LOGSTREAM_H
 #define INCLUDED_AI_LOGSTREAM_H
 #include "types.h"
-namespace Assimp    {
-class IOSystem;
-
-// ------------------------------------------------------------------------------------
-/** @brief CPP-API: Abstract interface for log stream implementations.
- *
- *  Several default implementations are provided, see #aiDefaultLogStream for more
- *  details. Writing your own implementation of LogStream is just necessary if these
- *  are not enough for your purpose. */
-class ASSIMP_API LogStream
-#ifndef SWIG
-    : public Intern::AllocateFromAssimpHeap
-#endif
+namespace Assimp
 {
-protected:
+  class IOSystem;
+
+  // ------------------------------------------------------------------------------------
+  /** @brief CPP-API: Abstract interface for log stream implementations.
+   *
+   *  Several default implementations are provided, see #aiDefaultLogStream for more
+   *  details. Writing your own implementation of LogStream is just necessary if these
+   *  are not enough for your purpose. */
+  class ASSIMP_API LogStream
+#ifndef SWIG
+      : public Intern::AllocateFromAssimpHeap
+#endif
+  {
+  protected:
     /** @brief  Default constructor */
-    LogStream() {
+    LogStream()
+    {
     }
-public:
+
+  public:
     /** @brief  Virtual destructor  */
-    virtual ~LogStream() {
+    virtual ~LogStream()
+    {
     }
 
     // -------------------------------------------------------------------
@@ -76,7 +80,7 @@ public:
      *  #DefaultLogger:set(). Usually you can *expect* that a log message
      *  is exactly one line and terminated with a single \n character.
      *  @param message Message to be written */
-    virtual void write(const char* message) = 0;
+    virtual void write(const char *message) = 0;
 
     // -------------------------------------------------------------------
     /** @brief Creates a default log stream
@@ -85,12 +89,12 @@ public:
      *  @param io For aiDefaultLogStream_FILE: IOSystem to be used to open the output
      *   file. Pass NULL for the default implementation.
      *  @return New LogStream instance.  */
-    static LogStream* createDefaultStream(aiDefaultLogStream stream,
-        const char* name = "AssimpLog.txt",
-        IOSystem* io = NULL);
+    static LogStream *createDefaultStream(aiDefaultLogStream stream,
+                                          const char *name = "AssimpLog.txt",
+                                          IOSystem *io = NULL);
 
-}; // !class LogStream
-// ------------------------------------------------------------------------------------
+  }; // !class LogStream
+  // ------------------------------------------------------------------------------------
 } // Namespace Assimp
 
 #endif

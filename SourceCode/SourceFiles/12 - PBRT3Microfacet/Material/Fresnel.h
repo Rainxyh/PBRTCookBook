@@ -5,23 +5,24 @@
 #include "Core/FeimosRender.h"
 #include "Core/Spectrum.h"
 
+namespace Feimos
+{
 
+  // Reflection Declarations
+  float FrDielectric(float cosThetaI, float etaI, float etaT);
+  Spectrum FrConductor(float cosThetaI, const Spectrum &etaI,
+                       const Spectrum &etaT, const Spectrum &k);
 
-namespace Feimos {
-
-// Reflection Declarations
-float FrDielectric(float cosThetaI, float etaI, float etaT);
-Spectrum FrConductor(float cosThetaI, const Spectrum &etaI,
-                     const Spectrum &etaT, const Spectrum &k);
-
-class Fresnel {
+  class Fresnel
+  {
   public:
     // Fresnel Interface
     virtual ~Fresnel() {}
     virtual Spectrum Evaluate(float cosI) const = 0;
-};
+  };
 
-class FresnelConductor : public Fresnel {
+  class FresnelConductor : public Fresnel
+  {
   public:
     // FresnelConductor Public Methods
     Spectrum Evaluate(float cosThetaI) const;
@@ -31,9 +32,10 @@ class FresnelConductor : public Fresnel {
 
   private:
     Spectrum etaI, etaT, k;
-};
+  };
 
-class FresnelDielectric : public Fresnel {
+  class FresnelDielectric : public Fresnel
+  {
   public:
     // FresnelDielectric Public Methods
     Spectrum Evaluate(float cosThetaI) const;
@@ -41,32 +43,14 @@ class FresnelDielectric : public Fresnel {
 
   private:
     float etaI, etaT;
-};
+  };
 
-class FresnelNoOp : public Fresnel {
+  class FresnelNoOp : public Fresnel
+  {
   public:
     Spectrum Evaluate(float) const { return Spectrum(1.); }
-};
-
-
-
-
-
-
+  };
 
 }
 
-
-
-
-
-
-
-
 #endif
-
-
-
-
-
-

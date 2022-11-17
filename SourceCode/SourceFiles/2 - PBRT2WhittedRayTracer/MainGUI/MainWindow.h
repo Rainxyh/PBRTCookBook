@@ -12,14 +12,12 @@
 
 class MainWindow : public QMainWindow
 {
-    Q_OBJECT
+	Q_OBJECT
 
 public:
-    MainWindow(QWidget *parent = Q_NULLPTR);
+	MainWindow(QWidget *parent = Q_NULLPTR);
 
 public:
-
-
 private:
 	QWidget centralWidget;
 	QVBoxLayout MainWindowLayout;
@@ -36,10 +34,6 @@ private:
 
 private slots:
 	void setRendering();
-
 };
 
-
 #endif
-
-

@@ -1,18 +1,6 @@
 #include "Core/interaction.h"
 
-namespace Feimos {
-
-
-
-
-
+namespace Feimos
+{
 
 }
-
-
-
-
-
-
-
-
