@@ -2,7 +2,7 @@
 #ifndef __Spectrum_h__
 #define __Spectrum_h__
 
-#include "Core\FeimosRender.h"
+#include "Core/FeimosRender.h"
 #include <string>
 
 namespace Feimos {

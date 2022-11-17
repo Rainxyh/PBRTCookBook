@@ -1,4 +1,4 @@
-#include "Sampler\halton.h"
+#include "Sampler/halton.h"
 
 
 namespace Feimos {

@@ -27,7 +27,7 @@ void DisplayWidget::startRenderThread() {
 		rThread->renderFlag = true;
 		rThread->p_framebuffer = &framebuffer;
 
-		connect(rThread, SIGNAL(PrintString(char*)), this, SLOT(PrintString(char*)));	
+		connect(rThread, SIGNAL(PrintString(const char*)), this, SLOT(PrintString(const char*)));	
 		connect(rThread, SIGNAL(PrintDataD(const char*, const double)), this, SLOT(PrintDataD(const char*, const double)));
 		connect(rThread, SIGNAL(PaintBuffer(unsigned char*, int, int, int)), &m_IMAGraphicsView, SLOT(PaintBuffer(unsigned char*, int, int, int)));
 
@@ -52,7 +52,7 @@ void DisplayWidget::killRenderThread() {
 	rThread = nullptr;
 }
 
-void DisplayWidget::PrintString(char* s) {
+void DisplayWidget::PrintString(const char* s) {
 
 	TextDinodonS(s);
 }

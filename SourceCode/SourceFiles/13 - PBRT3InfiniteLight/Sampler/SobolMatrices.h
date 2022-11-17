@@ -35,7 +35,7 @@
 #define NOMINMAX
 
 // core/sobolmatrices.h*
-#include "Core\FeimosRender.h"
+#include "Core/FeimosRender.h"
 
 namespace Feimos {
 

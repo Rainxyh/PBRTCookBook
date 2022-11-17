@@ -4,6 +4,8 @@
 
 #include <memory>
 #include <limits>
+#include <math.h>
+#include <string.h>
 
 namespace Feimos {
 
@@ -127,6 +129,17 @@ inline float NextFloatDown(float v) {
 		++ui;
 	return BitsToFloat(ui);
 }
+
+template <typename T, typename U, typename V>
+inline T Clamp(T val, U low, V high) {
+	if (val < low)
+		return low;
+	else if (val > high)
+		return high;
+	else
+		return val;
+}
+
 template <typename T>
 inline T Mod(T a, T b) {
 	T result = a - (a / b) * b;
@@ -136,7 +149,6 @@ template <>
 inline float Mod(float a, float b) {
 	return std::fmod(a, b);
 }
-
 
 
 }

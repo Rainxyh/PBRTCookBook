@@ -1,7 +1,7 @@
-#include "Core\interaction.h"
-#include "Core\primitive.h"
-#include "Material\Reflection.h"
-#include "Light\DiffuseLight.h"
+#include "Core/interaction.h"
+#include "Core/primitive.h"
+#include "Material/Reflection.h"
+#include "Light/DiffuseLight.h"
 
 namespace Feimos {
 

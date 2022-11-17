@@ -2,9 +2,9 @@
 #ifndef __PlasticMaterial_h__
 #define __PlasticMaterial_h__
 
-#include "Material\Material.h"
-#include "Core\FeimosRender.h"
-#include "Texture\Texture.h"
+#include "Material/Material.h"
+#include "Core/FeimosRender.h"
+#include "Texture/Texture.h"
 
 namespace Feimos {
 

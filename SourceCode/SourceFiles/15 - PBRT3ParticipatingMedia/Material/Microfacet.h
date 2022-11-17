@@ -2,8 +2,8 @@
 #ifndef __FeimosRender_Microfacet_h__
 #define __FeimosRender_Microfacet_h__
 
-#include "Core\FeimosRender.h"
-#include "Core\Geometry.h"
+#include "Core/FeimosRender.h"
+#include "Core/Geometry.h"
 
 namespace Feimos {
 

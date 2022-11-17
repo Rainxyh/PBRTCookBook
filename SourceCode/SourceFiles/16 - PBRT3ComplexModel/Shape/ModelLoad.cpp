@@ -1,10 +1,10 @@
-#include "Shape\ModelLoad.h"
-#include "Core\Geometry.h"
-#include "Core\Transform.h"
-#include "Core\primitive.h"
-#include "Texture\ConstantTexture.h"
-#include "Material\MatteMaterial.h"
-#include "Material\PlasticMaterial.h"
+#include "Shape/ModelLoad.h"
+#include "Core/Geometry.h"
+#include "Core/Transform.h"
+#include "Core/primitive.h"
+#include "Texture/ConstantTexture.h"
+#include "Material/MatteMaterial.h"
+#include "Material/PlasticMaterial.h"
 
 namespace Feimos {
 

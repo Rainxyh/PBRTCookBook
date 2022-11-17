@@ -1,7 +1,7 @@
-#include "Core\FeimosRender.h"
-#include "Core\interaction.h"
+#include "Core/FeimosRender.h"
+#include "Core/interaction.h"
 
-#include "Shape\Shape.h"
+#include "Shape/Shape.h"
 
 namespace Feimos {
 

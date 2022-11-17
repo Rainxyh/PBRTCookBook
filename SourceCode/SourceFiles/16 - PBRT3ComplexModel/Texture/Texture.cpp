@@ -1,5 +1,5 @@
-#include "Texture\Texture.h"
-#include "Core\interaction.h"
+#include "Texture/Texture.h"
+#include "Core/interaction.h"
 
 
 namespace Feimos {

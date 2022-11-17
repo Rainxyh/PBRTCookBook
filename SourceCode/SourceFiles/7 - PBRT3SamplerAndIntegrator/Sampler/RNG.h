@@ -2,7 +2,7 @@
 #ifndef __RNG_H__
 #define __RNG_H__
 
-#include "Core\FeimosRender.h"
+#include "Core/FeimosRender.h"
 #include <algorithm>
 
 namespace Feimos {

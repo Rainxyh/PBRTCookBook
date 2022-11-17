@@ -2,9 +2,9 @@
 #ifndef __SCENE_H__
 #define __SCENE_H__
 
-#include "Core\FeimosRender.h"
-#include "Core\Geometry.h"
-#include "Core\primitive.h"
+#include "Core/FeimosRender.h"
+#include "Core/Geometry.h"
+#include "Core/primitive.h"
 #include <vector>
 
 namespace Feimos{

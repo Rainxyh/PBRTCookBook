@@ -1,7 +1,7 @@
-#include "Material\Material.h"
-#include "Material\MetalMaterial.h"
-#include "Material\Reflection.h"
-#include "Material\Microfacet.h"
+#include "Material/Material.h"
+#include "Material/MetalMaterial.h"
+#include "Material/Reflection.h"
+#include "Material/Microfacet.h"
 
 
 namespace Feimos {

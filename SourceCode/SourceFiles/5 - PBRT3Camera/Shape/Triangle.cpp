@@ -1,5 +1,5 @@
-#include "Shape\Triangle.h"
-#include "Core\interaction.h"
+#include "Shape/Triangle.h"
+#include "Core/interaction.h"
 
 namespace Feimos {
 

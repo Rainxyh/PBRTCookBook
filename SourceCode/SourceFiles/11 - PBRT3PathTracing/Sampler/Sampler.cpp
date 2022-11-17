@@ -1,5 +1,5 @@
-#include "Core\FeimosRender.h"
-#include "Sampler\Sampler.h"
+#include "Core/FeimosRender.h"
+#include "Sampler/Sampler.h"
 
 namespace Feimos {
 

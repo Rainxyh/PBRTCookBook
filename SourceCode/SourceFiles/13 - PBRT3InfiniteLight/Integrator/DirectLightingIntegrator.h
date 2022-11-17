@@ -2,8 +2,8 @@
 #ifndef __DirectLightingIntegrator_h__
 #define __DirectLightingIntegrator_h__
 
-#include "Core\FeimosRender.h"
-#include "Integrator\Integrator.h"
+#include "Core/FeimosRender.h"
+#include "Integrator/Integrator.h"
 
 namespace Feimos {
 

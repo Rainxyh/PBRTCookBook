@@ -1,6 +1,6 @@
-#include "Accelerator\BVHAccel.h"
+#include "Accelerator/BVHAccel.h"
 #include <memory>
-#include "MainGUI/Debugtext.hpp"
+#include "MainGUI/DebugText.hpp"
 
 namespace Feimos {
 

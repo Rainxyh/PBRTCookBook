@@ -110,11 +110,11 @@ vec3 HDRtoLDR(const vec3& col, float exposure) {
 	float gamma = 2.2f;
 	//HDRÐÞÕý
 	vec3 temp_c;
-	temp_c[0] = 1.0f - expf(-col[0] * invExposure);
+	temp_c[0] = 1.0f - std::exp(-col[0] * invExposure);
 	//temp_cx = powf(temp_cx, 1.0 / gamma);
-	temp_c[1] = 1.0f - expf(-col[1] * invExposure);
+	temp_c[1] = 1.0f - std::exp(-col[1] * invExposure);
 	//temp_cy = powf(temp_cy, 1.0 / gamma);
-	temp_c[2] = 1.0f - expf(-col[2] * invExposure);
+	temp_c[2] = 1.0f - std::exp(-col[2] * invExposure);
 	//temp_cz = powf(temp_cz, 1.0 / gamma);
 	return temp_c;
 }

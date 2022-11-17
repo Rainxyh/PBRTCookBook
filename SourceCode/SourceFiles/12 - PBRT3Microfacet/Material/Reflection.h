@@ -2,13 +2,13 @@
 #ifndef __Reflection_h__
 #define __Reflection_h__
 
-#include "Core\FeimosRender.h"
-#include "Core\Geometry.hpp"
-#include "Core\Spectrum.h"
-#include "Core\interaction.h"
+#include "Core/FeimosRender.h"
+#include "Core/Geometry.hpp"
+#include "Core/Spectrum.h"
+#include "Core/interaction.h"
 
-#include "Material\Fresnel.h"
-#include "Material\Microfacet.h"
+#include "Material/Fresnel.h"
+#include "Material/Microfacet.h"
 
 #include <algorithm>
 #include <string>

@@ -2,10 +2,10 @@
 #ifndef __MIPMap_h__
 #define __MIPMap_h__
 
-#include "Core\FeimosRender.h"
-#include "Core\Spectrum.h"
-#include "Texture\Texture.h"
-#include "Core\Memory.h"
+#include "Core/FeimosRender.h"
+#include "Core/Spectrum.h"
+#include "Texture/Texture.h"
+#include "Core/Memory.h"
 
 #include <vector>
 #include <string>

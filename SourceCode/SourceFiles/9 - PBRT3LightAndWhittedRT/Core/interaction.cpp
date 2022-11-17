@@ -1,6 +1,6 @@
-#include "Core\interaction.h"
-#include "Core\primitive.h"
-#include "Material\Reflection.h"
+#include "Core/interaction.h"
+#include "Core/primitive.h"
+#include "Material/Reflection.h"
 
 namespace Feimos {
 

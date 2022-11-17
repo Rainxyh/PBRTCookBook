@@ -1,5 +1,5 @@
-#include "Sampler\LowDiscrepancy.h"
-#include "Sampler\RNG.h"
+#include "Sampler/LowDiscrepancy.h"
+#include "Sampler/RNG.h"
 #include "Sampling.h"
 #include <vector>
 
@@ -209,7 +209,7 @@ const int PrimeSums[PrimeTableSize] = {
 
 // Low Discrepancy Static Functions
 template <int base>
-__declspec(noinline) static float
+static float
 RadicalInverseSpecialized(uint64_t a) {
 	const float invBase = (float)1 / (float)base;
 	uint64_t reversedDigits = 0;
@@ -2298,7 +2298,7 @@ std::vector<uint16_t> ComputeRadicalInversePermutations(RNG &rng) {
 }
 
 template <int base>
-__declspec(noinline) static float
+static float
 ScrambledRadicalInverseSpecialized(const uint16_t *perm, uint64_t a) {
 	const float invBase = (float)1 / (float)base;
 	uint64_t reversedDigits = 0;

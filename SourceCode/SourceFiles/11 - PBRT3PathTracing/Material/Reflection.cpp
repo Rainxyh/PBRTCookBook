@@ -1,5 +1,5 @@
-#include "Material\Reflection.h"
-#include "Sampler\Sampling.h"
+#include "Material/Reflection.h"
+#include "Sampler/Sampling.h"
 
 
 namespace Feimos {

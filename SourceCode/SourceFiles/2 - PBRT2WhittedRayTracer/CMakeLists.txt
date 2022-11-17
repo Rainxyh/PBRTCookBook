@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.1)
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 14)
 
 # set Qt moc rcc uic
 set(CMAKE_AUTOMOC ON)
@@ -31,7 +31,7 @@ INCLUDE_DIRECTORIES(
 set(MainGUI
 	MainGUI/main.cpp
 	MainGUI/MainWindow.h
-	MainGUI/mainWindow.cpp
+	MainGUI/MainWindow.cpp
 	MainGUI/DebugText.hpp
 	MainGUI/DebugText.cpp
 	MainGUI/DisplayWidget.h

@@ -3,8 +3,8 @@
 #ifndef __SPHEREH__
 #define __SPHEREH__
 
-#include "Core\FeimosRender.h"
-#include "Shape\Shape.h"
+#include "Core/FeimosRender.h"
+#include "Shape/Shape.h"
 
 namespace Feimos {
 

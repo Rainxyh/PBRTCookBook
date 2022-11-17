@@ -1,10 +1,10 @@
-#include "Core\FeimosRender.h"
+#include "Core/FeimosRender.h"
 
-#include "Material\MatteMaterial.h"
+#include "Material/MatteMaterial.h"
 #include "Material/Reflection.h"
 
-#include "Core\Spectrum.h"
-#include "Core\interaction.h"
+#include "Core/Spectrum.h"
+#include "Core/interaction.h"
 
 
 namespace Feimos {

@@ -1,9 +1,9 @@
 #pragma once
 #ifndef __Integrator_h__
 #define __Integrator_h__
-#include "Core\FeimosRender.h"
-#include "Core\Geometry.hpp"
-#include "Core\FrameBuffer.h"
+#include "Core/FeimosRender.h"
+#include "Core/Geometry.hpp"
+#include "Core/FrameBuffer.h"
 
 namespace Feimos {
 

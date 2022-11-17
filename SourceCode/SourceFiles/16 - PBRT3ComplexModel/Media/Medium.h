@@ -2,8 +2,8 @@
 #ifndef __Medium_h__
 #define __Medium_h__
 
-#include "Core\FeimosRender.h"
-#include "Core\Spectrum.h"
+#include "Core/FeimosRender.h"
+#include "Core/Spectrum.h"
 
 namespace Feimos {
 

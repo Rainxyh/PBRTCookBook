@@ -5,8 +5,8 @@
 #include <vector>
 #include <memory>
 
-#include "Core\FeimosRender.h"
-#include "Core\primitive.h"
+#include "Core/FeimosRender.h"
+#include "Core/primitive.h"
 
 namespace Feimos {
 struct BVHBuildNode;

@@ -1,7 +1,7 @@
-#include "Light\LightDistrib.h"
-#include "Sampler\Sampling.h"
+#include "Light/LightDistrib.h"
+#include "Sampler/Sampling.h"
 #include <vector>
-#include "Core\Scene.h"
+#include "Core/Scene.h"
 
 namespace Feimos {
 

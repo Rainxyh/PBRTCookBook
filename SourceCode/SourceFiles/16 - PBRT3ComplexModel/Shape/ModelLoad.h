@@ -3,13 +3,13 @@
 #define __ModelLoad_h__
 
 
-#include "Core\FeimosRender.h"
-#include "Shape\Triangle.h"
+#include "Core/FeimosRender.h"
+#include "Shape/Triangle.h"
 #include "assimp/Importer.hpp"
 #include "assimp/scene.h"
 #include "assimp/postprocess.h"
-#include "Texture\ImageTexture.h"
-#include "Media\Medium.h"
+#include "Texture/ImageTexture.h"
+#include "Media/Medium.h"
 
 #include <memory>
 #include <string>
@@ -30,7 +30,7 @@ public:
 	std::shared_ptr<TriangleMesh> processMesh(aiMesh *mesh, const aiScene *scene, const Transform &ObjectToWorld);
 	void buildNoTextureModel(Transform& tri_Object2World, const MediumInterface &mediumInterface,
 		std::vector<std::shared_ptr<Primitive>> &prims, std::shared_ptr<Material> material);
-	void ModelLoad::buildTextureModel(Transform& tri_Object2World, const MediumInterface &mediumInterface,
+	void buildTextureModel(Transform& tri_Object2World, const MediumInterface &mediumInterface,
 		std::vector<std::shared_ptr<Primitive>> &prims);
 };
 

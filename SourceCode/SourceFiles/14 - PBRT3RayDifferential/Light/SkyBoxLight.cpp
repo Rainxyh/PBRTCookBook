@@ -1,9 +1,9 @@
-#include "Light\SkyBoxLight.h"
+#include "Light/SkyBoxLight.h"
 
 #include <cmath>
 
 #define STB_IMAGE_IMPLEMENTATION
-#include "3rdLib\stb_image.h"
+#include "3rdLib/stb_image.h"
 
 namespace Feimos {
 

@@ -1,32 +1,32 @@
 #include "RenderThread.h"
 #include "DebugText.hpp"
-#include <QTime>
+#include <QElapsedTimer>
 
-#include "Core\FeimosRender.h"
-#include "Core\primitive.h"
-#include "Core\Spectrum.h"
-#include "Core\interaction.h"
-#include "Core\Scene.h"
-#include "Core\Transform.h"
+#include "Core/FeimosRender.h"
+#include "Core/primitive.h"
+#include "Core/Spectrum.h"
+#include "Core/interaction.h"
+#include "Core/Scene.h"
+#include "Core/Transform.h"
 
-#include "Shape\Triangle.h"
-#include "Shape\plyRead.h"
+#include "Shape/Triangle.h"
+#include "Shape/plyRead.h"
 
-#include "Accelerator\BVHAccel.h"
+#include "Accelerator/BVHAccel.h"
 
-#include "Camera\Camera.h"
-#include "Camera\Perspective.h"
+#include "Camera/Camera.h"
+#include "Camera/Perspective.h"
 
-#include "Sampler\Sampler.h"
-#include "Sampler\clockRand.h"
+#include "Sampler/Sampler.h"
+#include "Sampler/clockRand.h"
 
-#include "Integrator\Integrator.h"
+#include "Integrator/Integrator.h"
 
-#include "Material\Material.h"
-#include "Material\MatteMaterial.h"
+#include "Material/Material.h"
+#include "Material/MatteMaterial.h"
 
-#include "Texture\Texture.h"
-#include "Texture\ConstantTexture.h"
+#include "Texture/Texture.h"
+#include "Texture/ConstantTexture.h"
 
 #include "RenderStatus.h"
 
@@ -64,7 +64,7 @@ void RenderThread::run() {
 	Feimos::Transform lookat = LookAt(eye, look, up);
 	//取逆是因为LookAt返回的是世界坐标到相机坐标系的变换
 	//而我们需要相机坐标系到世界坐标系的变换
-	Feimos::Transform Camera2World = Inverse(lookat);
+	Feimos::Transform Camera2World = Feimos::Inverse(lookat);
 	camera = std::shared_ptr<Feimos::Camera>(Feimos::CreatePerspectiveCamera(WIDTH, HEIGHT, Camera2World));
 
 	// 生成材质与纹理
@@ -106,10 +106,10 @@ void RenderThread::run() {
 	Feimos::Transform tri_Object2World, tri_World2Object;
 
 	tri_Object2World = Feimos::Translate(Feimos::Vector3f(0.0, -2.5, 0.0))*tri_Object2World;
-	tri_World2Object = Inverse(tri_Object2World);
+	tri_World2Object = Feimos::Inverse(tri_Object2World);
 
 	emit PrintString("Read Mesh");
-	Feimos::plyInfo plyi("Resources/dragon.3d");
+	Feimos::plyInfo plyi("../../Resources/dragon.3d");
 	mesh = std::make_shared<Feimos::TriangleMesh>(tri_Object2World, plyi.nTriangles, plyi.vertexIndices, plyi.nVertices, plyi.vertexArray, nullptr, nullptr, nullptr, nullptr);
 	tris.reserve(plyi.nTriangles);
 	emit PrintString("Init Triangles");
@@ -139,7 +139,8 @@ void RenderThread::run() {
 	// 开始执行渲染
 	int renderCount = 0;
 	while (renderFlag) {
-		QTime t;
+		emit PrintString("test");
+		QElapsedTimer t;
 		t.start();
 		
 		double frameTime;

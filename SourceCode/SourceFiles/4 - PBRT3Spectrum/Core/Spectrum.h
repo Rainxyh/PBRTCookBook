@@ -2,8 +2,9 @@
 #ifndef __Spectrum_h__
 #define __Spectrum_h__
 
-#include "Core\FeimosRender.h"
+#include "Core/FeimosRender.h"
 #include <string>
+#include <math.h>
 
 namespace Feimos {
 
@@ -153,13 +154,6 @@ class CoefficientSpectrum {
         }
         str += " ]";
         return str;
-    }
-    CoefficientSpectrum Clamp(float low = 0, float high = Infinity) const {
-        CoefficientSpectrum ret;
-        for (int i = 0; i < nSpectrumSamples; ++i)
-            ret.c[i] = pbrt::Clamp(c[i], low, high);
-        DCHECK(!ret.HasNaNs());
-        return ret;
     }
     float MaxComponentValue() const {
         float m = c[0];

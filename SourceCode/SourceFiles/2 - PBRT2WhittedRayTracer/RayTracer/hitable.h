@@ -2,7 +2,7 @@
 #ifndef __HITABLE__H__
 #define __HITABLE__H__
 
-#include "ray.h"
+#include "Ray.h"
 #include "AABB.h"
 #include "texture.h"
 #include "ONB.h"

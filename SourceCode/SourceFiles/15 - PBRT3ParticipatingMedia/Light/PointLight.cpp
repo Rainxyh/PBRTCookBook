@@ -1,5 +1,5 @@
-#include "Light\PointLight.h"
-#include "Sampler\Sampling.h"
+#include "Light/PointLight.h"
+#include "Sampler/Sampling.h"
 
 namespace Feimos{
 

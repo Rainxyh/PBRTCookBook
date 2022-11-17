@@ -1,6 +1,6 @@
-#include "Material\Microfacet.h"
-#include "Sampler\Sampling.h"
-#include "Material\Reflection.h"
+#include "Material/Microfacet.h"
+#include "Sampler/Sampling.h"
+#include "Material/Reflection.h"
 
 namespace Feimos {
 

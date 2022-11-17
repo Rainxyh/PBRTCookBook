@@ -2,11 +2,13 @@
 #ifndef __Transform_h__
 #define __Transform_h__
 
-#include "Core\Geometry.hpp"
-#include "Core\FeimosRender.h"
+#include "Core/Geometry.hpp"
+#include "Core/FeimosRender.h"
 
 namespace Feimos {
-
+Matrix4x4 Inverse(const Matrix4x4 &);
+Transform Inverse(const Transform &t);
+Transform Transpose(const Transform &t);
 // Matrix4x4 Declarations
 struct Matrix4x4 {
 	// Matrix4x4 Public Methods

@@ -4,6 +4,8 @@
 
 #include <memory>
 #include <limits>
+#include <math.h>
+#include <string.h>
 
 namespace Feimos {
 
@@ -144,6 +146,16 @@ inline float NextFloatDown(float v) {
 	return BitsToFloat(ui);
 }
 
+template <typename T, typename U, typename V>
+inline T Clamp(T val, U low, V high) {
+	if (val < low)
+		return low;
+	else if (val > high)
+		return high;
+	else
+		return val;
+}
+
 template <typename Predicate>
 int FindInterval(int size, const Predicate &pred) {
 	int first = 0, len = size;
@@ -160,15 +172,6 @@ int FindInterval(int size, const Predicate &pred) {
 	return Clamp(first - 1, 0, size - 2);
 }
 
-template <typename T, typename U, typename V>
-inline T Clamp(T val, U low, V high) {
-	if (val < low)
-		return low;
-	else if (val > high)
-		return high;
-	else
-		return val;
-}
 inline float Lerp(float t, float v1, float v2) { return (1 - t) * v1 + t * v2; }
 
 template <typename T>

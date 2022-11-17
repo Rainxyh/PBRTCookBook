@@ -1,6 +1,6 @@
-#include "Core\primitive.h"
-#include "Shape\Shape.h"
-#include "Core\interaction.h"
+#include "Core/primitive.h"
+#include "Shape/Shape.h"
+#include "Core/interaction.h"
 
 
 namespace Feimos {

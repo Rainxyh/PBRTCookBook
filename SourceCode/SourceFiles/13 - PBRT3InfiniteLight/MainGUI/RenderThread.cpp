@@ -1,48 +1,48 @@
 #include "RenderThread.h"
 #include "DebugText.hpp"
-#include <QTime>
+#include <QElapsedTimer>
 
-#include "Core\FeimosRender.h"
-#include "Core\primitive.h"
-#include "Core\Spectrum.h"
-#include "Core\interaction.h"
-#include "Core\Scene.h"
-#include "Core\Transform.h"
+#include "Core/FeimosRender.h"
+#include "Core/primitive.h"
+#include "Core/Spectrum.h"
+#include "Core/interaction.h"
+#include "Core/Scene.h"
+#include "Core/Transform.h"
 
-#include "Shape\Triangle.h"
-#include "Shape\plyRead.h"
+#include "Shape/Triangle.h"
+#include "Shape/plyRead.h"
 
-#include "Accelerator\BVHAccel.h"
+#include "Accelerator/BVHAccel.h"
 
-#include "Camera\Camera.h"
-#include "Camera\Perspective.h"
+#include "Camera/Camera.h"
+#include "Camera/Perspective.h"
 
-#include "Sampler\Sampler.h"
-#include "Sampler\clockRand.h"
+#include "Sampler/Sampler.h"
+#include "Sampler/clockRand.h"
 
-#include "Integrator\Integrator.h"
-#include "Integrator\WhittedIntegrator.h"
-#include "Integrator\DirectLightingIntegrator.h"
-#include "Integrator\PathIntegrator.h"
+#include "Integrator/Integrator.h"
+#include "Integrator/WhittedIntegrator.h"
+#include "Integrator/DirectLightingIntegrator.h"
+#include "Integrator/PathIntegrator.h"
 
-#include "Material\Material.h"
-#include "Material\MatteMaterial.h"
-#include "Material\Mirror.h"
-#include "Material\MetalMaterial.h"
-#include "Material\GlassMaterial.h"
+#include "Material/Material.h"
+#include "Material/MatteMaterial.h"
+#include "Material/Mirror.h"
+#include "Material/MetalMaterial.h"
+#include "Material/GlassMaterial.h"
 
-#include "Texture\Texture.h"
-#include "Texture\ConstantTexture.h"
+#include "Texture/Texture.h"
+#include "Texture/ConstantTexture.h"
 
-#include "Light\Light.h"
-#include "Light\DiffuseLight.h"
-#include "Light\PointLight.h"
-#include "Light\SkyBoxLight.h"
-#include "Light\InfiniteAreaLight.h"
+#include "Light/Light.h"
+#include "Light/DiffuseLight.h"
+#include "Light/PointLight.h"
+#include "Light/SkyBoxLight.h"
+#include "Light/InfiniteAreaLight.h"
 
 #include "RenderStatus.h"
 
-void showMemoryInfo(void);
+// void showMemoryInfo(void);
 
 
 inline std::shared_ptr<Feimos::Material> getGreeyMatteMaterial() {
@@ -231,7 +231,7 @@ void RenderThread::run() {
 		tri_World2Object = Inverse(tri_Object2World);
 
 		emit PrintString("   Read Mesh...");
-		Feimos::plyInfo plyi("Resources/dragon.3d");
+		Feimos::plyInfo plyi("../../Resources/dragon.3d");
 		mesh = std::make_shared<Feimos::TriangleMesh>(tri_Object2World, plyi.nTriangles, plyi.vertexIndices, plyi.nVertices, plyi.vertexArray, nullptr, nullptr, nullptr, nullptr);
 		tris.reserve(plyi.nTriangles);
 		emit PrintString("   Init Triangles...");
@@ -318,7 +318,7 @@ void RenderThread::run() {
 	// 开始执行渲染
 	int renderCount = 0;
 	while (renderFlag) {
-		QTime t;
+		QElapsedTimer t;
 		t.start();
 		
 		double frameTime;
@@ -332,7 +332,7 @@ void RenderThread::run() {
 			
 		while (t.elapsed() < 1);
 
-		showMemoryInfo();
+		// showMemoryInfo();
 	}
 
 	emit PrintString("End Rendering.");
@@ -341,33 +341,33 @@ void RenderThread::run() {
 
 
 
-#include <windows.h>
-#include <psapi.h>
-#pragma comment(lib, "psapi.lib") 
-void showMemoryInfo(void) {
+// #include <windows.h>
+// #include <psapi.h>
+// #pragma comment(lib, "psapi.lib") 
+// void showMemoryInfo(void) {
 
-	//  SIZE_T PeakWorkingSetSize; //峰值内存使用
-	//  SIZE_T WorkingSetSize; //内存使用
-	//  SIZE_T PagefileUsage; //虚拟内存使用
-	//  SIZE_T PeakPagefileUsage; //峰值虚拟内存使用
+// 	//  SIZE_T PeakWorkingSetSize; //峰值内存使用
+// 	//  SIZE_T WorkingSetSize; //内存使用
+// 	//  SIZE_T PagefileUsage; //虚拟内存使用
+// 	//  SIZE_T PeakPagefileUsage; //峰值虚拟内存使用
 
-	EmptyWorkingSet(GetCurrentProcess());
+// 	EmptyWorkingSet(GetCurrentProcess());
 
-	HANDLE handle = GetCurrentProcess();
-	PROCESS_MEMORY_COUNTERS pmc;
-	GetProcessMemoryInfo(handle, &pmc, sizeof(pmc));
+// 	HANDLE handle = GetCurrentProcess();
+// 	PROCESS_MEMORY_COUNTERS pmc;
+// 	GetProcessMemoryInfo(handle, &pmc, sizeof(pmc));
 
-	//DebugText::getDebugText()->addContents("Memory Use: WorkingSetSize: " + QString::number(pmc.WorkingSetSize / 1000.f / 1000.f) + " M");
-	//DebugText::getDebugText()->addContents("PeakWorkingSetSize: " + QString::number(pmc.PeakWorkingSetSize / 1000.f / 1000.f) + " M");
-	//DebugText::getDebugText()->addContents("PagefileUsage: " + QString::number(pmc.PagefileUsage / 1000.f / 1000.f) + " M");
-	//DebugText::getDebugText()->addContents("PeakPagefileUsage: " + QString::number(pmc.PeakPagefileUsage / 1000.f / 1000.f) + " M");
+// 	//DebugText::getDebugText()->addContents("Memory Use: WorkingSetSize: " + QString::number(pmc.WorkingSetSize / 1000.f / 1000.f) + " M");
+// 	//DebugText::getDebugText()->addContents("PeakWorkingSetSize: " + QString::number(pmc.PeakWorkingSetSize / 1000.f / 1000.f) + " M");
+// 	//DebugText::getDebugText()->addContents("PagefileUsage: " + QString::number(pmc.PagefileUsage / 1000.f / 1000.f) + " M");
+// 	//DebugText::getDebugText()->addContents("PeakPagefileUsage: " + QString::number(pmc.PeakPagefileUsage / 1000.f / 1000.f) + " M");
 
-	m_RenderStatus.setDataChanged("Memory Use", "WorkingSetSize", QString::number(pmc.WorkingSetSize / 1000.f / 1000.f), "M");
-	m_RenderStatus.setDataChanged("Memory Use", "PeakWorkingSetSize", QString::number(pmc.PeakWorkingSetSize / 1000.f / 1000.f), "M");
-	m_RenderStatus.setDataChanged("Memory Use", "PagefileUsage", QString::number(pmc.PagefileUsage / 1000.f / 1000.f), "M");
-	m_RenderStatus.setDataChanged("Memory Use", "PeakPagefileUsage", QString::number(pmc.PeakPagefileUsage / 1000.f / 1000.f), "M");
+// 	m_RenderStatus.setDataChanged("Memory Use", "WorkingSetSize", QString::number(pmc.WorkingSetSize / 1000.f / 1000.f), "M");
+// 	m_RenderStatus.setDataChanged("Memory Use", "PeakWorkingSetSize", QString::number(pmc.PeakWorkingSetSize / 1000.f / 1000.f), "M");
+// 	m_RenderStatus.setDataChanged("Memory Use", "PagefileUsage", QString::number(pmc.PagefileUsage / 1000.f / 1000.f), "M");
+// 	m_RenderStatus.setDataChanged("Memory Use", "PeakPagefileUsage", QString::number(pmc.PeakPagefileUsage / 1000.f / 1000.f), "M");
 
-}
+// }
 
 
 

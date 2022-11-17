@@ -2,7 +2,7 @@
 #ifndef __ConstantTexture_h__
 #define __ConstantTexture_h__
 
-#include "Texture\Texture.h"
+#include "Texture/Texture.h"
 
 namespace Feimos {
 

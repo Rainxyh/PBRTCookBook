@@ -1,12 +1,12 @@
-#include "Light\LightDistrib.h"
-#include "Sampler\Sampler.h"
-#include "Core\Geometry.h"
-#include "Core\interaction.h"
-#include "Core\Scene.h"
-#include "Light\Light.h"
-#include "Material\Reflection.h"
-#include "Integrator\VolPathIntegrator.h"
-#include "Core\Spectrum.h"
+#include "Light/LightDistrib.h"
+#include "Sampler/Sampler.h"
+#include "Core/Geometry.h"
+#include "Core/interaction.h"
+#include "Core/Scene.h"
+#include "Light/Light.h"
+#include "Material/Reflection.h"
+#include "Integrator/VolPathIntegrator.h"
+#include "Core/Spectrum.h"
 
 namespace Feimos {
 

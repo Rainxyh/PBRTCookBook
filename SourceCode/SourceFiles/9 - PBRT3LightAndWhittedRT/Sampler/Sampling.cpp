@@ -1,4 +1,4 @@
-#include "Sampler\Sampling.h"
+#include "Sampler/Sampling.h"
 
 
 namespace Feimos {

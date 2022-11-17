@@ -1,4 +1,4 @@
-#include "Sampler\clockRand.h"
+#include "Sampler/clockRand.h"
 
 namespace Feimos {
 

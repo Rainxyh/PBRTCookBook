@@ -1,7 +1,7 @@
 #pragma once
-#include "Core\Geometry.h"
-#include "Material\Material.h"
-#include "Media\Medium.h"
+#include "Core/Geometry.h"
+#include "Material/Material.h"
+#include "Media/Medium.h"
 
 namespace Feimos {
 

@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.1)
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 14)
 
 # set Qt moc rcc uic
 set(CMAKE_AUTOMOC ON)
@@ -11,7 +11,7 @@ project(Feimos)
 
 set(CMAKE_BUILD_TYPE  "Debug")
 
-set(QT_PATH "D:/DevTools/QT5/5.7/msvc2015_64" CACHE PATH "qt5 cmake dir")
+set(QT_PATH "~/Qt5.14.2/5.14.2/gcc_64" CACHE PATH "qt5 cmake dir")
 
 set(CMAKE_PREFIX_PATH ${QT_PATH})
 
@@ -24,7 +24,8 @@ find_package(OpenMP REQUIRED)
 if(OpenMP_FOUND)
 	message(STATUS "found openmp") 
 	set(CMAKE_C_FLAGS ${CMAKE_C_FLAGS}, ${OPENMP_C_FLAGS})
-   	set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS}, ${OPENMP_CXX_FLAGS})
+   	# set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS}, ${OPENMP_CXX_FLAGS})
+	set(CMAKE_CXX_FLAGS "-fopenmp")
 else()
    	message(FATAL_ERROR "openmp not found!")
 endif()
@@ -50,7 +51,7 @@ SOURCE_GROUP("3rdLib" FILES ${3rdLib})
 set(MainGUI
 	MainGUI/main.cpp
 	MainGUI/MainWindow.h
-	MainGUI/mainWindow.cpp
+	MainGUI/MainWindow.cpp
 	MainGUI/DebugText.hpp
 	MainGUI/DebugText.cpp
 	MainGUI/DisplayWidget.h
@@ -78,10 +79,10 @@ set(Core
 	# 基本数据类型
 	Core/Geometry.h
 	Core/Geometry.cpp
-	Core/Interaction.h
-	Core/Interaction.cpp
-	Core/Primitive.h
-	Core/Primitive.cpp
+	Core/interaction.h
+	Core/interaction.cpp
+	Core/primitive.h
+	Core/primitive.cpp
 	Core/Transform.h
 	Core/Transform.cpp
 	Core/Spectrum.h
@@ -96,7 +97,7 @@ SOURCE_GROUP("Core" FILES ${Core})
 
 # Shape files
 set(Shape
-	Shape/PlyRead.h
+	Shape/plyRead.h
 	Shape/Shape.h
 	Shape/Shape.cpp
 	Shape/Sphere.h
@@ -141,8 +142,8 @@ set(Sampler
 	Sampler/Sampler.cpp
 	Sampler/Halton.h
 	Sampler/Halton.cpp
-	Sampler/ClockRand.h
-	Sampler/ClockRand.cpp
+	Sampler/clockRand.h
+	Sampler/clockRand.cpp
 )
 # Make the Sampler group
 SOURCE_GROUP("Sampler" FILES ${Sampler})

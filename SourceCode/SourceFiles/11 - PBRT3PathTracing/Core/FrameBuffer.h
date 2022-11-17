@@ -2,8 +2,8 @@
 
 #ifndef __FrameBuffer_H__
 #define __FrameBuffer_H__
-#include "MainGUI\DebugText.hpp"
-
+#include "MainGUI/DebugText.hpp"
+#include <math.h>
 #include <QObject>
 
 
@@ -133,7 +133,7 @@ public:
 		fbuffer[offset] = weight * dat + (1.0f - weight) * fbuffer[offset];
 
 		float exposure = 0.75;
-		float temp_c = 1.0f -expf(-fbuffer[offset] * 1.0f / (1 - exposure));
+		float temp_c = 1.0f -std::exp(-fbuffer[offset] * 1.0f / (1 - exposure));
 
 		ubuffer[offset] = temp_c * 255;
 		return true;

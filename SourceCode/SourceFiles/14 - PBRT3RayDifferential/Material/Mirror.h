@@ -2,9 +2,9 @@
 #ifndef __Mirror_h__
 #define __Mirror_h__
 
-#include "Core\FeimosRender.h"
-#include "Material\Reflection.h"
-#include "Texture\Texture.h"
+#include "Core/FeimosRender.h"
+#include "Material/Reflection.h"
+#include "Texture/Texture.h"
 
 namespace Feimos {
 

@@ -3,9 +3,9 @@
 #define __ImageTexture_h__
 
 
-#include "Texture\Texture.h"
-#include "Texture\MIPMap.h"
-#include "Core\Spectrum.h"
+#include "Texture/Texture.h"
+#include "Texture/MIPMap.h"
+#include "Core/Spectrum.h"
 #include <map>
 #include <memory>
 

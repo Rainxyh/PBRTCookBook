@@ -6,9 +6,9 @@
 #include <fstream>
 #include <string> 
 
-#include "Core\FeimosRender.h"
-#include "Core\Geometry.hpp"
-#include "Core\Transform.h"
+#include "Core/FeimosRender.h"
+#include "Core/Geometry.hpp"
+#include "Core/Transform.h"
 
 #include "MainGUI/DebugText.hpp"
 

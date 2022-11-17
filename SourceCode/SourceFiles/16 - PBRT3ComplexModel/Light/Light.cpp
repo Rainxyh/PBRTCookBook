@@ -1,8 +1,8 @@
-#include "Light\Light.h"
+#include "Light/Light.h"
 
-#include "Core\Scene.h"
-#include "Core\interaction.h"
-#include "Media\Medium.h"
+#include "Core/Scene.h"
+#include "Core/interaction.h"
+#include "Media/Medium.h"
 #include "Core/interaction.h"
 
 namespace Feimos {

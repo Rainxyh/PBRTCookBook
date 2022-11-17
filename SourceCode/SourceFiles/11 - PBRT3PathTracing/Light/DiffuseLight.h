@@ -1,7 +1,7 @@
 #pragma once
 #ifndef __DiffuseLight_h__
 #define __DiffuseLight_h__
-#include "Light\Light.h"
+#include "Light/Light.h"
 
 namespace Feimos{
 

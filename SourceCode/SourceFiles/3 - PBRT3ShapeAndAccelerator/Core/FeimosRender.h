@@ -4,7 +4,7 @@
 
 #include <memory>
 #include <limits>
-
+#include <math.h>
 namespace Feimos {
 
 static constexpr float Pi = 3.14159265358979323846;
@@ -61,7 +61,7 @@ class Aggregate;
 
 template <typename T>
 inline bool isNaN(const T x) {
-	return std::isnan(x);
+	return isnan(x);
 }
 template <>
 inline bool isNaN(const int x) {

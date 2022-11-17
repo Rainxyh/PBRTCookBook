@@ -3,9 +3,9 @@
 #ifndef __Halton_h__
 #define __Halton_h__
 
-#include "Core\FeimosRender.h"
-#include "Sampler\Sampler.h"
-#include "Sampler\LowDiscrepancy.h"
+#include "Core/FeimosRender.h"
+#include "Sampler/Sampler.h"
+#include "Sampler/LowDiscrepancy.h"
 
 namespace Feimos {
 

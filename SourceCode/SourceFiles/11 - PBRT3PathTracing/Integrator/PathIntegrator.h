@@ -2,8 +2,8 @@
 #ifndef __PathIntegrator_h__
 #define __PathIntegrator_h__
 
-#include "Integrator\Integrator.h"
-#include "Core\FeimosRender.h"
+#include "Integrator/Integrator.h"
+#include "Core/FeimosRender.h"
 
 namespace Feimos {
 

@@ -1,21 +1,21 @@
 #include "RenderThread.h"
 #include "DebugText.hpp"
-#include <QTime>
+#include <QElapsedTimer>
 
-#include "Core\FeimosRender.h"
-#include "Core\primitive.h"
-#include "Core\Spectrum.h"
-#include "Core\interaction.h"
+#include "Core/FeimosRender.h"
+#include "Core/primitive.h"
+#include "Core/Spectrum.h"
+#include "Core/interaction.h"
 
-#include "Shape\Triangle.h"
-#include "Shape\plyRead.h"
+#include "Shape/Triangle.h"
+#include "Shape/plyRead.h"
 
-#include "Accelerator\BVHAccel.h"
+#include "Accelerator/BVHAccel.h"
 
-#include "Camera\Camera.h"
-#include "Camera\Perspective.h"
+#include "Camera/Camera.h"
+#include "Camera/Perspective.h"
 
-#include "Sampler\TimeClockRandom.h"
+#include "Sampler/TimeClockRandom.h"
 
 #include "RenderStatus.h"
 
@@ -68,7 +68,7 @@ void RenderThread::run() {
 	tri_Object2World = Feimos::Translate(Feimos::Vector3f(0.0, -2.5, 0.0))*tri_Object2World;
 	tri_World2Object = Inverse(tri_Object2World);
 	emit PrintString("Read Mesh");
-	plyi = new Feimos::plyInfo("Resources/dragon.3d");
+	plyi = new Feimos::plyInfo("../../Resources/dragon.3d");
 	mesh = std::make_shared<Feimos::TriangleMesh>(tri_Object2World, plyi->nTriangles, plyi->vertexIndices, plyi->nVertices, plyi->vertexArray, nullptr, nullptr, nullptr, nullptr);
 	tris.reserve(plyi->nTriangles);
 	emit PrintString("Init Triangles");
@@ -83,10 +83,10 @@ void RenderThread::run() {
 	// 开始执行渲染
 	int renderCount = 0;
 	while (renderFlag) {
-		QTime t;
+		QElapsedTimer t;
 		t.start();
 		
-		omp_set_num_threads(20); //设置线程的个数
+		omp_set_num_threads(32); //设置线程的个数
 		double start = omp_get_wtime();//获取起始时间  
 
 		//emit PrintString("Rendering");

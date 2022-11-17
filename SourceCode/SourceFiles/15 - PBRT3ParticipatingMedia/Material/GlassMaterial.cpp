@@ -1,6 +1,6 @@
-#include "Material\GlassMaterial.h"
-#include "Material\Reflection.h"
-#include "Material\Microfacet.h"
+#include "Material/GlassMaterial.h"
+#include "Material/Reflection.h"
+#include "Material/Microfacet.h"
 
 namespace Feimos {
 

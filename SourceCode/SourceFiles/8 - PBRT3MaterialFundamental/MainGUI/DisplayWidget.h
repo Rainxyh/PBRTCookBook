@@ -35,7 +35,7 @@ private:
 	void closeEvent(QCloseEvent *event);
 
 private slots:
-	void PrintString(char* s);
+	void PrintString(const char* s);
 	void PrintDataD(const char* s, const double data);
 };
 

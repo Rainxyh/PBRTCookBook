@@ -2,10 +2,10 @@
 #ifndef __Triangle_h__
 #define __Triangle_h__
 
-#include "Core\FeimosRender.h"
-#include "Core\Transform.h"
-#include "Core\Geometry.hpp"
-#include "Shape\Shape.h"
+#include "Core/FeimosRender.h"
+#include "Core/Transform.h"
+#include "Core/Geometry.hpp"
+#include "Shape/Shape.h"
 
 namespace Feimos {
 

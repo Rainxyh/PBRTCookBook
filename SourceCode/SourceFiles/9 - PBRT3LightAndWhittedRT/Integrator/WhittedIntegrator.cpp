@@ -1,10 +1,10 @@
-#include "Integrator\WhittedIntegrator.h"
-#include "Core\Spectrum.h"
-#include "Core\interaction.h"
-#include "Core\Scene.h"
-#include "Light\Light.h"
-#include "Sampler\Sampler.h"
-#include "Material\Reflection.h"
+#include "Integrator/WhittedIntegrator.h"
+#include "Core/Spectrum.h"
+#include "Core/interaction.h"
+#include "Core/Scene.h"
+#include "Light/Light.h"
+#include "Sampler/Sampler.h"
+#include "Material/Reflection.h"
 
 
 namespace Feimos {

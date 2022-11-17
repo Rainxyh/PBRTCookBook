@@ -2,10 +2,10 @@
 #ifndef __Light_h__
 #define __Light_h__
 
-#include "Core\FeimosRender.h"
-#include "Core\Transform.h"
-#include "Core\interaction.h"
-#include "Core\Spectrum.h"
+#include "Core/FeimosRender.h"
+#include "Core/Transform.h"
+#include "Core/interaction.h"
+#include "Core/Spectrum.h"
 
 namespace Feimos {
 

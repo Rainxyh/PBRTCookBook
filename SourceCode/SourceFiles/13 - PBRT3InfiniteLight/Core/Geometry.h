@@ -8,7 +8,7 @@
 #include <cassert>
 #include <algorithm>
 
-#include "Core\FeimosRender.h"
+#include "Core/FeimosRender.h"
 
 namespace Feimos {
 

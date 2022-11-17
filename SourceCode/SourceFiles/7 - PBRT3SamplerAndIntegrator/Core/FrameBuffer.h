@@ -2,7 +2,7 @@
 
 #ifndef __FrameBuffer_H__
 #define __FrameBuffer_H__
-#include "MainGUI\DebugText.hpp"
+#include "MainGUI/DebugText.hpp"
 
 #include <QObject>
 

@@ -2,9 +2,9 @@
 #ifndef __InfiniteAreaLight_H__
 #define __InfiniteAreaLight_H__
 
-#include "Texture\MIPMap.h"
-#include "Light\Light.h"
-#include "Core\Scene.h"
+#include "Texture/MIPMap.h"
+#include "Light/Light.h"
+#include "Core/Scene.h"
 
 
 namespace Feimos {

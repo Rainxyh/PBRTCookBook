@@ -1,8 +1,8 @@
 #pragma once
 #ifndef __TEXTURE_H__
 #define __TEXTURE_H__
-#include "Core\Geometry.h"
-#include "Core\FeimosRender.h"
+#include "Core/Geometry.h"
+#include "Core/FeimosRender.h"
 
 namespace Feimos{
 

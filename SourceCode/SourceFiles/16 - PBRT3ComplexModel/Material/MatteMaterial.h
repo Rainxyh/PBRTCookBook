@@ -1,8 +1,8 @@
 #pragma once
 #ifndef __MatteMaterial_h__
 #define __MatteMaterial_h__
-#include "Material\Material.h"
-#include "Texture\Texture.h"
+#include "Material/Material.h"
+#include "Texture/Texture.h"
 
 namespace Feimos {
 

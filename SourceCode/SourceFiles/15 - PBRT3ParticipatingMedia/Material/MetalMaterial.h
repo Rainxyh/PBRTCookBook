@@ -1,9 +1,9 @@
 #pragma once
 #ifndef __MetalMaterial_h__
 #define __MetalMaterial_h__
-#include "Material\Material.h"
-#include "Core\FeimosRender.h"
-#include "Texture\Texture.h"
+#include "Material/Material.h"
+#include "Core/FeimosRender.h"
+#include "Texture/Texture.h"
 namespace Feimos {
 
 // MetalMaterial Declarations

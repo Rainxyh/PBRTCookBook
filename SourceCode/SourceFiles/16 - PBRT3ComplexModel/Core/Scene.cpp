@@ -1,5 +1,5 @@
-#include "Core\Scene.h"
-#include "Light\Light.h"
+#include "Core/Scene.h"
+#include "Light/Light.h"
 
 namespace Feimos {
 static long long nIntersectionTests = 0;

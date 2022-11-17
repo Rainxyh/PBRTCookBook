@@ -4,6 +4,8 @@
 
 #include <memory>
 #include <limits>
+#include <math.h>
+#include <string.h>
 
 namespace Feimos {
 

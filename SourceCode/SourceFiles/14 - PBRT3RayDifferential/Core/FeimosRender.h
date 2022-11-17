@@ -4,6 +4,8 @@
 
 #include <memory>
 #include <limits>
+#include <math.h>
+#include <string.h>
 
 namespace Feimos {
 
@@ -183,7 +185,7 @@ inline float Log2(float x) {
 inline int Log2Int(uint32_t v) {
 #if defined(PBRT_IS_MSVC)
 	unsigned long lz = 0;
-	if (_BitScanReverse(&lz, v)) return lz;
+	if (__builtin_clz(lz)) return lz;
 	return 0;
 #else
 	return 31 - __builtin_clz(v);
@@ -196,12 +198,12 @@ inline int Log2Int(uint64_t v) {
 #if defined(PBRT_IS_MSVC)
 	unsigned long lz = 0;
 #if defined(_WIN64)
-	_BitScanReverse64(&lz, v);
+	__builtin_clz(lz);
 #else
-	if (_BitScanReverse(&lz, v >> 32))
+	if (__builtin_clz(lz >> 32))
 		lz += 32;
 	else
-		_BitScanReverse(&lz, v & 0xffffffff);
+		__builtin_clz(lz & 0xffffffff);
 #endif // _WIN64
 	return lz;
 #else  // PBRT_IS_MSVC
@@ -210,6 +212,16 @@ inline int Log2Int(uint64_t v) {
 }
 
 inline int Log2Int(int64_t v) { return Log2Int((uint64_t)v); }
+
+template <typename T, typename U, typename V>
+inline T Clamp(T val, U low, V high) {
+	if (val < low)
+		return low;
+	else if (val > high)
+		return high;
+	else
+		return val;
+}
 
 template <typename Predicate>
 int FindInterval(int size, const Predicate &pred) {
@@ -227,15 +239,6 @@ int FindInterval(int size, const Predicate &pred) {
 	return Clamp(first - 1, 0, size - 2);
 }
 
-template <typename T, typename U, typename V>
-inline T Clamp(T val, U low, V high) {
-	if (val < low)
-		return low;
-	else if (val > high)
-		return high;
-	else
-		return val;
-}
 inline float Lerp(float t, float v1, float v2) { return (1 - t) * v1 + t * v2; }
 
 template <typename T>

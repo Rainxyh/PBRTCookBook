@@ -1,9 +1,9 @@
 #pragma once
 #ifndef __TIMESAMPLER_H__
 #define __TIMESAMPLER_H__
-#include "Core\FeimosRender.h"
-#include "Sampler\Sampler.h"
-#include "Sampler\TimeClockRandom.h"
+#include "Core/FeimosRender.h"
+#include "Sampler/Sampler.h"
+#include "Sampler/TimeClockRandom.h"
 
 namespace Feimos {
 

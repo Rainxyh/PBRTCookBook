@@ -1,5 +1,5 @@
-#include "Camera\orthographic.h"
-#include "Sampler\Sampling.h"
+#include "Camera/Orthographic.h"
+#include "Sampler/Sampling.h"
 
 
 namespace Feimos {

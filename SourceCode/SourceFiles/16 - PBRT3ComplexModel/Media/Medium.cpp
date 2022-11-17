@@ -1,6 +1,6 @@
-#include "Media\Medium.h"
-#include "Core\Geometry.h"
-#include "Core\Transform.h"
+#include "Media/Medium.h"
+#include "Core/Geometry.h"
+#include "Core/Transform.h"
 
 
 namespace Feimos {

@@ -2,8 +2,8 @@
 #ifndef __Fresnel_h__
 #define __Fresnel_h__
 
-#include "Core\FeimosRender.h"
-#include "Core\Spectrum.h"
+#include "Core/FeimosRender.h"
+#include "Core/Spectrum.h"
 
 
 

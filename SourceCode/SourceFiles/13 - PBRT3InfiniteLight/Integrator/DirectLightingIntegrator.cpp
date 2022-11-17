@@ -1,7 +1,7 @@
-#include "Integrator\DirectLightingIntegrator.h"
+#include "Integrator/DirectLightingIntegrator.h"
 #include "Core/Scene.h"
-#include "Sampler\Sampler.h"
-#include "Light\Light.h"
+#include "Sampler/Sampler.h"
+#include "Light/Light.h"
 
 namespace Feimos {
 

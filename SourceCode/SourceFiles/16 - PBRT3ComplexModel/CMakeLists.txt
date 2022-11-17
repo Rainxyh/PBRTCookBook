@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.1)
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_FLAGS "-fopenmp")
 
 # set Qt moc rcc uic
 set(CMAKE_AUTOMOC ON)
@@ -11,7 +12,7 @@ project(Feimos)
 
 set(CMAKE_BUILD_TYPE  "Release")
 
-set(QT_PATH "D:/DevTools/QT5/5.7/msvc2015_64" CACHE PATH "qt5 cmake dir")
+set(QT_PATH "~/Qt5.14.2/5.14.2/gcc_64" CACHE PATH "qt5 cmake dir")
 
 set(CMAKE_PREFIX_PATH ${QT_PATH})
 
@@ -24,9 +25,18 @@ find_package(OpenMP REQUIRED)
 if(OpenMP_FOUND)
 	message(STATUS "found openmp") 
 	set(CMAKE_C_FLAGS ${CMAKE_C_FLAGS}, ${OPENMP_C_FLAGS})
-   	set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS}, ${OPENMP_CXX_FLAGS})
+   	# set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS}, ${OPENMP_CXX_FLAGS})
+	set(CMAKE_CXX_FLAGS "-fopenmp -lassimp")
 else()
    	message(FATAL_ERROR "openmp not found!")
+endif()
+
+find_package(assimp REQUIRED)
+if (assimp_FOUND)
+	message(STATUS "found assimp") 
+	set(CMAKE_CXX_FLAGS "-fopenmp -lassimp")
+else()
+   	message(FATAL_ERROR "assimp not found!")
 endif()
 
 
@@ -51,7 +61,7 @@ SOURCE_GROUP("3rdLib" FILES ${3rdLib})
 set(MainGUI
 	MainGUI/main.cpp
 	MainGUI/MainWindow.h
-	MainGUI/mainWindow.cpp
+	MainGUI/MainWindow.cpp
 	MainGUI/DebugText.hpp
 	MainGUI/DebugText.cpp
 	MainGUI/DisplayWidget.h
@@ -79,10 +89,10 @@ set(Core
 	# 基本数据类型
 	Core/Geometry.h
 	Core/Geometry.cpp
-	Core/Interaction.h
-	Core/Interaction.cpp
-	Core/Primitive.h
-	Core/Primitive.cpp
+	Core/interaction.h
+	Core/interaction.cpp
+	Core/primitive.h
+	Core/primitive.cpp
 	Core/Transform.h
 	Core/Transform.cpp
 	Core/Spectrum.h
@@ -97,7 +107,7 @@ SOURCE_GROUP("Core" FILES ${Core})
 
 # Shape files
 set(Shape
-	Shape/PlyRead.h
+	Shape/plyRead.h
 	Shape/Shape.h
 	Shape/Shape.cpp
 	Shape/Sphere.h
@@ -144,8 +154,8 @@ set(Sampler
 	Sampler/Sampler.cpp
 	Sampler/Halton.h
 	Sampler/Halton.cpp
-	Sampler/ClockRand.h
-	Sampler/ClockRand.cpp
+	Sampler/clockRand.h
+	Sampler/clockRand.cpp
 )
 # Make the Sampler group
 SOURCE_GROUP("Sampler" FILES ${Sampler})
@@ -260,8 +270,8 @@ add_executable(Feimos
 FILE(GLOB Icons ${CMAKE_CURRENT_SOURCE_DIR}/Icons/*.png)
 SET(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR})
 file(COPY ${Icons} DESTINATION ${EXECUTABLE_OUTPUT_PATH}/Icons/)
-# 用于包含第三方库
-set(AssimpLib ${CMAKE_CURRENT_SOURCE_DIR}/3rdLib/Assimp-lib/)
+# 用于包含ASSIMP
+#set(AssimpLib ${CMAKE_CURRENT_SOURCE_DIR}/3rdLib/Assimp-lib/)
 #add_library(Feimos STATIC IMPORTED)
 #set_target_properties(Feimos PROPERTIES
 #IMPORTED_LOCATION_RELEASE ${AssimpLib}/assimp.lib
@@ -272,13 +282,13 @@ set(AssimpLib ${CMAKE_CURRENT_SOURCE_DIR}/3rdLib/Assimp-lib/)
 #set_property(TARGET assimpFeimos PROPERTY IMPORTED_IMPLIB ${AssimpLib}assimp.lib)
 #set(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
 #set_target_properties(Feimos PROPERTIES INSTALL_RPATH ${AssimpLib})
-FILE(GLOB ASSIMPDLL ${AssimpLib}/assimp-vc140-mt.dll)
-file(COPY ${ASSIMPDLL} DESTINATION ${EXECUTABLE_OUTPUT_PATH})
+#FILE(GLOB ASSIMPDLL ${AssimpLib}/assimp-vc140-mt.dll)
+#file(COPY ${ASSIMPDLL} DESTINATION ${EXECUTABLE_OUTPUT_PATH})
 
 target_link_libraries(Feimos 
 	Qt5::Widgets
 	Qt5::Gui
-	${AssimpLib}assimp.lib
+	#${AssimpLib}assimp.lib
 )
 set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT Feimos)
 

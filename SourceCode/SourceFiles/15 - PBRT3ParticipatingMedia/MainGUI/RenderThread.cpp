@@ -1,51 +1,51 @@
 #include "RenderThread.h"
 #include "DebugText.hpp"
-#include <QTime>
+#include <QElapsedTimer>
 
-#include "Core\FeimosRender.h"
-#include "Core\primitive.h"
-#include "Core\Spectrum.h"
-#include "Core\interaction.h"
-#include "Core\Scene.h"
-#include "Core\Transform.h"
+#include "Core/FeimosRender.h"
+#include "Core/primitive.h"
+#include "Core/Spectrum.h"
+#include "Core/interaction.h"
+#include "Core/Scene.h"
+#include "Core/Transform.h"
 
-#include "Shape\Triangle.h"
-#include "Shape\plyRead.h"
+#include "Shape/Triangle.h"
+#include "Shape/plyRead.h"
 
-#include "Accelerator\BVHAccel.h"
+#include "Accelerator/BVHAccel.h"
 
-#include "Camera\Camera.h"
-#include "Camera\Perspective.h"
+#include "Camera/Camera.h"
+#include "Camera/Perspective.h"
 
-#include "Sampler\Sampler.h"
-#include "Sampler\clockRand.h"
+#include "Sampler/Sampler.h"
+#include "Sampler/clockRand.h"
 
-#include "Integrator\Integrator.h"
-#include "Integrator\WhittedIntegrator.h"
-#include "Integrator\DirectLightingIntegrator.h"
-#include "Integrator\PathIntegrator.h"
-#include "Integrator\VolPathIntegrator.h"
+#include "Integrator/Integrator.h"
+#include "Integrator/WhittedIntegrator.h"
+#include "Integrator/DirectLightingIntegrator.h"
+#include "Integrator/PathIntegrator.h"
+#include "Integrator/VolPathIntegrator.h"
 
-#include "Material\Material.h"
-#include "Material\MatteMaterial.h"
-#include "Material\Mirror.h"
-#include "Material\MetalMaterial.h"
-#include "Material\GlassMaterial.h"
-#include "Material\PlasticMaterial.h"
+#include "Material/Material.h"
+#include "Material/MatteMaterial.h"
+#include "Material/Mirror.h"
+#include "Material/MetalMaterial.h"
+#include "Material/GlassMaterial.h"
+#include "Material/PlasticMaterial.h"
 
-#include "Texture\Texture.h"
-#include "Texture\ConstantTexture.h"
-#include "Texture\ImageTexture.h"
+#include "Texture/Texture.h"
+#include "Texture/ConstantTexture.h"
+#include "Texture/ImageTexture.h"
 
-#include "Light\Light.h"
-#include "Light\DiffuseLight.h"
-#include "Light\PointLight.h"
-#include "Light\SkyBoxLight.h"
-#include "Light\InfiniteAreaLight.h"
+#include "Light/Light.h"
+#include "Light/DiffuseLight.h"
+#include "Light/PointLight.h"
+#include "Light/SkyBoxLight.h"
+#include "Light/InfiniteAreaLight.h"
 
-#include "Media\Medium.h"
-#include "Media\HomogeneousMedium.h"
-#include "Media\GridDensityMedium.h"
+#include "Media/Medium.h"
+#include "Media/HomogeneousMedium.h"
+#include "Media/GridDensityMedium.h"
 
 #include "RenderStatus.h"
 
@@ -401,7 +401,7 @@ void RenderThread::run() {
 		tri_World2Object = Inverse(tri_Object2World);
 
 		emit PrintString("   Read Mesh...");
-		Feimos::plyInfo plyi("Resources/dragon.3d");
+		Feimos::plyInfo plyi("../../Resources/dragon.3d");
 		mesh = std::make_shared<Feimos::TriangleMesh>(tri_Object2World, plyi.nTriangles, plyi.vertexIndices, plyi.nVertices, plyi.vertexArray, nullptr, nullptr, nullptr, nullptr);
 		tris.reserve(plyi.nTriangles);
 		emit PrintString("   Init Triangles...");
@@ -490,7 +490,7 @@ void RenderThread::run() {
 	int renderCount = 0;
 	double wholeTime = 0.0;
 	while (renderFlag) {
-		QTime t;
+		QElapsedTimer t;
 		t.start();
 		
 		double frameTime;

@@ -1,6 +1,6 @@
-#include "Shape\Triangle.h"
-#include "Core\interaction.h"
-#include "Sampler\Sampling.h"
+#include "Shape/Triangle.h"
+#include "Core/interaction.h"
+#include "Sampler/Sampling.h"
 
 namespace Feimos {
 

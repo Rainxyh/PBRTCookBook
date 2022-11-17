@@ -1,7 +1,7 @@
 #pragma once
 #ifndef __AABB_H__
 #define __AABB_H__
-#include "ray.h"
+#include "Ray.h"
 #include <stdio.h>
 inline float ffmin(float a, float b) { return a < b ? a : b; }
 inline float ffmax(float a, float b) { return a > b ? a : b; }

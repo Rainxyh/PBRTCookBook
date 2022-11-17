@@ -1,5 +1,5 @@
-#include "Camera\Perspective.h"
-#include "Sampler\Sampling.h"
+#include "Camera/Perspective.h"
+#include "Sampler/Sampling.h"
 
 
 

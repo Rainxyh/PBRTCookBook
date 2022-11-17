@@ -1,6 +1,6 @@
-#include "Media\GridDensityMedium.h"
-#include "Sampler\Sampler.h"
-#include "Core\interaction.h"
+#include "Media/GridDensityMedium.h"
+#include "Sampler/Sampler.h"
+#include "Core/interaction.h"
 
 namespace Feimos {
 

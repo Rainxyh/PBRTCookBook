@@ -2,10 +2,10 @@
 #ifndef __Reflection_h__
 #define __Reflection_h__
 
-#include "Core\FeimosRender.h"
-#include "Core\Geometry.hpp"
-#include "Core\Spectrum.h"
-#include "Core\interaction.h"
+#include "Core/FeimosRender.h"
+#include "Core/Geometry.hpp"
+#include "Core/Spectrum.h"
+#include "Core/interaction.h"
 
 #include <algorithm>
 #include <string>

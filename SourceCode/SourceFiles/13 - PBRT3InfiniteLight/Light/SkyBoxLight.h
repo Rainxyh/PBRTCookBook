@@ -2,7 +2,7 @@
 #ifndef __SkyBoxLight_h__
 #define __SkyBoxLight_h__
 
-#include "Light\Light.h"
+#include "Light/Light.h"
 
 namespace Feimos {
 

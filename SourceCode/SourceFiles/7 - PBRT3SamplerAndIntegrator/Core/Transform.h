@@ -2,8 +2,8 @@
 #ifndef __Transform_h__
 #define __Transform_h__
 
-#include "Core\Geometry.hpp"
-#include "Core\FeimosRender.h"
+#include "Core/Geometry.hpp"
+#include "Core/FeimosRender.h"
 
 namespace Feimos {
 

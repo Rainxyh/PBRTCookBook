@@ -2,10 +2,10 @@
 #ifndef __Sampler_h__
 #define __Sampler_h__
 
-#include "Core\FeimosRender.h"
-#include "Core\Geometry.h"
-#include "Camera\Camera.h"
-#include "Sampler\RNG.h"
+#include "Core/FeimosRender.h"
+#include "Core/Geometry.h"
+#include "Camera/Camera.h"
+#include "Sampler/RNG.h"
 
 namespace Feimos {
 

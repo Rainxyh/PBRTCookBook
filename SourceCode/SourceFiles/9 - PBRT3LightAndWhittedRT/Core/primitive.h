@@ -1,6 +1,6 @@
 #pragma once
-#include "Core\Geometry.hpp"
-#include "Material\Material.h"
+#include "Core/Geometry.hpp"
+#include "Material/Material.h"
 
 namespace Feimos {
 

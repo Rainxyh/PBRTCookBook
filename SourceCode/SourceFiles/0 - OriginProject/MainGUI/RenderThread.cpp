@@ -1,6 +1,6 @@
 #include "RenderThread.h"
 #include "DebugText.hpp"
-#include <QTime>
+#include <QElapsedTimer>
 
 RenderThread::RenderThread() {
 	paintFlag = false;
@@ -17,7 +17,7 @@ void RenderThread::run() {
 
 	// ¿ªÊ¼Ö´ÐÐäÖÈ¾
 	while (renderFlag) {
-		QTime t;
+		QElapsedTimer t;
 		t.start();
 		
 		emit PrintString("Rendering");

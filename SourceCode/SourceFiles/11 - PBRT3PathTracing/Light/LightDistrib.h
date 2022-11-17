@@ -2,7 +2,7 @@
 #ifndef __LightDistrib_h__
 #define __LightDistrib_h__
 
-#include "Core\FeimosRender.h"
+#include "Core/FeimosRender.h"
 #include <string>
 
 namespace Feimos {

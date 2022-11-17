@@ -3,10 +3,10 @@
 #ifndef __CAMERA_H__
 #define __CAMERA_H__
 
-#include "Sampler\TimeClockRandom.h"
-#include "Core\FeimosRender.h"
-#include "Core\Geometry.h"
-#include "Core\Transform.h"
+#include "Sampler/TimeClockRandom.h"
+#include "Core/FeimosRender.h"
+#include "Core/Geometry.h"
+#include "Core/Transform.h"
 
 namespace Feimos {
 

@@ -1,5 +1,5 @@
-#include "Core\FeimosRender.h"
-#include "Shape\Sphere.h"
+#include "Core/FeimosRender.h"
+#include "Shape/Sphere.h"
 
 
 namespace Feimos {

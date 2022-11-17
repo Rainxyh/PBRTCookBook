@@ -1,9 +1,9 @@
 #include "RenderThread.h"
 #include "DebugText.hpp"
-#include <QTime>
+#include <QElapsedTimer>
 
-#include "RayTracer\RayTracer.h"
-#include "RayTracer\camera.h"
+#include "RayTracer/RayTracer.h"
+#include "RayTracer/camera.h"
 
 RenderThread::RenderThread() {
 	paintFlag = false;
@@ -36,7 +36,7 @@ void RenderThread::run() {
 	// ¿ªÊ¼Ö´ÐÐäÖÈ¾
 	int renderCount = 0;
 	while (renderFlag) {
-		QTime t;
+		QElapsedTimer t;
 		t.start();
 		
 		//emit PrintString("Rendering");

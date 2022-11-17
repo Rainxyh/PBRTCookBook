@@ -1,7 +1,7 @@
 #pragma once
 #ifndef __WhittedIntegrator_h__
 #define __WhittedIntegrator_h__
-#include "Integrator\Integrator.h"
+#include "Integrator/Integrator.h"
 
 namespace Feimos {
 

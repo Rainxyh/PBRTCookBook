@@ -1,8 +1,8 @@
 #pragma once
-#include "Media\Medium.h"
-#include "Core\FeimosRender.h"
-#include "Core\Transform.h"
-#include "Core\Spectrum.h"
+#include "Media/Medium.h"
+#include "Core/FeimosRender.h"
+#include "Core/Transform.h"
+#include "Core/Spectrum.h"
 
 #include <iostream>
 #include <fstream>

@@ -2,7 +2,7 @@
 #ifndef __CAMERA_H__
 #define __CAMERA_H__
 
-#include "ray.h"
+#include "Ray.h"
 
 vec3 random_in_unit_disk() {
 	vec3 p;

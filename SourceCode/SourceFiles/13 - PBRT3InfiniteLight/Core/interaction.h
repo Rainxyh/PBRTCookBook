@@ -2,9 +2,9 @@
 #ifndef __Interaction_h__
 #define __Interaction_h__
 
-#include "Core\Geometry.h"
-#include "Shape\Shape.h"
-#include "Material\Material.h"
+#include "Core/Geometry.h"
+#include "Shape/Shape.h"
+#include "Material/Material.h"
 
 namespace Feimos {
 

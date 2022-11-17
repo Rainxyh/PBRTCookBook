@@ -3,7 +3,7 @@
 #ifndef __lowdiscrepancy_h__
 #define __lowdiscrepancy_h__
 #include <vector>
-#include "Sampler\RNG.h"
+#include "Sampler/RNG.h"
 
 namespace Feimos {
 

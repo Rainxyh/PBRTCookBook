@@ -2,9 +2,9 @@
 #ifndef __Shape_h__
 #define __Shape_h__
 
-#include "Core\FeimosRender.h"
-#include "Core\Geometry.h"
-#include "Core\Transform.h"
+#include "Core/FeimosRender.h"
+#include "Core/Geometry.h"
+#include "Core/Transform.h"
 
 namespace Feimos {
 

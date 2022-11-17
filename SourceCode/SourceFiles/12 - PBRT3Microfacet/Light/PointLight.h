@@ -2,7 +2,7 @@
 
 #ifndef __PointLight_h__
 #define __PointLight_h__
-#include "Light\Light.h"
+#include "Light/Light.h"
 
 
 namespace Feimos {

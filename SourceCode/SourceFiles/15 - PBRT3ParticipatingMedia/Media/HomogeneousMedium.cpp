@@ -1,8 +1,8 @@
-#include "Media\HomogeneousMedium.h"
-#include "Core\Geometry.h"
-#include "Core\FeimosRender.h"
-#include "Sampler\Sampler.h"
-#include "Core\interaction.h"
+#include "Media/HomogeneousMedium.h"
+#include "Core/Geometry.h"
+#include "Core/FeimosRender.h"
+#include "Sampler/Sampler.h"
+#include "Core/interaction.h"
 
 namespace Feimos {
 

@@ -1,17 +1,17 @@
-#pragma once
 
-#include "Integrator\Integrator.h"
-#include "Sampler\Sampler.h"
-#include "Sampler\Sampling.h"
 
-#include "Core\Spectrum.h"
-#include "Core\interaction.h"
-#include "Core\Scene.h"
-#include "Core\frameBuffer.h"
+#include "Integrator/Integrator.h"
+#include "Sampler/Sampler.h"
+#include "Sampler/Sampling.h"
 
-#include "Material\Reflection.h"
+#include "Core/Spectrum.h"
+#include "Core/interaction.h"
+#include "Core/Scene.h"
+#include "Core/FrameBuffer.h"
 
-#include "Light\Light.h"
+#include "Material/Reflection.h"
+
+#include "Light/Light.h"
 
 #include <omp.h>
 
@@ -176,7 +176,7 @@ Spectrum SamplerIntegrator::SpecularReflect(
 
 void SamplerIntegrator::Render(const Scene &scene, double &timeConsume) {
 
-	omp_set_num_threads(20); //设置线程的个数
+	omp_set_num_threads(32); //设置线程的个数
 	double start = omp_get_wtime();//获取起始时间  
 
 	// 场景预处理
