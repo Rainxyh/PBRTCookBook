@@ -100,12 +100,10 @@ void RenderThread::run()
 				Feimos::Ray r(origin, (lower_left_corner + u * horizontal + v * vertical) - Feimos::Vector3f(origin));
 				Feimos::SurfaceInteraction isect;
 				Feimos::Spectrum colObj(0.0f);
-				colObj[0] = 1.0f;
-				colObj[1] = 1.0f;
 				if (agg->Intersect(r, &isect))
 				{
 					float Li = Feimos::Dot(Light, isect.n);
-					colObj[1] = std::abs(Li); //取绝对值，防止出现负值
+					colObj[0] = std::abs(Li); //取绝对值，防止出现负值
 				}
 
 				p_framebuffer->update_f_u_c(i, HEIGHT - j - 1, 0, renderCount, colObj[0]);

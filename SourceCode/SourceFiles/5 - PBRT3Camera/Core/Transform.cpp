@@ -126,16 +126,26 @@ namespace Feimos
 
 	Transform Translate(const Vector3f &delta)
 	{
-		Matrix4x4 m(1, 0, 0, delta.x, 0, 1, 0, delta.y, 0, 0, 1, delta.z, 0, 0, 0,
-					1);
-		Matrix4x4 minv(1, 0, 0, -delta.x, 0, 1, 0, -delta.y, 0, 0, 1, -delta.z, 0,
-					   0, 0, 1);
+		Matrix4x4 m(1, 0, 0, delta.x,
+					0, 1, 0, delta.y,
+					0, 0, 1, delta.z,
+					0, 0, 0, 1);
+		Matrix4x4 minv(1, 0, 0, -delta.x,
+					   0, 1, 0, -delta.y,
+					   0, 0, 1, -delta.z,
+					   0, 0, 0, 1);
 		return Transform(m, minv);
 	}
 	Transform Scale(float x, float y, float z)
 	{
-		Matrix4x4 m(x, 0, 0, 0, 0, y, 0, 0, 0, 0, z, 0, 0, 0, 0, 1);
-		Matrix4x4 minv(1 / x, 0, 0, 0, 0, 1 / y, 0, 0, 0, 0, 1 / z, 0, 0, 0, 0, 1);
+		Matrix4x4 m(x, 0, 0, 0,
+					0, y, 0, 0,
+					0, 0, z, 0,
+					0, 0, 0, 1);
+		Matrix4x4 minv(1 / x, 0, 0, 0,
+					   0, 1 / y, 0, 0,
+					   0, 0, 1 / z, 0,
+					   0, 0, 0, 1);
 		return Transform(m, minv);
 	}
 	Transform RotateX(float theta)

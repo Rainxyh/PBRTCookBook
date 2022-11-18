@@ -21,13 +21,13 @@ namespace Feimos
 		// TriangleMesh Data
 		const int nTriangles, nVertices;
 		std::vector<int> vertexIndices;
-		std::unique_ptr<Point3f[]> p;
-		std::unique_ptr<Normal3f[]> n;
-		std::unique_ptr<Vector3f[]> s;
-		std::unique_ptr<Point2f[]> uv;
-		std::vector<int> faceIndices;
+		std::unique_ptr<Point3f[]> p;  // 顶点
+		std::unique_ptr<Normal3f[]> n; // 法线
+		std::unique_ptr<Vector3f[]> s; // 切线向量
+		std::unique_ptr<Point2f[]> uv; // 纹理坐标
+		std::vector<int> faceIndices;  // 网格面索引
 	};
-	
+
 	static long long triMeshBytes = 0;
 	class Triangle : public Shape
 	{

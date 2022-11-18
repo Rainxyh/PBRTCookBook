@@ -13,8 +13,8 @@ namespace Feimos
 
 	struct CameraSample
 	{
-		Point2f pFilm;
-		Point2f pLens;
+		Point2f pFilm; // 当 前 Ray 采 样 到 的 值 显 示 在 胶 片 的 哪 个 位 置。
+		Point2f pLens; // 当 前 Ray 通 过 镜 头 的 位 置
 	};
 
 	class Camera

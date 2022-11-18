@@ -158,7 +158,7 @@ namespace Feimos
 	}
 	bool Triangle::IntersectP(const Ray &ray, bool testAlphaTexture) const
 	{
-		return false;
+		return Intersect(ray, nullptr, nullptr, testAlphaTexture);
 	}
 	float Triangle::Area() const
 	{

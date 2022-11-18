@@ -11,10 +11,7 @@ namespace Feimos
     // OrthographicCamera Public Methods
     OrthographicCamera(const int RasterWidth, const int RasterHeight, const Transform &CameraToWorld,
                        const Bounds2f &screenWindow, float lensRadius,
-                       float focalDistance)
-        : ProjectiveCamera(RasterWidth, RasterHeight, CameraToWorld, Orthographic(0, 10), screenWindow, lensRadius, focalDistance)
-    {
-    }
+                       float focalDistance);
     float GenerateRay(const CameraSample &sample, Ray *) const;
   };
 

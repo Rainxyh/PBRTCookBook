@@ -23,8 +23,8 @@ namespace Feimos
 	{
 		// Compute raster and camera sample positions
 		Point3f pFilm = Point3f(sample.pFilm.x, sample.pFilm.y, 0);
-		Point3f pCamera = RasterToCamera(pFilm);
-		*ray = Ray(Point3f(0, 0, 0), Normalize(Vector3f(pCamera)));
+		Point3f pCamera = RasterToCamera(pFilm);					// 局部坐标到相机(世界)坐标
+		*ray = Ray(Point3f(0, 0, 0), Normalize(Vector3f(pCamera))); // 相机发出的光线
 		// Modify ray for depth of field
 		if (lensRadius > 0)
 		{
@@ -32,7 +32,7 @@ namespace Feimos
 			Point2f pLens = lensRadius * ConcentricSampleDisk(sample.pLens);
 
 			// Compute point on plane of focus
-			float ft = focalDistance / ray->d.z;
+			float ft = focalDistance / ray->d.z; // 焦距在世界坐标下
 			Point3f pFocus = (*ray)(ft);
 
 			// Update ray for effect of lens

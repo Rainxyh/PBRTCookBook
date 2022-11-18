@@ -10,7 +10,7 @@
 #include "Core/interaction.h"
 
 #include "RenderStatus.h"
-
+#include "Shape/Sphere.h"
 #include <stdlib.h>
 #include <time.h>
 #include <omp.h>
@@ -52,26 +52,32 @@ void RenderThread::run()
 	Feimos::Point3f origin(0.0, 0.0, -4.0);
 
 	// Feimos::Transform sphereT_Object2World, sphereT_World2Object;
-	// Feimos::Shape? s = new Sphere(&sphereT_Object2World, &sphereT_World2Object, false, 1.0);
+	// Feimos::Shape* s = new Feimos::Sphere(&sphereT_Object2World, &sphereT_World2Object, false, 2.0);
 
-	// 生成Mesh加速结构
-	std::shared_ptr<Feimos::TriangleMesh> mesh;
-	std::vector<std::shared_ptr<Feimos::Shape>> tris;
-	std::vector<std::shared_ptr<Feimos::Primitive>> prims;
-	Feimos::plyInfo *plyi;
-	Feimos::Aggregate *agg;
+	// ********************************************************生成Mesh加速结构********************************************************
+	// 构建变换矩阵
 	Feimos::Transform tri_Object2World, tri_World2Object;
-
 	tri_Object2World = Feimos::Translate(Feimos::Vector3f(0.0, -2.5, 0.0)) * tri_Object2World;
 	tri_World2Object = Inverse(tri_Object2World);
+	// 加载模型
+	Feimos::plyInfo *plyi;
 	plyi = new Feimos::plyInfo("../../Resources/dragon.3d");
+	// 生成网格
+	std::shared_ptr<Feimos::TriangleMesh> mesh;
 	mesh = std::make_shared<Feimos::TriangleMesh>(tri_Object2World, plyi->nTriangles, plyi->vertexIndices, plyi->nVertices, plyi->vertexArray, nullptr, nullptr, nullptr, nullptr);
+	// 构建三角形列表
+	std::vector<std::shared_ptr<Feimos::Shape>> tris;
 	tris.reserve(plyi->nTriangles);
 	for (int i = 0; i < plyi->nTriangles; ++i)
 		tris.push_back(std::make_shared<Feimos::Triangle>(&tri_Object2World, &tri_World2Object, false, mesh, i));
+	// 三角形转换为Primitive
+	std::vector<std::shared_ptr<Feimos::Primitive>> prims;
 	for (int i = 0; i < plyi->nTriangles; ++i)
 		prims.push_back(std::make_shared<Feimos::GeometricPrimitive>(tris[i]));
+	// 用Primitive构建加速结构
+	Feimos::Aggregate *agg;
 	agg = new Feimos::BVHAccel(prims, 1);
+	// ********************************************************生成Mesh加速结构********************************************************
 
 	// 开始执行渲染
 	int renderCount = 0;
@@ -98,7 +104,7 @@ void RenderThread::run()
 
 				Feimos::Ray r(origin, (lower_left_corner + u * horizontal + v * vertical) - Feimos::Vector3f(origin));
 				Feimos::SurfaceInteraction isect;
-				Feimos::Vector3f colObj(1.0, 1.0, 0.0);
+				Feimos::Vector3f colObj(1.0, 1.0, 1.0);
 				if (agg->Intersect(r, &isect))
 				{
 					colObj = Feimos::Vector3f(1.0, 0.0, 0.0);

@@ -14,6 +14,7 @@
 
 #include "Camera/Camera.h"
 #include "Camera/Perspective.h"
+#include "Camera/orthographic.h"
 
 #include "Sampler/TimeClockRandom.h"
 
@@ -44,7 +45,6 @@ void RenderThread::run()
 	p_framebuffer->bufferResize(WIDTH, HEIGHT);
 
 	emit PrintString("Init Camera");
-	Feimos::Camera *cam;
 	//初始化程序
 	Feimos::Point3f eye(-3.0f, 1.5f, -3.0f), look(0.0, 0.0, 0.0f);
 	Feimos::Vector3f up(0.0f, 1.0f, 0.0f);
@@ -52,7 +52,9 @@ void RenderThread::run()
 	//取逆是因为LookAt返回的是世界坐标到相机坐标系的变换
 	//而我们需要相机坐标系到世界坐标系的变换
 	Feimos::Transform Camera2World = Inverse(lookat);
+	Feimos::Camera *cam = nullptr;
 	cam = Feimos::CreatePerspectiveCamera(WIDTH, HEIGHT, Camera2World);
+	cam = Feimos::CreateOrthographicCamera(WIDTH, HEIGHT, Camera2World);
 
 	// 生成Mesh加速结构
 	std::shared_ptr<Feimos::TriangleMesh> mesh;
@@ -107,12 +109,11 @@ void RenderThread::run()
 				cs.pFilm = Feimos::Point2f(i + getClockRandom(), j + getClockRandom());
 				cs.pLens = Feimos::Point2f(getClockRandom(), getClockRandom());
 				Feimos::Ray r;
+				// per_cam->GenerateRay(cs, &r);
 				cam->GenerateRay(cs, &r);
 
 				Feimos::SurfaceInteraction isect;
 				Feimos::Spectrum colObj(0.0f);
-				colObj[0] = 1.0f;
-				colObj[1] = 1.0f;
 				if (agg->Intersect(r, &isect))
 				{
 					float Li = Feimos::Dot(Light, isect.n);
