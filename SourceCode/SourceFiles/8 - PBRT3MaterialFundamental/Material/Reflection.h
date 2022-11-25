@@ -75,8 +75,42 @@ namespace Feimos
 		BSDF_DIFFUSE = 1 << 2,
 		BSDF_GLOSSY = 1 << 3,
 		BSDF_SPECULAR = 1 << 4,
-		BSDF_ALL = BSDF_DIFFUSE | BSDF_GLOSSY | BSDF_SPECULAR | BSDF_REFLECTION |
-				   BSDF_TRANSMISSION,
+		BSDF_ALL = BSDF_DIFFUSE | BSDF_GLOSSY | BSDF_SPECULAR | BSDF_REFLECTION | BSDF_TRANSMISSION,
+	};
+
+	// BxDF Declarations
+	class BxDF
+	{
+	public:
+		// BxDF Interface
+		BxDF(BxDFType type) : type(type) {}
+		virtual ~BxDF() {}
+		bool MatchesFlags(BxDFType t) const { return (type & t) == type; }
+		virtual Spectrum f(const Vector3f &wo, const Vector3f &wi) const = 0;
+		virtual Spectrum Sample_f(const Vector3f &wo, Vector3f *wi,
+								  const Point2f &sample, float *pdf, BxDFType *sampledType = nullptr) const;
+		virtual Spectrum rho(const Vector3f &wo, int nSamples, const Point2f *samples) const;
+		virtual Spectrum rho(int nSamples, const Point2f *samples1, const Point2f *samples2) const;
+		virtual float Pdf(const Vector3f &wo, const Vector3f &wi) const;
+
+		// BxDF Public Data
+		const BxDFType type;
+	};
+
+	class LambertianReflection : public BxDF
+	{
+	public:
+		// LambertianReflection Public Methods
+		LambertianReflection(const Spectrum &R)
+			: BxDF(BxDFType(BSDF_REFLECTION | BSDF_DIFFUSE)), R(R) {}
+		virtual ~LambertianReflection() {}
+		Spectrum f(const Vector3f &wo, const Vector3f &wi) const;
+		Spectrum rho(const Vector3f &, int, const Point2f *) const { return R; }
+		Spectrum rho(int, const Point2f *, const Point2f *) const { return R; }
+
+	private:
+		// LambertianReflection Private Data
+		const Spectrum R;
 	};
 
 	class BSDF
@@ -120,7 +154,11 @@ namespace Feimos
 		// BSDF Public Data
 		const float eta;
 		// BSDF Private Methods
-		~BSDF();
+		~BSDF()
+		{
+			for (int i = 0; i < nBxDFs; ++i)
+				bxdfs[i]->~BxDF();
+		}
 
 	private:
 		// BSDF Private Data
@@ -129,40 +167,6 @@ namespace Feimos
 		int nBxDFs = 0;
 		static constexpr int MaxBxDFs = 8;
 		BxDF *bxdfs[MaxBxDFs];
-	};
-
-	// BxDF Declarations
-	class BxDF
-	{
-	public:
-		// BxDF Interface
-		virtual ~BxDF() {}
-		BxDF(BxDFType type) : type(type) {}
-		bool MatchesFlags(BxDFType t) const { return (type & t) == type; }
-		virtual Spectrum f(const Vector3f &wo, const Vector3f &wi) const = 0;
-		virtual Spectrum Sample_f(const Vector3f &wo, Vector3f *wi,
-								  const Point2f &sample, float *pdf, BxDFType *sampledType = nullptr) const;
-		virtual Spectrum rho(const Vector3f &wo, int nSamples, const Point2f *samples) const;
-		virtual Spectrum rho(int nSamples, const Point2f *samples1, const Point2f *samples2) const;
-		virtual float Pdf(const Vector3f &wo, const Vector3f &wi) const;
-
-		// BxDF Public Data
-		const BxDFType type;
-	};
-
-	class LambertianReflection : public BxDF
-	{
-	public:
-		// LambertianReflection Public Methods
-		LambertianReflection(const Spectrum &R)
-			: BxDF(BxDFType(BSDF_REFLECTION | BSDF_DIFFUSE)), R(R) {}
-		Spectrum f(const Vector3f &wo, const Vector3f &wi) const;
-		Spectrum rho(const Vector3f &, int, const Point2f *) const { return R; }
-		Spectrum rho(int, const Point2f *, const Point2f *) const { return R; }
-
-	private:
-		// LambertianReflection Private Data
-		const Spectrum R;
 	};
 
 	// BSDF Inline Method Definitions

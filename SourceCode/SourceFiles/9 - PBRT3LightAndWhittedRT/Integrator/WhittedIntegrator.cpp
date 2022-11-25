@@ -19,10 +19,12 @@ namespace Feimos
         {
             for (const auto &light : scene.lights)
                 L += light->Le(ray);
-            if (depth <= 2)
+            if (depth <= 0)
             {
                 Spectrum LL;
-                LL[2] = 0.8;
+                LL[0] = 135.f / 255.f;
+                LL[1] = 206.f / 255.f;
+                LL[2] = 235.f / 255.f;
                 return LL;
             }
             return L;

@@ -44,11 +44,13 @@ namespace Feimos
             float pdf;
             VisibilityTester visibility;
             Spectrum Li = light->Sample_Li(isect, sampler.Get2D(), &wi, &pdf, &visibility);
+            // Spectrum Li (1.f);
             if (Li.IsBlack() || pdf == 0)
                 continue;
             Spectrum f = isect.bsdf->f(wo, wi);
             if (!f.IsBlack() && visibility.Unoccluded(scene))
                 L += f * Li * AbsDot(wi, n) / pdf;
+
         }
         if (depth + 1 < maxDepth)
         {

@@ -40,6 +40,7 @@ namespace Feimos
 
 		for (bounces = 0;; ++bounces)
 		{
+			// 分 别 计 算 isect 与 mi 。 如 果 当 前 ray 在 参 与 介 质 中， 则 mi 就 会 被 正 确 赋 值
 			// Intersect _ray_ with scene and store intersection in _isect_
 			SurfaceInteraction isect;
 			bool foundIntersection = scene.Intersect(ray, &isect);
@@ -54,6 +55,8 @@ namespace Feimos
 			// Handle an interaction with a medium or a surface
 			if (mi.IsValid())
 			{
+				// 计 算 当 前 介 质 点 的 光 照 值
+				// 根 据 采 样 相 位 函 数 来 产 生 新 的 散 射 方 向
 				// Terminate path if ray escaped or _maxDepth_ was reached
 				if (bounces >= maxDepth)
 					break;
@@ -71,6 +74,8 @@ namespace Feimos
 			}
 			else
 			{
+				// 与 表 面 相 交， 计 算 表 面 BSDF 特 性
+				// 与 路 径 追 踪 一 致
 				++surfaceInteractions;
 				// Handle scattering at point on surface for volumetric path tracer
 

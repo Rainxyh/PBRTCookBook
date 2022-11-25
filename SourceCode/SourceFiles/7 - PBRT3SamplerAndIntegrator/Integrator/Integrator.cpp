@@ -13,7 +13,6 @@ namespace Feimos
 
 	void SamplerIntegrator::Render(const Scene &scene, double &timeConsume)
 	{
-
 		omp_set_num_threads(32);		//设置线程的个数
 		double start = omp_get_wtime(); //获取起始时间
 
@@ -21,7 +20,6 @@ namespace Feimos
 		m_FrameBuffer->renderCountIncrease();
 
 		Feimos::Point3f Light(10.0, 10.0, -10.0);
-
 #pragma omp parallel for
 		for (int i = 0; i < pixelBounds.pMax.x; i++)
 		{
@@ -33,18 +31,19 @@ namespace Feimos
 				int offset = (pixelBounds.pMax.x * j + i);
 
 				std::unique_ptr<Feimos::Sampler> pixel_sampler = sampler->Clone(offset);
+				// 遍 历 块 中 的 每 个 像 素 点
 				Feimos::Point2i pixel(i, j);
 				pixel_sampler->StartPixel(pixel);
-
+				// 根 据 每 个 像 素 点 初 始 化 采 样 器
+				// Initialize _CameraSample_ for current sample
+				// 会 产 生 前 5 维 的 随 机 数， 即 像 素 采 样 点 2 维 + 相 机 时 间 1 维 + 镜 头 采 样 2 维
 				Feimos::CameraSample cs;
 				cs = pixel_sampler->GetCameraSample(pixel);
 				Feimos::Ray r;
 				camera->GenerateRay(cs, &r);
 
 				Feimos::SurfaceInteraction isect;
-				Feimos::Spectrum colObj(0.0f);
-				colObj[0] = 1.0f;
-				colObj[1] = 1.0f;
+				Feimos::Spectrum colObj(1.0f);
 				if (scene.Intersect(r, &isect))
 				{
 					Vector3f LightNorm = Feimos::Normalize(Light - isect.p);
@@ -59,8 +58,10 @@ namespace Feimos
 					float Ld = Dot(LightNorm, isect.n);
 					Ld = (Ld > 0.0f) ? Ld : 0.0f;
 					float Li = (0.2 + 0.2 * Ld + 0.6 * Ls);
-					colObj = std::abs(Li) * colObj; //取绝对值，防止出现负值
+					colObj += std::abs(Li) * colObj; //取绝对值，防止出现负值
 				}
+				else
+					colObj = Feimos::Spectrum(0.f);
 
 				m_FrameBuffer->update_f_u_c(i, j, 0, colObj[0]);
 				m_FrameBuffer->update_f_u_c(i, j, 1, colObj[1]);

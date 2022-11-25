@@ -17,8 +17,10 @@ namespace Feimos
 		{
 			ClockRandomInit();
 		}
-		std::unique_ptr<Sampler> Clone(int seed)
+		std::unique_ptr<Sampler> Clone(int seed = 0)
 		{
+			if (seed > 0)
+				ClockRandomInit(seed);
 			return std::unique_ptr<Sampler>(new ClockRandSampler(*this));
 		}
 		int64_t GetIndexForSample(int64_t sampleNum) const

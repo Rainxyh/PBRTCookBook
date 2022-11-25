@@ -252,6 +252,12 @@ namespace Feimos
     public:
         // RGBSpectrum Public Methods
         RGBSpectrum(float v = 0.f) : CoefficientSpectrum<3>(v) {}
+        RGBSpectrum(float r, float g, float b)
+        {
+            c[0] = r;
+            c[1] = g;
+            c[2] = b;
+        }
         RGBSpectrum(const CoefficientSpectrum<3> &v) : CoefficientSpectrum<3>(v) {}
         RGBSpectrum(const RGBSpectrum &s,
                     SpectrumType type = SpectrumType::Reflectance)

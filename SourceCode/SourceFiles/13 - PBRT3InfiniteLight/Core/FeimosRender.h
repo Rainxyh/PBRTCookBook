@@ -117,14 +117,14 @@ namespace Feimos
 	{
 		return false;
 	}
-	inline uint32_t FloatToBits(float f)
+	inline uint32_t floatToBits(float f)
 	{
 		uint32_t ui;
 		memcpy(&ui, &f, sizeof(float));
 		return ui;
 	}
 
-	inline float BitsToFloat(uint32_t ui)
+	inline float BitsTofloat(uint32_t ui)
 	{
 		float f;
 		memcpy(&f, &ui, sizeof(uint32_t));
@@ -139,12 +139,12 @@ namespace Feimos
 			v = 0.f;
 
 		// Advance _v_ to next higher float
-		uint32_t ui = FloatToBits(v);
+		uint32_t ui = floatToBits(v);
 		if (v >= 0)
 			++ui;
 		else
 			--ui;
-		return BitsToFloat(ui);
+		return BitsTofloat(ui);
 	}
 	inline float NextFloatDown(float v)
 	{
@@ -153,12 +153,12 @@ namespace Feimos
 			return v;
 		if (v == 0.f)
 			v = -0.f;
-		uint32_t ui = FloatToBits(v);
+		uint32_t ui = floatToBits(v);
 		if (v > 0)
 			--ui;
 		else
 			++ui;
-		return BitsToFloat(ui);
+		return BitsTofloat(ui);
 	}
 
 	template <typename T>
@@ -202,11 +202,11 @@ namespace Feimos
 	{
 #if defined(PBRT_IS_MSVC)
 		unsigned long lz = 0;
-		if (__builtin_clz(lz))
+		if (__builtin_ctz(lz)) // Returns the number of leading 0-bits in x, starting at the least significant bit position. If x is 0, the result is undefined.
 			return lz;
 		return 0;
 #else
-		return 31 - __builtin_clz(v);
+		return 31 - __builtin_ctz(v);
 #endif
 	}
 
@@ -217,16 +217,16 @@ namespace Feimos
 #if defined(PBRT_IS_MSVC)
 		unsigned long lz = 0;
 #if defined(_WIN64)
-		__builtin_clz(lz);
+		__builtin_ctz(lz);
 #else
-		if (__builtin_clz(lz >> 32))
+		if (__builtin_ctz(lz >> 32))
 			lz += 32;
 		else
-			__builtin_clz(lz & 0xffffffff);
+			__builtin_ctz(lz & 0xffffffff);
 #endif // _WIN64
 		return lz;
 #else // PBRT_IS_MSVC
-		return 63 - __builtin_clzll(v);
+		return 63 - __builtin_ctzll(v);
 #endif
 	}
 
@@ -333,6 +333,20 @@ namespace Feimos
 			p = 2.83297682f + p * w;
 		}
 		return p * x;
+	}
+
+	inline float GammaCorrect(float value)
+	{
+		if (value <= 0.0031308f)
+			return 12.92f * value;
+		return 1.055f * std::pow(value, (float)(1.f / 2.4f)) - 0.055f;
+	}
+
+	inline float InverseGammaCorrect(float value)
+	{
+		if (value <= 0.04045f)
+			return value * 1.f / 12.92f;
+		return std::pow((value + 0.055f) * 1.f / 1.055f, (float)2.4f);
 	}
 
 }

@@ -1,5 +1,4 @@
 #include "Light/InfiniteAreaLight.h"
-#include "Sampler/Sampling.h"
 #include "3rdLib/stb_image.h"
 #include "Core/Geometry.h"
 

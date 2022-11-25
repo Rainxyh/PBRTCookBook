@@ -72,23 +72,32 @@ void RenderThread::run()
 	// 生成材质与纹理
 	emit PrintString("Init Material");
 	Feimos::Spectrum floorColor;
-	floorColor[0] = 0.2;
-	floorColor[1] = 0.3;
-	floorColor[2] = 0.9;
+	floorColor[0] = 0.f;
+	floorColor[1] = 0.f;
+	floorColor[2] = 250.f / 255.f;
 	Feimos::Spectrum dragonColor;
 	dragonColor[0] = 1.0;
-	dragonColor[1] = 1.0;
-	dragonColor[2] = 0.0;
+	dragonColor[1] = 5.0;
+	dragonColor[2] = 3.0;
+	Feimos::Spectrum lightColor;
+	lightColor[0] = 1.0;
+	lightColor[1] = 1.0;
+	lightColor[2] = 1.0;
+	Feimos::Spectrum mirrorColor;
+	mirrorColor[0] = 1.f;
+	mirrorColor[1] = 1.f;
+	mirrorColor[2] = 1.f;
 	std::shared_ptr<Feimos::Texture<Feimos::Spectrum>> KdDragon = std::make_shared<Feimos::ConstantTexture<Feimos::Spectrum>>(dragonColor);
-	std::shared_ptr<Feimos::Texture<Feimos::Spectrum>> KrDragon = std::make_shared<Feimos::ConstantTexture<Feimos::Spectrum>>(dragonColor);
 	std::shared_ptr<Feimos::Texture<Feimos::Spectrum>> KdFloor = std::make_shared<Feimos::ConstantTexture<Feimos::Spectrum>>(floorColor);
+	std::shared_ptr<Feimos::Texture<Feimos::Spectrum>> KdLight = std::make_shared<Feimos::ConstantTexture<Feimos::Spectrum>>(lightColor);
+	std::shared_ptr<Feimos::Texture<Feimos::Spectrum>> KdMirror = std::make_shared<Feimos::ConstantTexture<Feimos::Spectrum>>(mirrorColor);
 	std::shared_ptr<Feimos::Texture<float>> sigma = std::make_shared<Feimos::ConstantTexture<float>>(0.0f);
 	std::shared_ptr<Feimos::Texture<float>> bumpMap = std::make_shared<Feimos::ConstantTexture<float>>(0.0f);
 	//材质
 	std::shared_ptr<Feimos::Material> dragonMaterial = std::make_shared<Feimos::MatteMaterial>(KdDragon, sigma, bumpMap);
 	std::shared_ptr<Feimos::Material> floorMaterial = std::make_shared<Feimos::MatteMaterial>(KdFloor, sigma, bumpMap);
-	std::shared_ptr<Feimos::Material> whiteLightMaterial = std::make_shared<Feimos::MatteMaterial>(KdFloor, sigma, bumpMap);
-	std::shared_ptr<Feimos::Material> mirrorMaterial = std::make_shared<Feimos::MirrorMaterial>(KrDragon, bumpMap);
+	std::shared_ptr<Feimos::Material> whiteLightMaterial = std::make_shared<Feimos::MatteMaterial>(KdLight, sigma, bumpMap);
+	std::shared_ptr<Feimos::Material> mirrorMaterial = std::make_shared<Feimos::MirrorMaterial>(KdMirror, bumpMap);
 
 	//地板
 	emit PrintString("Init Floor");
@@ -128,12 +137,24 @@ void RenderThread::run()
 	for (int i = 0; i < plyi.nTriangles; ++i)
 		prims.push_back(std::make_shared<Feimos::GeometricPrimitive>(tris[i], dragonMaterial, nullptr));
 	for (int i = 0; i < nTrianglesFloor; ++i)
-		prims.push_back(std::make_shared<Feimos::GeometricPrimitive>(trisFloor[i], mirrorMaterial, nullptr));
+	{
+		if (i)
+			prims.push_back(std::make_shared<Feimos::GeometricPrimitive>(trisFloor[i], floorMaterial, nullptr));
+		else
+			prims.push_back(std::make_shared<Feimos::GeometricPrimitive>(trisFloor[i], mirrorMaterial, nullptr));
+	}
 
 	//面光源
 	emit PrintString("Init AreaLight");
 	// 光源
 	std::vector<std::shared_ptr<Feimos::Light>> lights;
+
+	// 定义点光源
+	Feimos::Spectrum LightI(30.f);
+	Feimos::Transform LightToWorld;
+	LightToWorld = Feimos::Translate(Feimos::Vector3f(1.f, 4.5f, -6.f)) * LightToWorld;
+	std::shared_ptr<Feimos::Light> pointLight = std::make_shared<Feimos::PointLight>(LightToWorld, LightI);
+	// lights.push_back(pointLight);
 
 	// 定义面光源
 	int nTrianglesAreaLight = 2;						//面光源数（三角形数）
@@ -172,6 +193,7 @@ void RenderThread::run()
 	Feimos::Bounds2i ScreenBound(Feimos::Point2i(0, 0), Feimos::Point2i(WIDTH, HEIGHT));
 
 	std::shared_ptr<Feimos::Integrator> integrator = std::make_shared<Feimos::WhittedIntegrator>(5, camera, sampler, ScreenBound, p_framebuffer);
+	// std::shared_ptr<Feimos::Integrator> integrator = std::make_shared<Feimos::SamplerIntegrator>(camera, sampler, ScreenBound, p_framebuffer);
 
 	emit PrintString("Start Rendering");
 	// 开始执行渲染

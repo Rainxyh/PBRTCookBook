@@ -45,7 +45,6 @@ OrthographicCamera *CreateOrthographicCamera(const int RasterWidth, const int Ra
 	}
 
 	float ScreenScale = 2.0f; 
-
 	{
 		screen.pMin.x *= ScreenScale;
 		screen.pMax.x *= ScreenScale;

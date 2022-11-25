@@ -131,12 +131,6 @@ namespace Feimos
 		return f;
 	}
 
-	BSDF::~BSDF()
-	{
-		for (int i = 0; i < nBxDFs; i++)
-			bxdfs[i]->~BxDF();
-	}
-
 	Spectrum BxDF::rho(const Vector3f &w, int nSamples, const Point2f *u) const
 	{
 		Spectrum r(0.);

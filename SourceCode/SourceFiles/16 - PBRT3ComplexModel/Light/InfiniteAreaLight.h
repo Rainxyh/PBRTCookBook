@@ -5,6 +5,7 @@
 #include "Texture/MIPMap.h"
 #include "Light/Light.h"
 #include "Core/Scene.h"
+#include "Sampler/Sampling.h"
 
 namespace Feimos
 {

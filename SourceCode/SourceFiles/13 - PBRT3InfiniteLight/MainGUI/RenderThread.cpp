@@ -40,9 +40,36 @@
 #include "Light/SkyBoxLight.h"
 #include "Light/InfiniteAreaLight.h"
 
-#include "RenderStatus.h"
+#define windows_operating_system false
+#if windows_operating_system
+#include <windows.h>
+#include <psapi.h>
+#pragma comment(lib, "psapi.lib")
+void showMemoryInfo(void)
+{
 
-// void showMemoryInfo(void);
+	//  SIZE_T PeakWorkingSetSize; //?????????
+	//  SIZE_T WorkingSetSize; //??????
+	//  SIZE_T PagefileUsage; //??????????
+	//  SIZE_T PeakPagefileUsage; //?????????????
+
+	EmptyWorkingSet(GetCurrentProcess());
+
+	HANDLE handle = GetCurrentProcess();
+	PROCESS_MEMORY_COUNTERS pmc;
+	GetProcessMemoryInfo(handle, &pmc, sizeof(pmc));
+
+	// DebugText::getDebugText()->addContents("Memory Use: WorkingSetSize: " + QString::number(pmc.WorkingSetSize / 1000.f / 1000.f) + " M");
+	// DebugText::getDebugText()->addContents("PeakWorkingSetSize: " + QString::number(pmc.PeakWorkingSetSize / 1000.f / 1000.f) + " M");
+	// DebugText::getDebugText()->addContents("PagefileUsage: " + QString::number(pmc.PagefileUsage / 1000.f / 1000.f) + " M");
+	// DebugText::getDebugText()->addContents("PeakPagefileUsage: " + QString::number(pmc.PeakPagefileUsage / 1000.f / 1000.f) + " M");
+
+	m_RenderStatus.setDataChanged("Memory Use", "WorkingSetSize", QString::number(pmc.WorkingSetSize / 1000.f / 1000.f), "M");
+	m_RenderStatus.setDataChanged("Memory Use", "PeakWorkingSetSize", QString::number(pmc.PeakWorkingSetSize / 1000.f / 1000.f), "M");
+	m_RenderStatus.setDataChanged("Memory Use", "PagefileUsage", QString::number(pmc.PagefileUsage / 1000.f / 1000.f), "M");
+	m_RenderStatus.setDataChanged("Memory Use", "PeakPagefileUsage", QString::number(pmc.PeakPagefileUsage / 1000.f / 1000.f), "M");
+}
+#endif
 
 inline std::shared_ptr<Feimos::Material> getGreeyMatteMaterial()
 {
@@ -177,48 +204,47 @@ void RenderThread::run()
 
 	std::vector<std::shared_ptr<Feimos::Primitive>> prims;
 
-	emit PrintString("Init Cornell Box...");
-	{
-		//墙和地板
-		const int nTrianglesWall = 2 * 5;
-		int vertexIndicesWall[nTrianglesWall * 3];
-		for (int i = 0; i < nTrianglesWall * 3; i++)
-			vertexIndicesWall[i] = i;
-		const int nVerticesWall = nTrianglesWall * 3;
-		const float length_Wall = 5.0f;
-		Feimos::Point3f P_Wall[nVerticesWall] = {
-			//底座
-			Feimos::Point3f(0.f, 0.f, length_Wall), Feimos::Point3f(length_Wall, 0.f, length_Wall), Feimos::Point3f(0.f, 0.f, 0.f),
-			Feimos::Point3f(length_Wall, 0.f, length_Wall), Feimos::Point3f(length_Wall, 0.f, 0.f), Feimos::Point3f(0.f, 0.f, 0.f),
-			//天花板
-			Feimos::Point3f(0.f, length_Wall, length_Wall), Feimos::Point3f(0.f, length_Wall, 0.f), Feimos::Point3f(length_Wall, length_Wall, length_Wall),
-			Feimos::Point3f(length_Wall, length_Wall, length_Wall), Feimos::Point3f(0.f, length_Wall, 0.f), Feimos::Point3f(length_Wall, length_Wall, 0.f),
-			//后墙
-			Feimos::Point3f(0.f, 0.f, 0.f), Feimos::Point3f(length_Wall, 0.f, 0.f), Feimos::Point3f(length_Wall, length_Wall, 0.f),
-			Feimos::Point3f(0.f, 0.f, 0.f), Feimos::Point3f(length_Wall, length_Wall, 0.f), Feimos::Point3f(0.f, length_Wall, 0.f),
-			//右墙
-			Feimos::Point3f(0.f, 0.f, 0.f), Feimos::Point3f(0.f, length_Wall, length_Wall), Feimos::Point3f(0.f, 0.f, length_Wall),
-			Feimos::Point3f(0.f, 0.f, 0.f), Feimos::Point3f(0.f, length_Wall, 0.f), Feimos::Point3f(0.f, length_Wall, length_Wall),
-			//左墙
-			Feimos::Point3f(length_Wall, 0.f, 0.f), Feimos::Point3f(length_Wall, length_Wall, length_Wall), Feimos::Point3f(length_Wall, 0.f, length_Wall),
-			Feimos::Point3f(length_Wall, 0.f, 0.f), Feimos::Point3f(length_Wall, length_Wall, 0.f), Feimos::Point3f(length_Wall, length_Wall, length_Wall)};
-		Feimos::Transform tri_ConBox2World = Feimos::Translate(Feimos::Vector3f(-0.5 * length_Wall, -0.5 * length_Wall, -0.5 * length_Wall));
-		Feimos::Transform tri_World2ConBox = Feimos::Inverse(tri_ConBox2World);
-		std::shared_ptr<Feimos::TriangleMesh> meshConBox = std::make_shared<Feimos::TriangleMesh>(tri_ConBox2World, nTrianglesWall, vertexIndicesWall, nVerticesWall, P_Wall, nullptr, nullptr, nullptr, nullptr);
-		std::vector<std::shared_ptr<Feimos::Shape>> trisConBox;
-		for (int i = 0; i < nTrianglesWall; ++i)
-			trisConBox.push_back(std::make_shared<Feimos::Triangle>(&tri_ConBox2World, &tri_World2ConBox, false, meshConBox, i));
-
-		//将物体填充到基元
-		/*for (int i = 0; i < nTrianglesWall; ++i) {
-			if (i == 6 || i == 7)
-				prims.push_back(std::make_shared<Feimos::GeometricPrimitive>(trisConBox[i], redWallMaterial, nullptr));
-			else if (i == 8 || i == 9)
-				prims.push_back(std::make_shared<Feimos::GeometricPrimitive>(trisConBox[i], blueWallMaterial, nullptr));
-			else
-				prims.push_back(std::make_shared<Feimos::GeometricPrimitive>(trisConBox[i], whiteWallMaterial, nullptr));
-		}*/
-	}
+	// emit PrintString("Init Cornell Box...");
+	// {
+	// 	//墙和地板
+	// 	const int nTrianglesWall = 2 * 5;
+	// 	int vertexIndicesWall[nTrianglesWall * 3];
+	// 	for (int i = 0; i < nTrianglesWall * 3; i++)
+	// 		vertexIndicesWall[i] = i;
+	// 	const int nVerticesWall = nTrianglesWall * 3;
+	// 	const float length_Wall = 5.0f;
+	// 	Feimos::Point3f P_Wall[nVerticesWall] = {
+	// 		//底座
+	// 		Feimos::Point3f(0.f, 0.f, length_Wall), Feimos::Point3f(length_Wall, 0.f, length_Wall), Feimos::Point3f(0.f, 0.f, 0.f),
+	// 		Feimos::Point3f(length_Wall, 0.f, length_Wall), Feimos::Point3f(length_Wall, 0.f, 0.f), Feimos::Point3f(0.f, 0.f, 0.f),
+	// 		//天花板
+	// 		Feimos::Point3f(0.f, length_Wall, length_Wall), Feimos::Point3f(0.f, length_Wall, 0.f), Feimos::Point3f(length_Wall, length_Wall, length_Wall),
+	// 		Feimos::Point3f(length_Wall, length_Wall, length_Wall), Feimos::Point3f(0.f, length_Wall, 0.f), Feimos::Point3f(length_Wall, length_Wall, 0.f),
+	// 		//后墙
+	// 		Feimos::Point3f(0.f, 0.f, 0.f), Feimos::Point3f(length_Wall, 0.f, 0.f), Feimos::Point3f(length_Wall, length_Wall, 0.f),
+	// 		Feimos::Point3f(0.f, 0.f, 0.f), Feimos::Point3f(length_Wall, length_Wall, 0.f), Feimos::Point3f(0.f, length_Wall, 0.f),
+	// 		//右墙
+	// 		Feimos::Point3f(0.f, 0.f, 0.f), Feimos::Point3f(0.f, length_Wall, length_Wall), Feimos::Point3f(0.f, 0.f, length_Wall),
+	// 		Feimos::Point3f(0.f, 0.f, 0.f), Feimos::Point3f(0.f, length_Wall, 0.f), Feimos::Point3f(0.f, length_Wall, length_Wall),
+	// 		//左墙
+	// 		Feimos::Point3f(length_Wall, 0.f, 0.f), Feimos::Point3f(length_Wall, length_Wall, length_Wall), Feimos::Point3f(length_Wall, 0.f, length_Wall),
+	// 		Feimos::Point3f(length_Wall, 0.f, 0.f), Feimos::Point3f(length_Wall, length_Wall, 0.f), Feimos::Point3f(length_Wall, length_Wall, length_Wall)};
+	// 	Feimos::Transform tri_ConBox2World = Feimos::Translate(Feimos::Vector3f(-0.5 * length_Wall, -0.5 * length_Wall, -0.5 * length_Wall));
+	// 	Feimos::Transform tri_World2ConBox = Feimos::Inverse(tri_ConBox2World);
+	// 	std::shared_ptr<Feimos::TriangleMesh> meshConBox = std::make_shared<Feimos::TriangleMesh>(tri_ConBox2World, nTrianglesWall, vertexIndicesWall, nVerticesWall, P_Wall, nullptr, nullptr, nullptr, nullptr);
+	// 	std::vector<std::shared_ptr<Feimos::Shape>> trisConBox;
+	// 	for (int i = 0; i < nTrianglesWall; ++i)
+	// 		trisConBox.push_back(std::make_shared<Feimos::Triangle>(&tri_ConBox2World, &tri_World2ConBox, false, meshConBox, i));
+	// 	for (int i = 0; i < nTrianglesWall; ++i)
+	// 	{
+	// 		if (i == 6 || i == 7)
+	// 			prims.push_back(std::make_shared<Feimos::GeometricPrimitive>(trisConBox[i], redWallMaterial, nullptr));
+	// 		else if (i == 8 || i == 9)
+	// 			prims.push_back(std::make_shared<Feimos::GeometricPrimitive>(trisConBox[i], blueWallMaterial, nullptr));
+	// 		else
+	// 			prims.push_back(std::make_shared<Feimos::GeometricPrimitive>(trisConBox[i], whiteWallMaterial, nullptr));
+	// 	}
+	// }
 
 	emit PrintString("Init Floor...");
 	{
@@ -308,22 +334,23 @@ void RenderThread::run()
 		}
 	}
 
-	//无限环境光源
+	//天空盒
 	emit PrintString("Init SkyBoxLight...");
 	{
 		Feimos::Transform SkyBoxToWorld;
 		Feimos::Point3f SkyBoxCenter(0.f, 0.f, 0.f);
 		float SkyBoxRadius = 10.0f;
 		// std::shared_ptr<Feimos::Light> skyBoxLight =
-		//	std::make_shared<Feimos::SkyBoxLight>(SkyBoxToWorld, SkyBoxCenter, SkyBoxRadius, "Resources/TropicalRuins1000.hdr", 1);
+		//	std::make_shared<Feimos::SkyBoxLight>(SkyBoxToWorld, SkyBoxCenter, SkyBoxRadius, "../../Resources/TropicalRuins1000.hdr", 1);
 		// lights.push_back(skyBoxLight);
 	}
+	//无限环境光源
 	emit PrintString("Init InfiniteLight...");
 	{
 		Feimos::Transform InfinityLightToWorld = Feimos::RotateX(20) * Feimos::RotateY(-90) * Feimos::RotateX(-90);
 		Feimos::Spectrum power(1.0f);
 		std::shared_ptr<Feimos::Light> infinityLight =
-			std::make_shared<Feimos::InfiniteAreaLight>(InfinityLightToWorld, power, 10, "Resources/MonValley1000.hdr");
+			std::make_shared<Feimos::InfiniteAreaLight>(InfinityLightToWorld, power, 10, "../../Resources/MonValley1000.hdr");
 		lights.push_back(infinityLight);
 	}
 
@@ -355,44 +382,20 @@ void RenderThread::run()
 		double frameTime;
 		integrator->Render(*worldScene, frameTime);
 
+#if windows_operating_system
 		m_RenderStatus.setDataChanged("Performance", "One Frame Time", QString::number(frameTime), "");
 		m_RenderStatus.setDataChanged("Performance", "Frame pre second", QString::number(1.0f / (float)frameTime), "");
+#endif
 
 		emit PaintBuffer(p_framebuffer->getUCbuffer(), WIDTH, HEIGHT, 4);
 
 		while (t.elapsed() < 1)
 			;
 
-		// showMemoryInfo();
+#if windows_operating_system
+		showMemoryInfo();
+#endif
 	}
 
 	emit PrintString("End Rendering.");
 }
-
-// #include <windows.h>
-// #include <psapi.h>
-// #pragma comment(lib, "psapi.lib")
-// void showMemoryInfo(void) {
-
-// 	//  SIZE_T PeakWorkingSetSize; //峰值内存使用
-// 	//  SIZE_T WorkingSetSize; //内存使用
-// 	//  SIZE_T PagefileUsage; //虚拟内存使用
-// 	//  SIZE_T PeakPagefileUsage; //峰值虚拟内存使用
-
-// 	EmptyWorkingSet(GetCurrentProcess());
-
-// 	HANDLE handle = GetCurrentProcess();
-// 	PROCESS_MEMORY_COUNTERS pmc;
-// 	GetProcessMemoryInfo(handle, &pmc, sizeof(pmc));
-
-// 	//DebugText::getDebugText()->addContents("Memory Use: WorkingSetSize: " + QString::number(pmc.WorkingSetSize / 1000.f / 1000.f) + " M");
-// 	//DebugText::getDebugText()->addContents("PeakWorkingSetSize: " + QString::number(pmc.PeakWorkingSetSize / 1000.f / 1000.f) + " M");
-// 	//DebugText::getDebugText()->addContents("PagefileUsage: " + QString::number(pmc.PagefileUsage / 1000.f / 1000.f) + " M");
-// 	//DebugText::getDebugText()->addContents("PeakPagefileUsage: " + QString::number(pmc.PeakPagefileUsage / 1000.f / 1000.f) + " M");
-
-// 	m_RenderStatus.setDataChanged("Memory Use", "WorkingSetSize", QString::number(pmc.WorkingSetSize / 1000.f / 1000.f), "M");
-// 	m_RenderStatus.setDataChanged("Memory Use", "PeakWorkingSetSize", QString::number(pmc.PeakWorkingSetSize / 1000.f / 1000.f), "M");
-// 	m_RenderStatus.setDataChanged("Memory Use", "PagefileUsage", QString::number(pmc.PagefileUsage / 1000.f / 1000.f), "M");
-// 	m_RenderStatus.setDataChanged("Memory Use", "PeakPagefileUsage", QString::number(pmc.PeakPagefileUsage / 1000.f / 1000.f), "M");
-
-// }

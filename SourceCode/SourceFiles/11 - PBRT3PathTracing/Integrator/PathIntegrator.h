@@ -4,6 +4,7 @@
 
 #include "Integrator/Integrator.h"
 #include "Core/FeimosRender.h"
+#include "Light/LightDistrib.h"
 
 namespace Feimos
 {

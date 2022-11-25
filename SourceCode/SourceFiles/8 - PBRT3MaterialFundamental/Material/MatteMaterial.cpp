@@ -16,13 +16,15 @@ namespace Feimos
     {
         // Evaluate textures for _MatteMaterial_ material and allocate BRDF
         si->bsdf = std::make_shared<BSDF>(*si);
-
         Spectrum r = Kd->Evaluate(*si).Clamp();
         float sig = Clamp(sigma->Evaluate(*si), 0, 90);
         if (!r.IsBlack())
         {
             if (sig == 0)
+            {
                 si->bsdf->Add(new LambertianReflection(r));
+            }
+
             // else
             // si->bsdf->Add(ARENA_ALLOC(arena, OrenNayar)(r, sig));
         }

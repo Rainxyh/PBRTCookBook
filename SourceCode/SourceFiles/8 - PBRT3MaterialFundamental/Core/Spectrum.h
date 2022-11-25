@@ -197,7 +197,7 @@ namespace Feimos
             std::string str = "[ ";
             for (int i = 0; i < nSpectrumSamples; ++i)
             {
-                str += StringPrintf("%f", c[i]);
+                str += c[i];
                 if (i + 1 < nSpectrumSamples)
                     str += ", ";
             }

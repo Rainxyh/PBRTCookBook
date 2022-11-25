@@ -41,7 +41,9 @@ namespace Feimos
 						  std::shared_ptr<Sampler> sampler,
 						  const Bounds2i &pixelBounds, FrameBuffer *m_FrameBuffer)
 			: camera(camera), sampler(sampler), pixelBounds(pixelBounds), m_FrameBuffer(m_FrameBuffer) {}
+
 		virtual void Preprocess(const Scene &scene, Sampler &sampler) {}
+		
 		void Render(const Scene &scene, double &timeConsume);
 
 		virtual Spectrum Li(const Ray &ray, const Scene &scene, Sampler &sampler, int depth = 0) const;

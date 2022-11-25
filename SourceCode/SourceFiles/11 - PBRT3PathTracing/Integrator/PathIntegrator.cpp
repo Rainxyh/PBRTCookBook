@@ -1,5 +1,4 @@
 #include "Integrator/PathIntegrator.h"
-#include "Light/LightDistrib.h"
 #include "Core/Spectrum.h"
 #include "Core/interaction.h"
 #include "Core/Scene.h"
@@ -51,9 +50,13 @@ namespace Feimos
 		{
 			// Find next path vertex and accumulate contribution
 
+			// ------------------------------------------------------与 场 景 计 算 交 点 isect------------------------------------------------------
+
 			// Intersect _ray_ with scene and store intersection in _isect_
 			SurfaceInteraction isect;
 			bool foundIntersection = scene.Intersect(ray, &isect);
+
+			// -------------------如 果 是 第 一 次 相 交 或 是 镜 面： 如 果 有 交 点，L += 交 点 表 面 自 身 发 出 的 光； 否 则，L += 环 境 光-------------------
 
 			// Possibly add emitted light at intersection
 			if (bounces == 0 || specularBounce)
@@ -70,9 +73,13 @@ namespace Feimos
 				}
 			}
 
+			// --------------------------------达 到 最 大 反 弹 深 度 maxDepth 或 与 场 景 没 有 交 点 就 终 止 光 线------------------------------------------------------
+
 			// Terminate path if ray escaped or _maxDepth_ was reached
 			if (!foundIntersection || bounces >= maxDepth)
 				break;
+
+			// ------------------------------------------------------计 算 散 射 BSDF------------------------------------------------------
 
 			// Compute scattering functions and skip over medium boundaries
 			isect.ComputeScatteringFunctions(ray, true);
@@ -82,6 +89,8 @@ namespace Feimos
 				bounces--;
 				continue;
 			}
+
+			// ------------------------------------------------------采 样 直 接 光 照 值------------------------------------------------------
 
 			const Distribution1D *distrib = lightDistribution->Lookup(isect.p);
 
@@ -95,6 +104,8 @@ namespace Feimos
 					++zeroRadiancePaths;
 				L += Ld;
 			}
+
+			// ----------------------------------------------------采 样 BSDF 产 生 新 路 径------------------------------------------------------
 
 			// Sample BSDF to get new path direction
 			Vector3f wo = -ray.d, wi;
@@ -116,6 +127,9 @@ namespace Feimos
 				etaScale *= (Dot(wo, isect.n) > 0) ? (eta * eta) : 1 / (eta * eta);
 			}
 			ray = isect.SpawnRay(wi);
+
+			// -------------------------------------------------根 据 俄 罗 斯 轮 盘 确 定 是 否 终 止 路 径------------------------------------------------------
+
 			// Possibly terminate the path with Russian roulette.
 			// Factor out radiance scaling due to refraction in rrBeta.
 			Spectrum rrBeta = beta * etaScale;

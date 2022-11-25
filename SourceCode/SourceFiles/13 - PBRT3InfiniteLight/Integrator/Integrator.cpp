@@ -231,7 +231,18 @@ namespace Feimos
 				camera->GenerateRay(cs, &ray);
 
 				Feimos::Spectrum colObj = Li(ray, scene, *sampler_c, 0);
-
+#define gamma_correct false
+#if gamma_correct
+				float xyz[3];
+				colObj.ToXYZ(xyz);
+				float rgb[3];
+				XYZToRGB(xyz, rgb);
+// #define TO_BYTE(v) (uint8_t) Clamp(255.f * GammaCorrect(v) + .5f, 0.f, 255.f);
+// 				colObj[0] = TO_BYTE(colObj[0]);
+// 				colObj[1] = TO_BYTE(colObj[1]);
+// 				colObj[2] = TO_BYTE(colObj[2]);
+#undef TO_BYTE
+#endif
 				m_FrameBuffer->update_f_u_c(i, j, 0, colObj[0]);
 				m_FrameBuffer->update_f_u_c(i, j, 1, colObj[1]);
 				m_FrameBuffer->update_f_u_c(i, j, 2, colObj[2]);
@@ -276,5 +287,4 @@ namespace Feimos
 
 		return colObj;
 	}
-
 };

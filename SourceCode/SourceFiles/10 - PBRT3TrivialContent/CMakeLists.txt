@@ -166,6 +166,8 @@ set(Material
 	Material/Material.cpp
 	Material/MatteMaterial.h
 	Material/MatteMaterial.cpp
+	Material/PerfectGlassMaterial.h
+	Material/PerfectGlassMaterial.cpp
 	Material/Fresnel.h
 	Material/Fresnel.cpp
 	Material/Mirror.h

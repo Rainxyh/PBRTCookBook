@@ -27,17 +27,12 @@ namespace Feimos
 		shading.dndv = dndv;
 
 		// Adjust normal based on orientation and handedness
-		/*if (shape &&
-		(shape->reverseOrientation ^ shape->transformSwapsHandedness)) {
-		n *= -1;
-		shading.n *= -1;
-		}*/
-	}
-
-	SurfaceInteraction::~SurfaceInteraction()
-	{
-		if (bsdf)
-			bsdf->~BSDF();
+		if (shape &&
+			(shape->reverseOrientation))
+		{
+			n *= -1;
+			shading.n *= -1;
+		}
 	}
 
 	void SurfaceInteraction::ComputeScatteringFunctions(const Ray &ray,

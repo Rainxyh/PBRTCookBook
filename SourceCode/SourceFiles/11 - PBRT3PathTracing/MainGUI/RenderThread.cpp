@@ -39,7 +39,36 @@
 
 #include "RenderStatus.h"
 
-void showMemoryInfo(void);
+#define windows_operating_system false
+#if windows_operating_system
+#include <windows.h>
+#include <psapi.h>
+#pragma comment(lib, "psapi.lib")
+void showMemoryInfo(void)
+{
+
+	//  SIZE_T PeakWorkingSetSize; //峰值内存使用
+	//  SIZE_T WorkingSetSize; //内存使用
+	//  SIZE_T PagefileUsage; //虚拟内存使用
+	//  SIZE_T PeakPagefileUsage; //峰值虚拟内存使用
+
+	EmptyWorkingSet(GetCurrentProcess());
+
+	HANDLE handle = GetCurrentProcess();
+	PROCESS_MEMORY_COUNTERS pmc;
+	GetProcessMemoryInfo(handle, &pmc, sizeof(pmc));
+
+	// DebugText::getDebugText()->addContents("Memory Use: WorkingSetSize: " + QString::number(pmc.WorkingSetSize / 1000.f / 1000.f) + " M");
+	// DebugText::getDebugText()->addContents("PeakWorkingSetSize: " + QString::number(pmc.PeakWorkingSetSize / 1000.f / 1000.f) + " M");
+	// DebugText::getDebugText()->addContents("PagefileUsage: " + QString::number(pmc.PagefileUsage / 1000.f / 1000.f) + " M");
+	// DebugText::getDebugText()->addContents("PeakPagefileUsage: " + QString::number(pmc.PeakPagefileUsage / 1000.f / 1000.f) + " M");
+
+	m_RenderStatus.setDataChanged("Memory Use", "WorkingSetSize", QString::number(pmc.WorkingSetSize / 1000.f / 1000.f), "M");
+	m_RenderStatus.setDataChanged("Memory Use", "PeakWorkingSetSize", QString::number(pmc.PeakWorkingSetSize / 1000.f / 1000.f), "M");
+	m_RenderStatus.setDataChanged("Memory Use", "PagefileUsage", QString::number(pmc.PagefileUsage / 1000.f / 1000.f), "M");
+	m_RenderStatus.setDataChanged("Memory Use", "PeakPagefileUsage", QString::number(pmc.PeakPagefileUsage / 1000.f / 1000.f), "M");
+}
+#endif
 
 RenderThread::RenderThread()
 {
@@ -224,9 +253,9 @@ void RenderThread::run()
 	Feimos::Transform SkyBoxToWorld;
 	Feimos::Point3f SkyBoxCenter(0.f, 0.f, 0.f);
 	float SkyBoxRadius = 10.0f;
-	// std::shared_ptr<Feimos::Light> skyBoxLight =
-	//	std::make_shared<Feimos::SkyBoxLight>(SkyBoxToWorld, SkyBoxCenter, SkyBoxRadius, "Resources/TropicalRuins1000.hdr", 1);
-	// lights.push_back(skyBoxLight);
+	std::shared_ptr<Feimos::Light> skyBoxLight =
+		std::make_shared<Feimos::SkyBoxLight>(SkyBoxToWorld, SkyBoxCenter, SkyBoxRadius, "../../Resources/TropicalRuins1000.hdr", 1);
+	lights.push_back(skyBoxLight);
 
 	// 生成加速结构
 	emit PrintString("Init Accelerator...");
@@ -264,36 +293,10 @@ void RenderThread::run()
 		while (t.elapsed() < 1)
 			;
 
+#if windows_operating_system
 		showMemoryInfo();
+#endif
 	}
 
 	emit PrintString("End Rendering.");
-}
-
-#include <windows.h>
-#include <psapi.h>
-#pragma comment(lib, "psapi.lib")
-void showMemoryInfo(void)
-{
-
-	//  SIZE_T PeakWorkingSetSize; //峰值内存使用
-	//  SIZE_T WorkingSetSize; //内存使用
-	//  SIZE_T PagefileUsage; //虚拟内存使用
-	//  SIZE_T PeakPagefileUsage; //峰值虚拟内存使用
-
-	EmptyWorkingSet(GetCurrentProcess());
-
-	HANDLE handle = GetCurrentProcess();
-	PROCESS_MEMORY_COUNTERS pmc;
-	GetProcessMemoryInfo(handle, &pmc, sizeof(pmc));
-
-	// DebugText::getDebugText()->addContents("Memory Use: WorkingSetSize: " + QString::number(pmc.WorkingSetSize / 1000.f / 1000.f) + " M");
-	// DebugText::getDebugText()->addContents("PeakWorkingSetSize: " + QString::number(pmc.PeakWorkingSetSize / 1000.f / 1000.f) + " M");
-	// DebugText::getDebugText()->addContents("PagefileUsage: " + QString::number(pmc.PagefileUsage / 1000.f / 1000.f) + " M");
-	// DebugText::getDebugText()->addContents("PeakPagefileUsage: " + QString::number(pmc.PeakPagefileUsage / 1000.f / 1000.f) + " M");
-
-	m_RenderStatus.setDataChanged("Memory Use", "WorkingSetSize", QString::number(pmc.WorkingSetSize / 1000.f / 1000.f), "M");
-	m_RenderStatus.setDataChanged("Memory Use", "PeakWorkingSetSize", QString::number(pmc.PeakWorkingSetSize / 1000.f / 1000.f), "M");
-	m_RenderStatus.setDataChanged("Memory Use", "PagefileUsage", QString::number(pmc.PagefileUsage / 1000.f / 1000.f), "M");
-	m_RenderStatus.setDataChanged("Memory Use", "PeakPagefileUsage", QString::number(pmc.PeakPagefileUsage / 1000.f / 1000.f), "M");
 }

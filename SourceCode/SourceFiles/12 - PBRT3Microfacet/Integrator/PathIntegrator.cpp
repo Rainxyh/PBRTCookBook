@@ -1,5 +1,4 @@
 #include "Integrator/PathIntegrator.h"
-#include "Light/LightDistrib.h"
 #include "Core/Spectrum.h"
 #include "Core/interaction.h"
 #include "Core/Scene.h"

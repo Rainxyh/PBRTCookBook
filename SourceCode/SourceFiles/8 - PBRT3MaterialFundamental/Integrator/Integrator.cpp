@@ -26,7 +26,7 @@ namespace Feimos
 
 		Feimos::Point3f Light(10.0, 10.0, -10.0);
 
-#pragma omp parallel for
+// #pragma omp parallel for
 		for (int i = 0; i < pixelBounds.pMax.x; i++)
 		{
 			for (int j = 0; j < pixelBounds.pMax.y; j++)
@@ -53,13 +53,20 @@ namespace Feimos
 					isect.ComputeScatteringFunctions(r);
 					// 对于漫反射材质来说，wo不会影响后面的结果
 					Vector3f wo = isect.wo;
-					Vector3f LightNorm = Light - isect.p;
-					LightNorm = Normalize(LightNorm);
-					Vector3f wi = LightNorm;
+					Vector3f wi = Normalize(Light - isect.p);
 					Spectrum f = isect.bsdf->f(wo, wi);
 					float pdf = isect.bsdf->Pdf(wo, wi);
-					//乘以3.0的意义是为了不让图像过暗
-					colObj += pdf * f * 3.0f;
+
+					Vector3f wh = Normalize(-r.d + wi);
+					float La, Ld, Ls;
+					La = .2f;
+					Ld = Dot(wi, isect.n) > 0.f ? Dot(wi, isect.n) : 0.f;
+					Ls = Dot(wh, isect.n) > 0.f ? Dot(wh, isect.n) : 0.f;
+					Ls = pow(Ls, 4);
+					float Li = 1.5f * (La + .2f * Ld + 1.7f * Ls);
+
+					// 乘以3.0的意义是为了不让图像过暗
+					colObj += Li * pdf * f * 3.0f;
 				}
 
 				m_FrameBuffer->update_f_u_c(i, j, 0, colObj[0]);

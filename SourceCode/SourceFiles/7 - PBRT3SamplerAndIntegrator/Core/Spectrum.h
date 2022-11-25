@@ -197,7 +197,7 @@ namespace Feimos
             std::string str = "[ ";
             for (int i = 0; i < nSpectrumSamples; ++i)
             {
-                str += StringPrintf("%f", c[i]);
+                str += stringprintf("%f", c[i]);
                 if (i + 1 < nSpectrumSamples)
                     str += ", ";
             }
@@ -288,8 +288,25 @@ namespace Feimos
             const float YWeight[3] = {0.212671f, 0.715160f, 0.072169f};
             return YWeight[0] * c[0] + YWeight[1] * c[1] + YWeight[2] * c[2];
         }
-    };
 
+        friend std::ostream &operator<<(std::ostream &os, const RGBSpectrum &s)
+        {
+
+            return os << s.ToString();
+        }
+        std::string ToString() const
+        {
+            std::string str = "[ ";
+            for (int i = 0; i < 3; ++i)
+            {
+                str += c[i];
+                if (i + 1 < 3)
+                    str += ", ";
+            }
+            str += " ]";
+            return str;
+        }
+    };
 }
 
 #endif

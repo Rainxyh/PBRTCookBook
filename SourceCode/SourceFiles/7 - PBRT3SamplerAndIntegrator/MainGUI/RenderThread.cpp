@@ -56,6 +56,21 @@ void RenderThread::run()
 	Feimos::Transform Camera2World = Inverse(lookat);
 	camera = std::shared_ptr<Feimos::Camera>(Feimos::CreatePerspectiveCamera(WIDTH, HEIGHT, Camera2World));
 
+	int nTrianglesFloor = 2;
+	int vectexIndicesFloor[] = {0, 1, 2, 3, 4, 5};
+	int nVecticesFloor = 6;
+	const float yPos_Floor = -2.f;
+	Feimos::Point3f P_Floor[6] = {Feimos::Point3f(-6.f, yPos_Floor, 6.f), Feimos::Point3f(6.f, yPos_Floor, 6.f), Feimos::Point3f(-6.f, yPos_Floor, -6.f),
+								  Feimos::Point3f(6.f, yPos_Floor, 6.f), Feimos::Point3f(6.f, yPos_Floor, -6.f), Feimos::Point3f(-6.f, yPos_Floor, -6.f)};
+	Feimos::Transform floor_Object2World, floor_World2Object;
+	std::shared_ptr<Feimos::TriangleMesh> mesh_floor = std::make_shared<Feimos::TriangleMesh>(floor_Object2World, nTrianglesFloor,
+																							  vectexIndicesFloor, nVecticesFloor, P_Floor,
+																							  nullptr, nullptr, nullptr, nullptr);
+
+	std::vector<std::shared_ptr<Feimos::Shape>> trisfloor;
+	for (size_t i = 0; i < nTrianglesFloor; ++i)
+		trisfloor.push_back(std::make_shared<Feimos::Triangle>(&floor_Object2World, &floor_World2Object, false, mesh_floor, i));
+
 	// 生成Mesh加速结构
 	std::shared_ptr<Feimos::TriangleMesh> mesh;
 	std::vector<std::shared_ptr<Feimos::Shape>> tris;
@@ -63,19 +78,22 @@ void RenderThread::run()
 	Feimos::plyInfo *plyi;
 	std::shared_ptr<Feimos::Aggregate> aggregate;
 	Feimos::Transform tri_Object2World, tri_World2Object;
-
 	tri_Object2World = Feimos::Translate(Feimos::Vector3f(0.0, -2.5, 0.0)) * tri_Object2World;
 	tri_World2Object = Inverse(tri_Object2World);
 	emit PrintString("Read Mesh");
 	plyi = new Feimos::plyInfo("../../Resources/dragon.3d");
-	mesh = std::make_shared<Feimos::TriangleMesh>(tri_Object2World, plyi->nTriangles, plyi->vertexIndices, plyi->nVertices, plyi->vertexArray, nullptr, nullptr, nullptr, nullptr);
+	mesh = std::make_shared<Feimos::TriangleMesh>(tri_Object2World, plyi->nTriangles,
+												  plyi->vertexIndices, plyi->nVertices, plyi->vertexArray,
+												  nullptr, nullptr, nullptr, nullptr);
 	tris.reserve(plyi->nTriangles);
 	emit PrintString("Init Triangles");
 	for (int i = 0; i < plyi->nTriangles; ++i)
 		tris.push_back(std::make_shared<Feimos::Triangle>(&tri_Object2World, &tri_World2Object, false, mesh, i));
 	emit PrintString("Init Primitives");
 	for (int i = 0; i < plyi->nTriangles; ++i)
-		prims.push_back(std::make_shared<Feimos::GeometricPrimitive>(tris[i]));
+		prims.push_back(std::make_shared<Feimos::GeometricPrimitive>(tris[i])); // dragon
+	for (size_t i = 0; i < nTrianglesFloor; ++i)
+		prims.push_back(std::make_shared<Feimos::GeometricPrimitive>(trisfloor[i])); // floor
 	emit PrintString("Init Accelerator");
 	aggregate = std::make_unique<Feimos::BVHAccel>(prims, 1);
 

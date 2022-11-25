@@ -49,13 +49,42 @@
 
 #include "RenderStatus.h"
 
-void showMemoryInfo(void);
+#define windows_operating_system false
+#if windows_operating_system
+#include <windows.h>
+#include <psapi.h>
+#pragma comment(lib, "psapi.lib")
+void showMemoryInfo(void)
+{
+
+	//  SIZE_T PeakWorkingSetSize; //?????????
+	//  SIZE_T WorkingSetSize; //??????
+	//  SIZE_T PagefileUsage; //??????????
+	//  SIZE_T PeakPagefileUsage; //?????????????
+
+	EmptyWorkingSet(GetCurrentProcess());
+
+	HANDLE handle = GetCurrentProcess();
+	PROCESS_MEMORY_COUNTERS pmc;
+	GetProcessMemoryInfo(handle, &pmc, sizeof(pmc));
+
+	// DebugText::getDebugText()->addContents("Memory Use: WorkingSetSize: " + QString::number(pmc.WorkingSetSize / 1000.f / 1000.f) + " M");
+	// DebugText::getDebugText()->addContents("PeakWorkingSetSize: " + QString::number(pmc.PeakWorkingSetSize / 1000.f / 1000.f) + " M");
+	// DebugText::getDebugText()->addContents("PagefileUsage: " + QString::number(pmc.PagefileUsage / 1000.f / 1000.f) + " M");
+	// DebugText::getDebugText()->addContents("PeakPagefileUsage: " + QString::number(pmc.PeakPagefileUsage / 1000.f / 1000.f) + " M");
+
+	m_RenderStatus.setDataChanged("Memory Use", "WorkingSetSize", QString::number(pmc.WorkingSetSize / 1000.f / 1000.f), "M");
+	m_RenderStatus.setDataChanged("Memory Use", "PeakWorkingSetSize", QString::number(pmc.PeakWorkingSetSize / 1000.f / 1000.f), "M");
+	m_RenderStatus.setDataChanged("Memory Use", "PagefileUsage", QString::number(pmc.PagefileUsage / 1000.f / 1000.f), "M");
+	m_RenderStatus.setDataChanged("Memory Use", "PeakPagefileUsage", QString::number(pmc.PeakPagefileUsage / 1000.f / 1000.f), "M");
+}
+#endif
 
 inline std::shared_ptr<Feimos::Material> getSmileFacePlasticMaterial()
 {
 
 	std::unique_ptr<Feimos::TextureMapping2D> map = std::make_unique<Feimos::UVMapping2D>(1.f, 1.f, 0.f, 0.f);
-	std::string filename = "Resources/awesomeface.jpg";
+	std::string filename = "../../Resources/awesomeface.jpg";
 	Feimos::ImageWrap wrapMode = Feimos::ImageWrap::Repeat;
 	bool trilerp = false;
 	float maxAniso = 8.f;
@@ -335,7 +364,7 @@ void RenderThread::run()
 	Feimos::HomogeneousMedium homoMedium(0.5, 4.4, -0.5);
 	Feimos::MediumInterface homoMediumInterface(&homoMedium, nullptr);
 	Feimos::Transform smoke2World = Feimos::Translate(Feimos::Vector3f(1.8f, -1.30f, 0.9f)) * Feimos::RotateY(180) * Feimos::Scale(2.0f, 2.0f, 2.0f);
-	Feimos::MediumLoad smokeMed("Resources/density_render.70.volume", smoke2World);
+	Feimos::MediumLoad smokeMed("../../Resources/density_render.70.volume", smoke2World);
 	Feimos::MediumInterface mediumInterfaceSmoke(&(*smokeMed.med), nullptr);
 
 	std::vector<std::shared_ptr<Feimos::Primitive>> prims;
@@ -484,7 +513,7 @@ void RenderThread::run()
 		Feimos::Point3f SkyBoxCenter(0.f, 0.f, 0.f);
 		float SkyBoxRadius = 10.0f;
 		// std::shared_ptr<Feimos::Light> skyBoxLight =
-		//	std::make_shared<Feimos::SkyBoxLight>(SkyBoxToWorld, SkyBoxCenter, SkyBoxRadius, "Resources/TropicalRuins1000.hdr", 1);
+		//	std::make_shared<Feimos::SkyBoxLight>(SkyBoxToWorld, SkyBoxCenter, SkyBoxRadius, "../../Resources/TropicalRuins1000.hdr", 1);
 		// lights.push_back(skyBoxLight);
 	}
 	emit PrintString("Init InfiniteLight...");
@@ -492,7 +521,7 @@ void RenderThread::run()
 		Feimos::Transform InfinityLightToWorld = Feimos::RotateX(20) * Feimos::RotateY(-90) * Feimos::RotateX(90);
 		Feimos::Spectrum power(0.5f);
 		// std::shared_ptr<Feimos::Light> infinityLight =
-		//	std::make_shared<Feimos::InfiniteAreaLight>(InfinityLightToWorld, power, 10, "Resources/MonValley1000.hdr");
+		//	std::make_shared<Feimos::InfiniteAreaLight>(InfinityLightToWorld, power, 10, "../../Resources/MonValley1000.hdr");
 		// lights.push_back(infinityLight);
 	}
 
@@ -526,6 +555,7 @@ void RenderThread::run()
 		double frameTime;
 		integrator->Render(*worldScene, frameTime);
 
+#if windows_operating_system
 		{
 			renderCount++;
 			wholeTime += frameTime;
@@ -534,42 +564,17 @@ void RenderThread::run()
 			m_RenderStatus.setDataChanged("Performance", "Samples pre frame", QString::number(renderCount), "");
 			m_RenderStatus.setDataChanged("Performance", "Whole time", QString::number(wholeTime), "seconds");
 		}
+#endif
 
 		emit PaintBuffer(p_framebuffer->getUCbuffer(), WIDTH, HEIGHT, 4);
 
 		while (t.elapsed() < 1)
 			;
 
+#if windows_operating_system
 		showMemoryInfo();
+#endif
 	}
 
 	emit PrintString("End Rendering.");
-}
-
-#include <windows.h>
-#include <psapi.h>
-#pragma comment(lib, "psapi.lib")
-void showMemoryInfo(void)
-{
-
-	//  SIZE_T PeakWorkingSetSize; //峰值内存使用
-	//  SIZE_T WorkingSetSize; //内存使用
-	//  SIZE_T PagefileUsage; //虚拟内存使用
-	//  SIZE_T PeakPagefileUsage; //峰值虚拟内存使用
-
-	EmptyWorkingSet(GetCurrentProcess());
-
-	HANDLE handle = GetCurrentProcess();
-	PROCESS_MEMORY_COUNTERS pmc;
-	GetProcessMemoryInfo(handle, &pmc, sizeof(pmc));
-
-	// DebugText::getDebugText()->addContents("Memory Use: WorkingSetSize: " + QString::number(pmc.WorkingSetSize / 1000.f / 1000.f) + " M");
-	// DebugText::getDebugText()->addContents("PeakWorkingSetSize: " + QString::number(pmc.PeakWorkingSetSize / 1000.f / 1000.f) + " M");
-	// DebugText::getDebugText()->addContents("PagefileUsage: " + QString::number(pmc.PagefileUsage / 1000.f / 1000.f) + " M");
-	// DebugText::getDebugText()->addContents("PeakPagefileUsage: " + QString::number(pmc.PeakPagefileUsage / 1000.f / 1000.f) + " M");
-
-	m_RenderStatus.setDataChanged("Memory Use", "WorkingSetSize", QString::number(pmc.WorkingSetSize / 1000.f / 1000.f), "M");
-	m_RenderStatus.setDataChanged("Memory Use", "PeakWorkingSetSize", QString::number(pmc.PeakWorkingSetSize / 1000.f / 1000.f), "M");
-	m_RenderStatus.setDataChanged("Memory Use", "PagefileUsage", QString::number(pmc.PagefileUsage / 1000.f / 1000.f), "M");
-	m_RenderStatus.setDataChanged("Memory Use", "PeakPagefileUsage", QString::number(pmc.PeakPagefileUsage / 1000.f / 1000.f), "M");
 }

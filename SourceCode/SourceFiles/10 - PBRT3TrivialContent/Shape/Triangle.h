@@ -13,10 +13,9 @@ namespace Feimos
 	struct TriangleMesh
 	{
 		// TriangleMesh Public Methods
-		TriangleMesh(const Transform &ObjectToWorld, int nTriangles,
-					 const int *vertexIndices, int nVertices, const Point3f *P,
-					 const Vector3f *S, const Normal3f *N, const Point2f *uv,
-					 const int *faceIndices);
+		TriangleMesh(const Transform &ObjectToWorld,
+					 int nTriangles, const int *vertexIndices, int nVertices,
+					 const Point3f *P, const Vector3f *S, const Normal3f *N, const Point2f *UV, const int *faceIndices);
 		// TriangleMesh Data
 		const int nTriangles, nVertices;
 		std::vector<int> vertexIndices;

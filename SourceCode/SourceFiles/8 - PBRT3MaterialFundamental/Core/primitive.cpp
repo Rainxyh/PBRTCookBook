@@ -39,8 +39,11 @@ namespace Feimos
 		bool allowMultipleLobes) const
 	{
 		if (material)
+		{
 			material->ComputeScatteringFunctions(isect, mode,
 												 allowMultipleLobes);
+		}
+
 		// CHECK_GE(Dot(isect->n, isect->shading.n), 0.);
 	}
 

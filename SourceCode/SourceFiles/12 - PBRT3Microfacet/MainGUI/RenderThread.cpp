@@ -30,6 +30,7 @@
 #include "Material/Mirror.h"
 #include "Material/MetalMaterial.h"
 #include "Material/GlassMaterial.h"
+#include "Material/PlasticMaterial.h"
 
 #include "Texture/Texture.h"
 #include "Texture/ConstantTexture.h"
@@ -41,23 +42,65 @@
 
 #include "RenderStatus.h"
 
-void showMemoryInfo(void);
+#define windows_operating_system false
+#if windows_operating_system
+#include <windows.h>
+#include <psapi.h>
+#pragma comment(lib, "psapi.lib")
+void showMemoryInfo(void)
+{
 
-inline std::shared_ptr<Feimos::Material> getYelloMetalMaterial()
+	//  SIZE_T PeakWorkingSetSize; //峰值内存使用
+	//  SIZE_T WorkingSetSize; //内存使用
+	//  SIZE_T PagefileUsage; //虚拟内存使用
+	//  SIZE_T PeakPagefileUsage; //峰值虚拟内存使用
+
+	EmptyWorkingSet(GetCurrentProcess());
+
+	HANDLE handle = GetCurrentProcess();
+	PROCESS_MEMORY_COUNTERS pmc;
+	GetProcessMemoryInfo(handle, &pmc, sizeof(pmc));
+
+	// DebugText::getDebugText()->addContents("Memory Use: WorkingSetSize: " + QString::number(pmc.WorkingSetSize / 1000.f / 1000.f) + " M");
+	// DebugText::getDebugText()->addContents("PeakWorkingSetSize: " + QString::number(pmc.PeakWorkingSetSize / 1000.f / 1000.f) + " M");
+	// DebugText::getDebugText()->addContents("PagefileUsage: " + QString::number(pmc.PagefileUsage / 1000.f / 1000.f) + " M");
+	// DebugText::getDebugText()->addContents("PeakPagefileUsage: " + QString::number(pmc.PeakPagefileUsage / 1000.f / 1000.f) + " M");
+
+	m_RenderStatus.setDataChanged("Memory Use", "WorkingSetSize", QString::number(pmc.WorkingSetSize / 1000.f / 1000.f), "M");
+	m_RenderStatus.setDataChanged("Memory Use", "PeakWorkingSetSize", QString::number(pmc.PeakWorkingSetSize / 1000.f / 1000.f), "M");
+	m_RenderStatus.setDataChanged("Memory Use", "PagefileUsage", QString::number(pmc.PagefileUsage / 1000.f / 1000.f), "M");
+	m_RenderStatus.setDataChanged("Memory Use", "PeakPagefileUsage", QString::number(pmc.PeakPagefileUsage / 1000.f / 1000.f), "M");
+}
+#endif
+
+inline std::shared_ptr<Feimos::Material> getPurplePlasticMaterial()
+{
+	Feimos::Spectrum purple;
+	purple[0] = .35f;
+	purple[1] = .12f;
+	purple[2] = .48f;
+	std::shared_ptr<Feimos::Texture<Feimos::Spectrum>> plasticKd = std::make_shared<Feimos::ConstantTexture<Feimos::Spectrum>>(purple);
+	std::shared_ptr<Feimos::Texture<Feimos::Spectrum>> plasticKr = std::make_shared<Feimos::ConstantTexture<Feimos::Spectrum>>(Feimos::Spectrum(1.f) - purple);
+	std::shared_ptr<Feimos::Texture<float>> plasticRoughness = std::make_shared<Feimos::ConstantTexture<float>>(.1f);
+	std::shared_ptr<Feimos::Texture<float>> bumpMap = std::make_shared<Feimos::ConstantTexture<float>>(0.f);
+	return std::make_shared<Feimos::PlasticMaterial>(plasticKd, plasticKr, plasticRoughness, bumpMap, true);
+}
+
+inline std::shared_ptr<Feimos::Material> getYellowMetalMaterial()
 {
 	Feimos::Spectrum eta;
-	eta[0] = 0.2f;
-	eta[1] = 0.2f;
-	eta[2] = 0.8f;
+	eta[0] = 0.18f;
+	eta[1] = 0.15f;
+	eta[2] = 0.81f;
 	std::shared_ptr<Feimos::Texture<Feimos::Spectrum>> etaM = std::make_shared<Feimos::ConstantTexture<Feimos::Spectrum>>(eta);
 	Feimos::Spectrum k;
 	k[0] = 0.11f;
 	k[1] = 0.11f;
 	k[2] = 0.11f;
 	std::shared_ptr<Feimos::Texture<Feimos::Spectrum>> kM = std::make_shared<Feimos::ConstantTexture<Feimos::Spectrum>>(k);
-	std::shared_ptr<Feimos::Texture<float>> Roughness = std::make_shared<Feimos::ConstantTexture<float>>(0.15f);
-	std::shared_ptr<Feimos::Texture<float>> RoughnessU = std::make_shared<Feimos::ConstantTexture<float>>(0.15f);
-	std::shared_ptr<Feimos::Texture<float>> RoughnessV = std::make_shared<Feimos::ConstantTexture<float>>(0.15f);
+	std::shared_ptr<Feimos::Texture<float>> Roughness = std::make_shared<Feimos::ConstantTexture<float>>(0.2f);
+	std::shared_ptr<Feimos::Texture<float>> RoughnessU = std::make_shared<Feimos::ConstantTexture<float>>(0.2f);
+	std::shared_ptr<Feimos::Texture<float>> RoughnessV = std::make_shared<Feimos::ConstantTexture<float>>(0.2f);
 	std::shared_ptr<Feimos::Texture<float>> bumpMap = std::make_shared<Feimos::ConstantTexture<float>>(0.0f);
 	return std::make_shared<Feimos::MetalMaterial>(etaM, kM, Roughness, RoughnessU, RoughnessV, bumpMap, false);
 }
@@ -123,7 +166,7 @@ void RenderThread::run()
 	std::shared_ptr<Feimos::Material> blueWallMaterial;
 	std::shared_ptr<Feimos::Material> whiteLightMaterial;
 	std::shared_ptr<Feimos::Material> mirrorMaterial;
-	std::shared_ptr<Feimos::Material> yellowMetalMaterial = getYelloMetalMaterial();
+	std::shared_ptr<Feimos::Material> yellowMetalMaterial = getYellowMetalMaterial();
 	std::shared_ptr<Feimos::Material> whiteGlassMaterial = getWhiteGlassMaterial();
 	{
 		Feimos::Spectrum whiteColor;
@@ -226,7 +269,7 @@ void RenderThread::run()
 
 		emit PrintString("   Init Primitives...");
 		for (int i = 0; i < plyi.nTriangles; ++i)
-			prims.push_back(std::make_shared<Feimos::GeometricPrimitive>(tris[i], yellowMetalMaterial, nullptr));
+			prims.push_back(std::make_shared<Feimos::GeometricPrimitive>(tris[i], getWhiteGlassMaterial(), nullptr));
 		plyi.Release();
 	}
 
@@ -268,7 +311,7 @@ void RenderThread::run()
 	Feimos::Point3f SkyBoxCenter(0.f, 0.f, 0.f);
 	float SkyBoxRadius = 10.0f;
 	// std::shared_ptr<Feimos::Light> skyBoxLight =
-	//	std::make_shared<Feimos::SkyBoxLight>(SkyBoxToWorld, SkyBoxCenter, SkyBoxRadius, "Resources/TropicalRuins1000.hdr", 1);
+	//	std::make_shared<Feimos::SkyBoxLight>(SkyBoxToWorld, SkyBoxCenter, SkyBoxRadius, "../../Resources/TropicalRuins1000.hdr", 1);
 	// lights.push_back(skyBoxLight);
 
 	// 生成加速结构
@@ -307,36 +350,10 @@ void RenderThread::run()
 		while (t.elapsed() < 1)
 			;
 
+#if windows_operating_system
 		showMemoryInfo();
+#endif
 	}
 
 	emit PrintString("End Rendering.");
-}
-
-#include <windows.h>
-#include <psapi.h>
-#pragma comment(lib, "psapi.lib")
-void showMemoryInfo(void)
-{
-
-	//  SIZE_T PeakWorkingSetSize; //峰值内存使用
-	//  SIZE_T WorkingSetSize; //内存使用
-	//  SIZE_T PagefileUsage; //虚拟内存使用
-	//  SIZE_T PeakPagefileUsage; //峰值虚拟内存使用
-
-	EmptyWorkingSet(GetCurrentProcess());
-
-	HANDLE handle = GetCurrentProcess();
-	PROCESS_MEMORY_COUNTERS pmc;
-	GetProcessMemoryInfo(handle, &pmc, sizeof(pmc));
-
-	// DebugText::getDebugText()->addContents("Memory Use: WorkingSetSize: " + QString::number(pmc.WorkingSetSize / 1000.f / 1000.f) + " M");
-	// DebugText::getDebugText()->addContents("PeakWorkingSetSize: " + QString::number(pmc.PeakWorkingSetSize / 1000.f / 1000.f) + " M");
-	// DebugText::getDebugText()->addContents("PagefileUsage: " + QString::number(pmc.PagefileUsage / 1000.f / 1000.f) + " M");
-	// DebugText::getDebugText()->addContents("PeakPagefileUsage: " + QString::number(pmc.PeakPagefileUsage / 1000.f / 1000.f) + " M");
-
-	m_RenderStatus.setDataChanged("Memory Use", "WorkingSetSize", QString::number(pmc.WorkingSetSize / 1000.f / 1000.f), "M");
-	m_RenderStatus.setDataChanged("Memory Use", "PeakWorkingSetSize", QString::number(pmc.PeakWorkingSetSize / 1000.f / 1000.f), "M");
-	m_RenderStatus.setDataChanged("Memory Use", "PagefileUsage", QString::number(pmc.PagefileUsage / 1000.f / 1000.f), "M");
-	m_RenderStatus.setDataChanged("Memory Use", "PeakPagefileUsage", QString::number(pmc.PeakPagefileUsage / 1000.f / 1000.f), "M");
 }

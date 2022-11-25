@@ -1,5 +1,4 @@
 #include "Light/InfiniteAreaLight.h"
-#include "Sampler/Sampling.h"
 #include "3rdLib/stb_image.h"
 #include "Core/Geometry.h"
 
@@ -28,12 +27,9 @@ namespace Feimos
 				for (int i = 0; i < imageWidth; i++)
 				{
 					RGBSpectrum r;
-					r[0] = data[(i + j * imageWidth) * nrComponents + 0];
-					r[0] = L[0] * r[0]; // *r[0];
-					r[1] = data[(i + j * imageWidth) * nrComponents + 1];
-					r[1] = L[1] * r[1]; // *r[1];
-					r[2] = data[(i + j * imageWidth) * nrComponents + 2];
-					r[2] = L[2] * r[2]; // *r[2];
+					r[0] = L[0] * data[(i + j * imageWidth) * nrComponents + 0];
+					r[1] = L[1] * data[(i + j * imageWidth) * nrComponents + 1];
+					r[2] = L[2] * data[(i + j * imageWidth) * nrComponents + 2];
 					data_s[i + j * imageWidth] = r * Sqrt(r);
 				}
 			}

@@ -27,7 +27,7 @@ namespace Feimos
 	}
 	Spectrum SkyBoxLight::getLightValue(float u, float v) const
 	{
-		int w = u * imageWidth, h = v * imageHeight;
+		int w = u * (imageWidth - 1), h = v * (imageHeight - 1);
 		int offset = (w + h * imageWidth) * nrComponents;
 		Spectrum Lv;
 		// ∑¿÷πª∑æ≥π‚Ã´¡¡

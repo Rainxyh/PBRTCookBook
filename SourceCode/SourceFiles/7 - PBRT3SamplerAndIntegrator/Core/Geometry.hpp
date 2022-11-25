@@ -121,6 +121,18 @@ namespace Feimos
 		float LengthSquared() const { return x * x + y * y; }
 		float Length() const { return std::sqrt(LengthSquared()); }
 
+		friend std::ostream &operator<<(std::ostream &os, const Vector2<T> &vec)
+		{
+			os << vec.x << " " << vec.y << std::endl;
+			return os;
+		}
+
+		friend std::istream &operator>>(std::istream &is, const Vector2<T> &vec)
+		{
+			is >> vec.x >> vec.y;
+			return is;
+		}
+
 		// Vector2 Public Data
 		T x, y;
 	};
@@ -242,6 +254,18 @@ namespace Feimos
 		float LengthSquared() const { return x * x + y * y + z * z; }
 		float Length() const { return std::sqrt(LengthSquared()); }
 		explicit Vector3(const Normal3<T> &n);
+
+		friend std::ostream &operator<<(std::ostream &os, const Vector3<T> &vec)
+		{
+			os << vec.x << " " << vec.y << " " << vec.z << std::endl;
+			return os;
+		}
+
+		friend std::istream &operator>>(std::istream &is, const Vector3<T> &vec)
+		{
+			is >> vec.x >> vec.y >> vec.z;
+			return is;
+		}
 
 		// Vector3 Public Data
 		T x, y, z;
@@ -385,6 +409,18 @@ namespace Feimos
 		bool operator==(const Point2<T> &p) const { return x == p.x && y == p.y; }
 		bool operator!=(const Point2<T> &p) const { return x != p.x || y != p.y; }
 		bool HasNaNs() const { return isNaN(x) || isNaN(y); }
+
+		friend std::ostream &operator<<(std::ostream &os, const Point2<T> &p)
+		{
+			os << p.x << " " << p.y << std::endl;
+			return os;
+		}
+
+		friend std::istream &operator>>(std::istream &is, const Point2<T> &p)
+		{
+			is >> p.x >> p.y;
+			return is;
+		}
 
 		// Point2 Public Data
 		T x, y;
@@ -530,6 +566,18 @@ namespace Feimos
 		bool HasNaNs() const { return isNaN(x) || isNaN(y) || isNaN(z); }
 		Point3<T> operator-() const { return Point3<T>(-x, -y, -z); }
 
+		friend std::ostream &operator<<(std::ostream &os, const Point3<T> &p)
+		{
+			os << p.x << " " << p.y << " " << p.z << std::endl;
+			return os;
+		}
+
+		friend std::istream &operator>>(std::istream &is, const Point3<T> &p)
+		{
+			is >> p.x >> p.y >> p.z;
+			return is;
+		}
+
 		// Point3 Public Data
 		T x, y, z;
 	};
@@ -656,6 +704,18 @@ namespace Feimos
 			if (i == 1)
 				return y;
 			return z;
+		}
+
+		friend std::ostream &operator<<(std::ostream &os, const Normal3<T> &p)
+		{
+			os << p.x << " " << p.y << " " << p.z << std::endl;
+			return os;
+		}
+
+		friend std::istream &operator>>(std::istream &is, const Normal3<T> &p)
+		{
+			is >> p.x >> p.y >> p.z;
+			return is;
 		}
 
 		// Normal3 Public Data
@@ -1101,6 +1161,18 @@ namespace Feimos
 			*rad = Inside(*c, *this) ? Distance(*c, pMax) : 0;
 		}
 
+		friend std::ostream &operator<<(std::ostream &os, const Bounds2<T> &b)
+		{
+			os << b.pMin << " " << b.pMax << std::endl;
+			return os;
+		}
+
+		friend std::istream &operator>>(std::istream &is, const Bounds2<T> &b)
+		{
+			is >> b.pMin >> b.pMax;
+			return is;
+		}
+
 		// Bounds2 Public Data
 		Point2<T> pMin, pMax;
 	};
@@ -1252,6 +1324,19 @@ namespace Feimos
 							   float *hitt1 = nullptr) const;
 		inline bool IntersectP(const Ray &ray, const Vector3f &invDir,
 							   const int dirIsNeg[3]) const;
+
+		friend std::ostream &operator<<(std::ostream &os, Bounds3<T> b)
+		{
+			os << b.pMin << " " << b.pMax << std::endl;
+			return os;
+		}
+
+		friend std::istream &operator>>(std::istream &is, Bounds3<T> b)
+		{
+			is >> b.pMin >> b.pMax;
+			return is;
+		}
+
 		// Bounds3 Public Data
 		Point3<T> pMin, pMax;
 	};

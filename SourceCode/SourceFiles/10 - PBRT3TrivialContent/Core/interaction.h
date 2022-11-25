@@ -61,7 +61,7 @@ namespace Feimos
 						   const Normal3f &dndu, const Normal3f &dndv, float time,
 						   const Shape *sh,
 						   int faceIndex = 0);
-		~SurfaceInteraction();
+		~SurfaceInteraction() {}
 
 		void ComputeScatteringFunctions(const Ray &ray, bool allowMultipleLobes = false, TransportMode mode = TransportMode::Radiance);
 

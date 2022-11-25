@@ -11,9 +11,9 @@ namespace Feimos
 	static long long nTests = 0;
 
 	TriangleMesh::TriangleMesh(
-		const Transform &ObjectToWorld, int nTriangles, const int *vertexIndices,
-		int nVertices, const Point3f *P, const Vector3f *S, const Normal3f *N,
-		const Point2f *UV, const int *fIndices)
+		const Transform &ObjectToWorld,
+		int nTriangles, const int *vertexIndices, int nVertices,
+		const Point3f *P, const Vector3f *S, const Normal3f *N, const Point2f *UV, const int *fIndices)
 		: nTriangles(nTriangles),
 		  nVertices(nVertices),
 		  vertexIndices(vertexIndices, vertexIndices + 3 * nTriangles)
@@ -48,7 +48,7 @@ namespace Feimos
 				s[i] = ObjectToWorld(S[i]);
 		}
 		if (fIndices)
-			faceIndices = std::vector<int>(fIndices, fIndices + nTriangles);
+			this->faceIndices = std::vector<int>(fIndices, fIndices + nTriangles);
 	}
 
 	Bounds3f Triangle::ObjectBound() const

@@ -20,10 +20,6 @@ namespace Feimos
 	class ModelLoad
 	{
 	public:
-		//  模型数据
-		std::vector<std::shared_ptr<TriangleMesh>> meshes;
-		std::vector<std::string> diffTexName, specTexName; //纹理序列
-		std::string directory;
 		//  函数
 		void loadModel(std::string path, const Transform &ObjectToWorld);
 		void processNode(aiNode *node, const aiScene *scene, const Transform &ObjectToWorld);
@@ -32,6 +28,11 @@ namespace Feimos
 								 std::vector<std::shared_ptr<Primitive>> &prims, std::shared_ptr<Material> material);
 		void buildTextureModel(Transform &tri_Object2World, const MediumInterface &mediumInterface,
 							   std::vector<std::shared_ptr<Primitive>> &prims);
+
+		//  模型数据
+		std::vector<std::shared_ptr<TriangleMesh>> meshes;
+		std::vector<std::string> diffTexName, specTexName; //纹理序列
+		std::string directory;
 	};
 
 }

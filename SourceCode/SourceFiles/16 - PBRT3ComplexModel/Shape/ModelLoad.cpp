@@ -100,6 +100,7 @@ namespace Feimos
 		delete[] uv;
 		return trimesh;
 	}
+
 	void ModelLoad::processNode(aiNode *node, const aiScene *scene, const Transform &ObjectToWorld)
 	{
 		// 处理节点所有的网格（如果有的话）
@@ -136,8 +137,10 @@ namespace Feimos
 		std::shared_ptr<Texture<float>> bumpMap = std::make_shared<ConstantTexture<float>>(0.0f);
 		return std::make_shared<MatteMaterial>(Kt, sigmaRed, bumpMap);
 	}
+
 	inline std::shared_ptr<Material> getPlasticMaterial(std::string diffFilename, std::string specFilename)
 	{
+		std::cout << diffFilename << std::endl;
 		std::unique_ptr<TextureMapping2D> map1 = std::make_unique<UVMapping2D>(1.f, 1.f, 0.f, 0.f);
 		std::unique_ptr<TextureMapping2D> map2 = std::make_unique<UVMapping2D>(1.f, 1.f, 0.f, 0.f);
 		ImageWrap wrapMode = ImageWrap::Repeat;
@@ -189,7 +192,6 @@ namespace Feimos
 			std::string specFilename = directory + "/" + specTexName[i];
 			std::shared_ptr<Material> diffMaterial = getDiffuseMaterial(diffFilename);
 			std::shared_ptr<Material> MetalMaterial = getPlasticMaterial(diffFilename, specFilename);
-
 			if (mediumInterface.inside == nullptr && mediumInterface.outside == nullptr)
 			{
 				for (int j = 0; j < meshes[i]->nTriangles; ++j)
@@ -212,6 +214,7 @@ namespace Feimos
 				}
 			}
 		}
+
 		meshes.clear();
 		diffTexName.clear();
 		specTexName.clear();

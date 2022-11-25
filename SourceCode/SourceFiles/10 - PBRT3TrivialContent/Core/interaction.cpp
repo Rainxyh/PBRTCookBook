@@ -35,12 +35,6 @@ namespace Feimos
 		}
 	}
 
-	SurfaceInteraction::~SurfaceInteraction()
-	{
-		if (bsdf)
-			bsdf->~BSDF();
-	}
-
 	void SurfaceInteraction::ComputeScatteringFunctions(const Ray &ray,
 														bool allowMultipleLobes,
 														TransportMode mode)

@@ -70,9 +70,9 @@ void RenderThread::run()
 	floorColor[1] = 0.3;
 	floorColor[2] = 0.9;
 	Feimos::Spectrum dragonColor;
-	dragonColor[0] = 1.0;
-	dragonColor[1] = 1.0;
-	dragonColor[2] = 0.0;
+	dragonColor[0] = .8f;
+	dragonColor[1] = .8f;
+	dragonColor[2] = .1f;
 	std::shared_ptr<Feimos::Texture<Feimos::Spectrum>> KdDragon = std::make_shared<Feimos::ConstantTexture<Feimos::Spectrum>>(dragonColor);
 	std::shared_ptr<Feimos::Texture<Feimos::Spectrum>> KdFloor = std::make_shared<Feimos::ConstantTexture<Feimos::Spectrum>>(floorColor);
 	std::shared_ptr<Feimos::Texture<float>> sigma = std::make_shared<Feimos::ConstantTexture<float>>(0.0f);
@@ -115,6 +115,7 @@ void RenderThread::run()
 	for (int i = 0; i < plyi.nTriangles; ++i)
 		tris.push_back(std::make_shared<Feimos::Triangle>(&tri_Object2World, &tri_World2Object, false, mesh, i));
 
+	// 将 物 体 填 充 到 基 元
 	emit PrintString("Init Primitives");
 	for (int i = 0; i < plyi.nTriangles; ++i)
 		prims.push_back(std::make_shared<Feimos::GeometricPrimitive>(tris[i], dragonMaterial));
@@ -139,7 +140,6 @@ void RenderThread::run()
 	int renderCount = 0;
 	while (renderFlag)
 	{
-		emit PrintString("test");
 		QElapsedTimer t;
 		t.start();
 

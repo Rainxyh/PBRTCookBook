@@ -6,10 +6,9 @@ namespace Feimos
 
 	PerspectiveCamera::PerspectiveCamera(const int RasterWidth, const int RasterHeight, const Transform &CameraToWorld,
 										 const Bounds2f &screenWindow, float lensRadius, float focalDistance, float fov)
-		: ProjectiveCamera(RasterWidth, RasterHeight, CameraToWorld, Perspective(fov, 1e-2f, 1000.f),
+		: ProjectiveCamera(RasterWidth, RasterHeight, CameraToWorld, Perspective(fov, 1e-2f, 1000.f), // CameraToScreen = Perspective(fov, 1e-2f, 1000.f)
 						   screenWindow, lensRadius, focalDistance)
 	{
-
 		// Compute image plane bounds at $z=1$ for _PerspectiveCamera_
 		Point2i res = Point2i(RasterWidth, RasterHeight);
 		Point3f pMin = RasterToCamera(Point3f(0, 0, 0));
