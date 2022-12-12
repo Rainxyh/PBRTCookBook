@@ -1,0 +1,80 @@
+#pragma once
+#pragma once
+#ifndef __CAMERA_H__
+#define __CAMERA_H__
+
+#include "Sampler/TimeClockRandom.h"
+#include "Core/FeimosRender.h"
+#include "Core/Geometry.h"
+#include "Core/Transform.h"
+
+namespace Feimos
+{
+
+	struct CameraSample
+	{
+		Point2f pFilm;
+		Point2f pLens;
+		float time;
+	};
+
+	class Camera
+	{
+	public:
+		// Camera Interface
+		Camera(const AnimatedTransform &CameraToWorld,
+			   float shutterOpen,
+			   float shutterClose,
+			   const Medium *medium = nullptr) : CameraToWorld(CameraToWorld),
+												 shutterOpen(shutterOpen),
+												 shutterClose(shutterClose),
+												 medium(medium) {}
+		virtual ~Camera() {}
+		virtual float GenerateRay(const CameraSample &sample, Ray *ray) const { return 1; };
+		virtual float GenerateRayDifferential(const CameraSample &sample, RayDifferential *rd) const;
+		// Camera Public Data
+		AnimatedTransform CameraToWorld;
+		const float shutterOpen, shutterClose;
+		const Medium *medium;
+	};
+
+	class ProjectiveCamera : public Camera
+	{
+	public:
+		// ProjectiveCamera Public Methods
+		ProjectiveCamera(const int RasterWidth, const int RasterHeight, const AnimatedTransform &CameraToWorld,
+						 const Transform &CameraToScreen,
+						 const Bounds2f &screenWindow,
+						 float shutterOpen,
+						 float shutterClose,
+						 float lensr, float focald,
+						 const Medium *medium)
+			: Camera(CameraToWorld, shutterOpen, shutterClose, medium),
+			  CameraToScreen(CameraToScreen)
+		{
+			// Initialize depth of field parameters
+			lensRadius = lensr;
+			focalDistance = focald;
+			// Compute projective camera screen transformations
+			ScreenToRaster =
+				Scale(RasterWidth, RasterHeight, 1) *
+				Scale(1 / (screenWindow.pMax.x - screenWindow.pMin.x),
+					  1 / (screenWindow.pMin.y - screenWindow.pMax.y), 1) *
+				Translate(Vector3f(-screenWindow.pMin.x, -screenWindow.pMax.y, 0));
+			RasterToScreen = Inverse(ScreenToRaster);
+			RasterToCamera = Inverse(CameraToScreen) * RasterToScreen;
+		}
+
+	protected:
+		// ProjectiveCamera Protected Data
+		Transform CameraToScreen, RasterToCamera;
+		Transform ScreenToRaster, RasterToScreen;
+		float lensRadius, focalDistance;
+	};
+
+	PerspectiveCamera *CreatePerspectiveCamera(const int RasterWidth, const int RasterHeight, const AnimatedTransform &cam2world, float shutterOpen, float shutterClose, Medium *media = nullptr);
+	OrthographicCamera *CreateOrthographicCamera(const int RasterWidth, const int RasterHeight, const AnimatedTransform &cam2world, float shutterOpen, float shutterClose, Medium *media = nullptr);
+
+}
+
+#endif
