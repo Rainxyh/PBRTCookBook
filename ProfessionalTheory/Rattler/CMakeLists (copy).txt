@@ -6,7 +6,8 @@ project(Rattler)
 
 set(CMAKE_BUILD_TYPE  "Release")
 
-link_directories(${CMAKE_SOURCE_DIR}/3rdLib)
+link_directories(${CMAKE_SOURCE_DIR}/3rdLib/Assimp-lib/)
+link_directories(${CMAKE_SOURCE_DIR}/3rdLib/OpenGL-lib/)
 
 find_package(OpenMP REQUIRED)
 if(OpenMP_FOUND)
@@ -17,16 +18,6 @@ if(OpenMP_FOUND)
 	set(CMAKE_CXX_FLAGS "-fopenmp")
 else()
    	message(FATAL_ERROR "openmp not found!")
-endif()
-
-find_package(assimp REQUIRED)
-if (assimp_FOUND)
-    message(STATUS "found assimp") 
-    set(ASSIMP_LIBRARY "assimp")
-    add_library(${ASSIMP_LIBRARY} SHARED IMPORTED)
-    set_target_properties(${ASSIMP_LIBRARY} PROPERTIES IMPORTED_LOCATION "${ASSIMP_LIBRARY_DIRS}/libassimp.so")
-else()
-   	message(FATAL_ERROR "assimp not found!")
 endif()
 
 if(WIN32)
@@ -73,7 +64,7 @@ set(3rdLib
 	3rdLib/OpenGL/glfw3native.h
 	3rdLib/OpenGL/khrplatform.h
 	3rdLib/OpenGL/glad.h
-	#3rdLib/OpenGL/glad.c
+	3rdLib/OpenGL/glad.c
 )
 # Make the 3rdLib group
 SOURCE_GROUP("3rdLib" FILES ${3rdLib})
@@ -106,13 +97,40 @@ SOURCE_GROUP("Main" FILES ${Main})
 
 # Create executable
 add_executable(Rattler
-	${Main}
 	${3rdLib}
+	${Main}
 	${Core}
 )
-target_link_libraries(Rattler ${LIBS})
 
 FILE(GLOB Icons ${CMAKE_CURRENT_SOURCE_DIR}/Icons/*.png)
 SET(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_BINARY_DIR})
 file(COPY ${Icons} DESTINATION ${EXECUTABLE_OUTPUT_PATH}/Icons/)
 
+
+add_library(GLAD "3rdLib/OpenGL/glad.c")
+set(LIBS ${LIBS} GLAD)
+message(${LIBS})
+
+target_link_libraries(Rattler ${LIBS})
+
+# 用于包含第三方库
+set(AssimpLib ${CMAKE_CURRENT_SOURCE_DIR}/3rdLib/Assimp-lib/)
+set(OpenGLLib ${CMAKE_CURRENT_SOURCE_DIR}/3rdLib/OpenGL-lib/)
+
+FILE(GLOB ASSIMPDLL ${AssimpLib}/assimp-vc140-mt.dll)
+file(COPY ${ASSIMPDLL} DESTINATION ${EXECUTABLE_OUTPUT_PATH})
+FILE(GLOB OpenGLDLL ${OpenGLLib}/glfw3.dll)
+file(COPY ${OpenGLDLL} DESTINATION ${EXECUTABLE_OUTPUT_PATH})
+
+target_link_libraries(Rattler 
+	${AssimpLib}assimp.lib
+	${OpenGLLib}glfw3.lib
+	${OpenGLLib}glfw3_mt.lib
+	${OpenGLLib}glfw3dll.lib
+)
+set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT Rattler)
+
+get_target_property(prj_libs ${PROJECT_NAME} LINK_LIBRARIES)
+foreach(lib ${prj_libs})
+    message( STATUS "libs_list: ${lib}" )
+endforeach()
