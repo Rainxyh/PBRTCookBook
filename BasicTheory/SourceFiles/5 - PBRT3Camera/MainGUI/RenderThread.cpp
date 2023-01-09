@@ -54,7 +54,7 @@ void RenderThread::run()
 	Feimos::Transform Camera2World = Inverse(lookat);
 	Feimos::Camera *cam = nullptr;
 	cam = Feimos::CreatePerspectiveCamera(WIDTH, HEIGHT, Camera2World);
-	cam = Feimos::CreateOrthographicCamera(WIDTH, HEIGHT, Camera2World);
+	// cam = Feimos::CreateOrthographicCamera(WIDTH, HEIGHT, Camera2World);
 
 	// 生成Mesh加速结构
 	std::shared_ptr<Feimos::TriangleMesh> mesh;

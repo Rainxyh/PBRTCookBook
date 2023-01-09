@@ -46,7 +46,7 @@ namespace Feimos
 	PerspectiveCamera *CreatePerspectiveCamera(const int RasterWidth, const int RasterHeight, const Transform &cam2world)
 	{
 		float lensradius = 0.3f;
-		float focaldistance = 3.0f;
+		float focaldistance = 3.5f;
 		float frame = (float)RasterWidth / (float)RasterHeight;
 		Bounds2f screen;
 		if (frame > 1.f)
